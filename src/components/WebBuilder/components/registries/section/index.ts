@@ -1,0 +1,68 @@
+import { registerAllApplicationsComponent } from './allApplications'
+import { registerAppsCarouselThbComponent } from './appsCarouselThb'
+import { registerCardCarouselSectionComponent } from './cardCarouselSection'
+import { registerCaseSpotlightComponent } from './caseSpotlight'
+import { registerCompanyScaleComponent } from './companyScale'
+import { registerContactBlockComponent } from './contactBlock'
+import { registerContactInfoBlockComponent } from './contactInfoBlock'
+import { registerContentCarouselComponent } from './contentCarousel'
+import { registerCustomizationGridComponent } from './customizationGrid'
+import { registerFactoryMapComponent } from './factoryMap'
+import { registerFaqSectionComponent } from './faqSection'
+import { registerFocaHistoryTimelineComponent } from './focaHistoryTimeline'
+import { registerHistoryTimelineComponent } from './historyTimeline'
+import { registerHomeBannerCarouselComponent } from './homeBannerCarousel'
+import { registerHotspotShowcaseComponent } from './hotspotShowcase'
+import { registerMapComponent } from './map'
+import { registerMilestoneCardStripComponent } from './milestoneCardStrip'
+import { registerMoreCardCarouselComponent } from './moreCardCarousel'
+import { registerOurAdvantagesComponent } from './ourAdvantages'
+import { registerOverviewSplitComponent } from './overviewSplit'
+import { registerPageHeadBannerComponent } from './pageHeadBanner'
+import { registerProcessTimelineComponent } from './processTimeline'
+import { registerProductCardStripComponent } from './productCardStrip'
+import { registerResourceSectionComponent } from './resourceSection'
+import { registerResponsiveHeroCarouselComponent } from './responsiveHeroCarousel'
+import { registerServiceIconGridComponent } from './serviceIconGrid'
+import { registerServicesCarouselComponent } from './servicesCarousel'
+import { registerServicesShowcaseComponent } from './servicesShowcase'
+import { registerServiceThbComponent } from './servicesThb'
+import { registerSolutionListComponent } from './solutionList'
+import { registerStaticPinMapComponent } from './staticPinMap'
+import { registerStatsCardsComponent } from './statsCards'
+import type { ComponentRegistryExecutor } from '../types'
+
+export const SECTION_REGISTRIES: ComponentRegistryExecutor[] = [
+  { id: 'historyTimeline', register: registerHistoryTimelineComponent },
+  { id: 'focaHistoryTimeline', register: registerFocaHistoryTimelineComponent },
+  { id: 'productCardStrip', register: registerProductCardStripComponent },
+  { id: 'caseSpotlight', register: registerCaseSpotlightComponent },
+  { id: 'milestoneCardStrip', register: registerMilestoneCardStripComponent },
+  { id: 'allApplications', register: registerAllApplicationsComponent },
+  { id: 'moreCardCarousel', register: registerMoreCardCarouselComponent },
+  { id: 'map', register: registerMapComponent },
+  { id: 'staticPinMap', register: registerStaticPinMapComponent },
+  { id: 'factoryMap', register: registerFactoryMapComponent },
+  { id: 'statsCards', register: registerStatsCardsComponent },
+  { id: 'customizationGrid', register: registerCustomizationGridComponent },
+  { id: 'processTimeline', register: registerProcessTimelineComponent },
+  { id: 'companyScale', register: registerCompanyScaleComponent },
+  { id: 'solutionList', register: registerSolutionListComponent },
+  { id: 'contentCarousel', register: registerContentCarouselComponent },
+  { id: 'ourAdvantages', register: registerOurAdvantagesComponent },
+  { id: 'serviceIconGrid', register: registerServiceIconGridComponent },
+  { id: 'servicesCarousel', register: registerServicesCarouselComponent },
+  { id: 'servicesShowcase', register: registerServicesShowcaseComponent },
+  { id: 'serviceThb', register: registerServiceThbComponent },
+  { id: 'appsCarouselThb', register: registerAppsCarouselThbComponent },
+  { id: 'responsiveHeroCarousel', register: registerResponsiveHeroCarouselComponent },
+  { id: 'homeBannerCarousel', register: registerHomeBannerCarouselComponent },
+  { id: 'overviewSplit', register: registerOverviewSplitComponent },
+  { id: 'contactBlock', register: registerContactBlockComponent },
+  { id: 'contactInfoBlock', register: registerContactInfoBlockComponent },
+  { id: 'pageHeadBanner', register: registerPageHeadBannerComponent },
+  { id: 'hotspotShowcase', register: registerHotspotShowcaseComponent },
+  { id: 'resourceSection', register: registerResourceSectionComponent },
+  { id: 'faqSection', register: registerFaqSectionComponent },
+  { id: 'cardCarouselSection', register: registerCardCarouselSectionComponent },
+]
