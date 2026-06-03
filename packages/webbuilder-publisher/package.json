@@ -1,0 +1,43 @@
+{
+  "name": "@tooto-tech/webbuilder-publisher",
+  "version": "0.1.0",
+  "type": "module",
+  "private": false,
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "corepack pnpm@10.28.1 build"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "peerDependencies": {
+    "@tooto-tech/webbuilder-components-basic": "^0.1.0",
+    "@tooto-tech/webbuilder-components-cms": "^0.1.0",
+    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@tooto-tech/webbuilder-global-settings": "^0.1.0",
+    "grapesjs": "^0.23.1"
+  },
+  "devDependencies": {
+    "@tooto-tech/webbuilder-components-basic": "^0.1.0",
+    "@tooto-tech/webbuilder-components-cms": "^0.1.0",
+    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@tooto-tech/webbuilder-global-settings": "^0.1.0"
+  },
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-publisher",
+  "publishConfig": {
+    "access": "public"
+  }
+}

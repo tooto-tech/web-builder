@@ -1,86 +1,24 @@
-# @tooto-tech/web-builder
+# WebBuilder Packages
 
-Dist-only WebBuilder package for Tooto admin applications.
+`web-builder` 是 `@tooto-tech/webbuilder-*` 包源码仓库。
 
-This package is published without TypeScript/Vue source files or sourcemaps. Public browser assets can still be inspected and reverse engineered, so sensitive business logic must stay on the server side.
+## 包目录
 
-## Install
+- `packages/webbuilder-core`
+- `packages/webbuilder-vue`
+- `packages/webbuilder-i18n`
+- `packages/webbuilder-global-settings`
+- `packages/webbuilder-layout-template`
+- `packages/webbuilder-components-basic`
+- `packages/webbuilder-components-cms`
+- `packages/webbuilder-publisher`
 
-```sh
-pnpm add @tooto-tech/web-builder
-```
+## 常用命令
 
-The host application must provide the peer dependencies declared by this package: `vue`, `pinia`, `vue-router`, and `element-plus`.
+- 安装依赖：`pnpm install`
+- 包源码边界检查：`pnpm guard`
+- 运行测试：`pnpm test`
+- 构建全部包：`pnpm build`
+- 发布前打包检查：`pnpm pack:dry-run`
 
-## Usage
-
-```ts
-import { WebBuilder } from '@tooto-tech/web-builder'
-import '@tooto-tech/web-builder/style.css'
-```
-
-Render the editor with a resource identity and host adapters:
-
-```vue
-<template>
-  <WebBuilder :resource="resource" :adapters="webBuilderAdapters" />
-</template>
-```
-
-The host application owns API, auth, upload, tenant, and routing behavior through the `WebBuilderAdapters` contract. Keep those adapters in the host app so the package does not import host-internal source paths.
-
-## Published Files
-
-Only these files are included in the npm package:
-
-- `dist/index.js`
-- `dist/style.css`
-- `dist/types/index.d.ts`
-- `LICENSE`
-- `README.md`
-- `package.json`
-
-The package intentionally excludes:
-
-- `src/`
-- `.vue`
-- `.ts` implementation files
-- source maps
-- development notes and mirrored GrapesJS docs
-
-## Release
-
-Run these checks before publishing:
-
-```sh
-pnpm test
-pnpm build
-pnpm pack:dry
-pnpm publish:dry
-```
-
-Publish with:
-
-```sh
-pnpm publish:public
-```
-
-After publishing, change the host application dependency from local workspace mode:
-
-```json
-"@tooto-tech/web-builder": "workspace:*"
-```
-
-to the published version:
-
-```json
-"@tooto-tech/web-builder": "0.0.1"
-```
-
-Then run `pnpm install` and the host build again.
-
-In the host repository, `pnpm build:web-builder` is intentionally conditional. It builds the local workspace package only while the dependency is `workspace:*`; after the dependency is changed to a published version it skips local package compilation, so the host source delivery does not need to include `packages/web-builder`.
-
-## Rollback
-
-Rollback is a host dependency change: set `@tooto-tech/web-builder` back to the last known good published version, run `pnpm install`, and rebuild the host app.
+`b2b-admin` 默认只消费 npm 上发布的 `@tooto-tech/webbuilder-*` 版本。修改包源码、构建和发布包时优先在本仓库完成，然后再回到 `b2b-admin` 更新依赖版本。

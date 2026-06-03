@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.webbuilder-package.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*", "src/**/*.vue"],
+  "exclude": ["dist", "node_modules", "**/*.spec.ts", "**/*.test.ts", "**/auto-*.d.ts"]
+}

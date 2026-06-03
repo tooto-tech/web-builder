@@ -1,0 +1,52 @@
+{
+  "name": "@tooto-tech/webbuilder-layout-template",
+  "version": "0.1.0",
+  "type": "module",
+  "private": false,
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "vite build --config vite.config.ts && vue-tsc -p tsconfig.build.json --declaration --emitDeclarationOnly",
+    "prepack": "corepack pnpm@10.28.1 build"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./vue": {
+      "types": "./dist/vue.d.ts",
+      "import": "./dist/vue.js"
+    },
+    "./style.css": {
+      "import": "./dist/style.css"
+    }
+  },
+  "peerDependencies": {
+    "@iconify/vue": "^5.0.0",
+    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "element-plus": "^2.11.0",
+    "grapesjs": "^0.23.1",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.1.4",
+    "vue-tsc": "^2.2.12"
+  },
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-layout-template",
+  "publishConfig": {
+    "access": "public"
+  }
+}

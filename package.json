@@ -1,67 +1,38 @@
 {
-  "name": "@tooto-tech/web-builder",
-  "version": "0.0.1",
-  "private": false,
+  "name": "@tooto-tech/webbuilder-packages",
+  "version": "0.1.0",
+  "private": true,
   "type": "module",
-  "description": "Tooto WebBuilder editor package",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
-  "sideEffects": [
-    "**/*.css",
-    "**/*.scss"
-  ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./style.css": "./dist/style.css"
-  },
+  "packageManager": "pnpm@10.28.1",
   "scripts": {
-    "build": "pnpm run build:js && pnpm run build:types",
-    "build:js": "vite build",
-    "build:types": "node scripts/build-types.mjs",
-    "test": "vitest run",
-    "pack:dry": "pnpm pack --dry-run",
-    "publish:dry": "pnpm publish --dry-run --access public --no-git-checks",
-    "publish:public": "pnpm publish --access public --no-git-checks"
-  },
-  "peerDependencies": {
-    "element-plus": "2.11.1",
-    "pinia": "^2.1.7",
-    "vue": "3.5.12",
-    "vue-router": "^4.4.5"
-  },
-  "dependencies": {
-    "@element-plus/icons-vue": "2.3.2",
-    "@iconify/vue": "^5.0.0",
-    "@monaco-editor/loader": "^1.7.0",
-    "@silexlabs/grapesjs-symbols": "^1.4.1",
-    "@vueuse/core": "^10.9.0",
-    "dayjs": "^1.11.10",
-    "grapesjs": "0.22.16",
-    "grapesjs-parser-postcss": "1.0.3",
-    "lodash-es": "^4.17.21",
-    "monaco-editor": "^0.55.1",
-    "swiper": "^12.1.0"
+    "build": "pnpm --filter @tooto-tech/webbuilder-core build && pnpm --filter \"@tooto-tech/webbuilder-*\" --filter \"!@tooto-tech/webbuilder-core\" build",
+    "guard": "node scripts/webbuilder-packages-guard.mjs",
+    "test": "pnpm run build && vitest run --config vitest.config.ts",
+    "pack:dry-run": "pnpm run guard && pnpm run build && pnpm --filter \"@tooto-tech/webbuilder-*\" exec npm pack --dry-run --json"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
-    "@vitest/coverage-v8": "^4.0.18",
-    "sass": "^1.69.5",
+    "@iconify/iconify": "^3.1.1",
+    "@iconify/json": "^2.2.187",
+    "@iconify/vue": "^5.0.0",
+    "@monaco-editor/loader": "^1.7.0",
+    "@types/node": "^20.11.21",
+    "@vitejs/plugin-vue": "5.0.4",
+    "autoprefixer": "^10.4.17",
+    "element-plus": "2.11.1",
+    "grapesjs": "0.23.1",
+    "monaco-editor": "^0.55.1",
+    "postcss": "^8.4.35",
+    "swiper": "^12.1.0",
+    "tailwindcss": "^3.4.19",
     "typescript": "5.3.3",
     "vite": "5.1.4",
-    "vitest": "^4.0.18",
+    "vitest": "4.0.18",
+    "vue": "3.5.12",
     "vue-tsc": "^1.8.27"
+  },
+  "pnpm": {
+    "overrides": {
+      "grapesjs": "0.23.1"
+    }
   }
 }

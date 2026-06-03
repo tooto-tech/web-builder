@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-prod/
+coverage/
+.DS_Store
+*.log
+packages/*/dist/
+packages/*/node_modules/

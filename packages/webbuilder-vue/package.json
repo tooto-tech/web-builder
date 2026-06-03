@@ -1,0 +1,56 @@
+{
+  "name": "@tooto-tech/webbuilder-vue",
+  "version": "0.1.1",
+  "type": "module",
+  "private": false,
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "vite build --config vite.config.ts && vue-tsc -p tsconfig.build.json --declaration --emitDeclarationOnly",
+    "prepack": "corepack pnpm@10.28.1 build"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "peerDependencies": {
+    "@monaco-editor/loader": "^1.7.0",
+    "@iconify/vue": "^5.0.0",
+    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "element-plus": "^2.11.0",
+    "grapesjs": "^0.23.1",
+    "monaco-editor": "^0.55.0",
+    "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "@monaco-editor/loader": {
+      "optional": true
+    },
+    "monaco-editor": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@vitejs/plugin-vue": "5.0.4",
+    "vite": "5.1.4",
+    "vue-tsc": "^1.8.27"
+  },
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-vue",
+  "publishConfig": {
+    "access": "public"
+  }
+}
