@@ -12,9 +12,13 @@ export const collectWebBuilderResourceParticipants = (
   const participants: ResourceTransactionParticipant[] = []
 
   plugins.forEach((plugin) => {
-    plugin.resources?.forEach((provider) => {
+    const providers = Array.isArray(plugin.resources) ? plugin.resources : []
+
+    providers.forEach((provider) => {
       const providedParticipants = provider(context) ?? []
-      providedParticipants.forEach((participant) => {
+      const nextParticipants = Array.isArray(providedParticipants) ? providedParticipants : []
+
+      nextParticipants.forEach((participant) => {
         if (seenParticipantIds.has(participant.id)) {
           throw new Error(`Duplicate WebBuilder resource participant id "${participant.id}"`)
         }

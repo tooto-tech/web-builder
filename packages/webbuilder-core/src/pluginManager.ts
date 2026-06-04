@@ -78,6 +78,16 @@ const getErrorMessage = (error: unknown) => {
   return 'Plugin activation failed'
 }
 
+const removeEditorPluginIfPresent = (editor: Editor, id: string) => {
+  const pluginManager = editor.Plugins as Editor['Plugins'] & {
+    get?: (id: string) => unknown
+  }
+
+  if (typeof pluginManager.get === 'function' && !pluginManager.get(id)) return
+
+  editor.Plugins.remove(id)
+}
+
 export function createWebBuilderPluginManager(
   plugins: WebBuilderFeaturePlugin[]
 ): WebBuilderPluginManager {
@@ -119,7 +129,7 @@ export function createWebBuilderPluginManager(
         .slice()
         .reverse()
         .forEach((id) => {
-          editor.Plugins.remove(id)
+          removeEditorPluginIfPresent(editor, id)
         })
       throw error
     }
@@ -132,7 +142,7 @@ export function createWebBuilderPluginManager(
         .slice()
         .reverse()
         .forEach((id) => {
-          editor.Plugins.remove(id)
+          removeEditorPluginIfPresent(editor, id)
         })
     }
   }
