@@ -78,9 +78,16 @@ const pickFromGlobals = (names: string[]): GrapesPluginFn | null => {
   return null
 }
 
+const unique = (values: string[]): string[] => [...new Set(values.filter(Boolean))]
+
+export interface LoadPluginFromUrlOptions {
+  fallbackGlobalNames?: string[]
+}
+
 export async function loadPluginFromUrl(
   url: string,
-  globalVar?: string
+  globalVar?: string,
+  options: LoadPluginFromUrlOptions = {}
 ): Promise<GrapesPluginFn> {
   const trimmedUrl = url.trim()
   if (!trimmedUrl) throw new Error('插件 URL 不能为空')
@@ -101,7 +108,10 @@ export async function loadPluginFromUrl(
     // UMD bundles commonly fail dynamic import, then fall back to script globals.
   }
 
-  const candidates = deriveGlobalNames(trimmedUrl)
+  const candidates = unique([
+    ...deriveGlobalNames(trimmedUrl),
+    ...(options.fallbackGlobalNames ?? []),
+  ])
   if (candidates.length) {
     try {
       await loadScript(trimmedUrl)
@@ -115,4 +125,38 @@ export async function loadPluginFromUrl(
   throw new Error(
     '未从模块解析到插件函数（ESM 默认导出 / UMD 全局变量均未命中）。若为 UMD 包，请填写全局变量名。'
   )
+}
+
+export interface LoadPluginFromCodeOptions {
+  filename?: string
+  globalVar?: string
+}
+
+const deriveFilenameGlobalNames = (filename?: string): string[] => {
+  const name = filename?.trim().split(/[\\/]/).pop()
+  if (!name) return []
+  return deriveGlobalNames(`https://webbuilder.local/${encodeURI(name)}`)
+}
+
+export async function loadPluginFromCode(
+  code: string,
+  options: LoadPluginFromCodeOptions = {}
+): Promise<GrapesPluginFn> {
+  if (!code.trim()) throw new Error('插件文件内容不能为空')
+  if (
+    typeof Blob === 'undefined' ||
+    typeof URL === 'undefined' ||
+    typeof URL.createObjectURL !== 'function'
+  ) {
+    throw new Error('当前运行环境不支持从文件内容加载插件')
+  }
+
+  const objectUrl = URL.createObjectURL(new Blob([code], { type: 'text/javascript' }))
+  try {
+    return await loadPluginFromUrl(objectUrl, options.globalVar, {
+      fallbackGlobalNames: deriveFilenameGlobalNames(options.filename),
+    })
+  } finally {
+    URL.revokeObjectURL?.(objectUrl)
+  }
 }

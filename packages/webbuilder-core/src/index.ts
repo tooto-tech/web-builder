@@ -1,5 +1,9 @@
 export type { GrapesPluginFn } from './types.js'
-export { deriveGlobalNames, loadPluginFromUrl } from './pluginLoader.js'
+export { deriveGlobalNames, loadPluginFromCode, loadPluginFromUrl } from './pluginLoader.js'
+export type {
+  LoadPluginFromCodeOptions,
+  LoadPluginFromUrlOptions,
+} from './pluginLoader.js'
 export * from './blockContributions.js'
 export * from './capabilityAdapter.js'
 export * from './commandContext.js'
