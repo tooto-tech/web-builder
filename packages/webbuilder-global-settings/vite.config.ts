@@ -2,8 +2,20 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
+const injectVueEntryStyle = () => ({
+  name: 'webbuilder-global-settings-inject-vue-entry-style',
+  generateBundle(_options: unknown, bundle: Record<string, any>) {
+    const vueEntry = Object.values(bundle).find(
+      chunk => chunk?.type === 'chunk' && chunk.fileName === 'vue.js',
+    )
+    if (vueEntry && typeof vueEntry.code === 'string' && !vueEntry.code.includes("import './style.css';")) {
+      vueEntry.code = `import './style.css';\n${vueEntry.code}`
+    }
+  },
+})
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), injectVueEntryStyle()],
   build: {
     sourcemap: false,
     minify: false,
