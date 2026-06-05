@@ -65,6 +65,15 @@ export const CMS_COMPONENT_REQUIRED_HOST_SERVICES = [
 
 const CMS_DYNAMIC_BLOCKS: WebBuilderBlockPack['blocks'] = [
   {
+    id: 'cms-post-card',
+    label: '文章卡片',
+    category: 'CMS',
+    order: 5,
+    media: 'lucide:newspaper',
+    content: { type: 'wb-cms-post-card' },
+    componentTypes: ['wb-cms-post-card'],
+  },
+  {
     id: 'cms-dynamic-text',
     label: '动态文本',
     category: 'CMS Dynamic',
