@@ -88,6 +88,42 @@ const removeAttr = (el: Element, attr: string, enabled: boolean) => {
   if (enabled) el.removeAttribute(attr)
 }
 
+const isDynamicConditionTruthy = (value: unknown): boolean => {
+  if (Array.isArray(value)) return value.length > 0
+  if (value == null) return false
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'number') return Number.isFinite(value) && value !== 0
+  if (typeof value === 'string') return value.trim().length > 0
+  if (typeof value === 'object') return Object.keys(value).length > 0
+  return Boolean(value)
+}
+
+const shouldShowDynamicCondition = (value: unknown, mode: string): boolean => {
+  const truthy = isDynamicConditionTruthy(value)
+  if (mode === 'falsy' || mode === 'isEmpty') return !truthy
+  return truthy
+}
+
+const applyDynamicConditions = (
+  root: Element,
+  data: DynamicRenderData,
+  removeAttrs: boolean
+): void => {
+  selectBoundElements(root, '[data-cms-if]').forEach((el) => {
+    const key = `${el.getAttribute('data-cms-if') ?? ''}`.trim()
+    if (!key || !(key in data)) return
+
+    const mode = `${el.getAttribute('data-cms-if-mode') ?? 'truthy'}`.trim() || 'truthy'
+    if (!shouldShowDynamicCondition(data[key], mode)) {
+      el.remove()
+      return
+    }
+
+    removeAttr(el, 'data-cms-if', removeAttrs)
+    removeAttr(el, 'data-cms-if-mode', removeAttrs)
+  })
+}
+
 export function bindDynamicRenderData(
   root: Element,
   data: DynamicRenderData,
@@ -97,6 +133,8 @@ export function bindDynamicRenderData(
   const removeAttrs = options.removeBindingAttrs === true
   const imageStrategy = options.imageStrategy ?? 'preview-background'
   let boundRoot = options.normalizeDynamicElements && doc ? normalizeDynamicElements(root, doc) : root
+
+  applyDynamicConditions(boundRoot, data, removeAttrs)
 
   selectBoundElements(boundRoot, '[data-cms-bind]').forEach((el) => {
     const key = el.getAttribute('data-cms-bind')!

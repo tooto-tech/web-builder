@@ -60,6 +60,12 @@ class TestElement {
     }
   }
 
+  remove() {
+    if (!this.parentNode) return
+    this.parentNode.children = this.parentNode.children.filter((item) => item !== this)
+    this.parentNode = null
+  }
+
   hasAttribute(name: string) {
     return this.attrs.has(name)
   }
@@ -217,5 +223,47 @@ describe('dynamicRenderPipeline', () => {
     expect(boundImage.alt).toBe('Product A')
     expect(boundImage.getAttribute('class')).toBe('product-image')
     expect(boundImage.getAttribute('data-cms-bind-src')).toBeNull()
+  })
+
+  it('applies dynamic show and hide conditions for bound fields', () => {
+    const doc = new TestDocument()
+    const root = doc.createElement('div')
+    const showWhenImage = doc.createElement('section')
+    showWhenImage.setAttribute('data-cms-if', 'post.image')
+    const showWhenMissingImage = doc.createElement('section')
+    showWhenMissingImage.setAttribute('data-cms-if', 'post.image')
+    showWhenMissingImage.setAttribute('data-cms-if-mode', 'falsy')
+    const hiddenWhenTitleExists = doc.createElement('section')
+    hiddenWhenTitleExists.setAttribute('data-cms-if', 'post.title')
+    hiddenWhenTitleExists.setAttribute('data-cms-if-mode', 'falsy')
+    root.appendChild(showWhenImage)
+    root.appendChild(showWhenMissingImage)
+    root.appendChild(hiddenWhenTitleExists)
+
+    bindDynamicRenderData(
+      root as any,
+      {
+        'post.image': '',
+        'post.title': 'Launch'
+      },
+      { removeBindingAttrs: true }
+    )
+
+    expect(root.children).toEqual([showWhenMissingImage])
+    expect(showWhenMissingImage.getAttribute('data-cms-if')).toBeNull()
+    expect(showWhenMissingImage.getAttribute('data-cms-if-mode')).toBeNull()
+  })
+
+  it('leaves unknown dynamic condition expressions for downstream renderers', () => {
+    const doc = new TestDocument()
+    const root = doc.createElement('div')
+    const expression = doc.createElement('section')
+    expression.setAttribute('data-cms-if', '!#lists.isEmpty(post.tags)')
+    root.appendChild(expression)
+
+    bindDynamicRenderData(root as any, {}, { removeBindingAttrs: true })
+
+    expect(root.children).toEqual([expression])
+    expect(expression.getAttribute('data-cms-if')).toBe('!#lists.isEmpty(post.tags)')
   })
 })
