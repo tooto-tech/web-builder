@@ -64,4 +64,6 @@ jobs:
 
       - name: Publish selected package
         if: inputs.mode == 'publish'
-        run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --provenance --access public
+        run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --access public
+        env:
+          NPM_CONFIG_PROVENANCE: "false"
