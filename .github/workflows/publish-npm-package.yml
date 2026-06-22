@@ -56,11 +56,8 @@ jobs:
       - name: Run package guard
         run: pnpm guard
 
-      - name: Build core package
-        run: pnpm --filter @tooto-tech/webbuilder-core build
-
-      - name: Build selected package
-        run: pnpm --filter "${{ inputs.package_name }}" build
+      - name: Build selected package and dependencies
+        run: pnpm --filter "${{ inputs.package_name }}..." build
 
       - name: Pack selected package
         run: pnpm --filter "${{ inputs.package_name }}" exec npm pack --dry-run
