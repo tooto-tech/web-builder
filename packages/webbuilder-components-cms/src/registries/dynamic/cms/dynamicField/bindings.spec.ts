@@ -91,4 +91,24 @@ describe('cms dynamic product detail fields', () => {
       ])
     )
   })
+
+  it('exposes media size on media detail and loop item templates', () => {
+    const mediaSizeField = {
+      value: 'media.size',
+      label: '媒体大小',
+      kind: 'text',
+      group: '媒体'
+    }
+
+    expect(DYNAMIC_FIELD_MAP['media-detail']).toContainEqual(mediaSizeField)
+    expect(DYNAMIC_FIELD_MAP['media-loop-item']).toContainEqual(mediaSizeField)
+    expect(
+      buildFieldSelectOptions(filterFieldsByKind(DYNAMIC_FIELD_MAP['media-detail'], ['text']))
+        .map((field) => field.value)
+    ).toContain('media.size')
+    expect(
+      buildFieldSelectOptions(filterFieldsByKind(DYNAMIC_FIELD_MAP['media-loop-item'], ['text']))
+        .map((field) => field.value)
+    ).toContain('media.size')
+  })
 })

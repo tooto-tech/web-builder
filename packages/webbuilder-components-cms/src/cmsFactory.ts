@@ -181,6 +181,16 @@ const CMS_TRANSFORM_FN: Record<string, string> = {
       };
     }`,
   media: `function transform(item) {
+      function formatFileSize(size) {
+        var normalized = Number(size);
+        if (!isFinite(normalized) || normalized < 0) return '';
+        if (normalized === 0) return '0 B';
+        var units = ['B', 'KB', 'MB', 'GB'];
+        var index = Math.min(Math.floor(Math.log(normalized) / Math.log(1024)), units.length - 1);
+        var value = normalized / Math.pow(1024, index);
+        var text = value >= 100 ? value.toFixed(0) : value.toFixed(1).replace(/\\.0$/, '');
+        return text + ' ' + units[index];
+      }
       var mediaUrl = ${normalizeSiteHref.toString()}(
         item && (item.url || item.mediaUrl || item.link)
       );
@@ -194,6 +204,7 @@ const CMS_TRANSFORM_FN: Record<string, string> = {
       return {
         'media.title': item.title || '',
         'media.url': mediaUrl || '',
+        'media.size': formatFileSize(item && (item.size != null ? item.size : item.fileSize)),
         'media.coverUrl': item.coverUrl || '',
         'media.description': item.description || '',
         'media.detailUrl': explicitUrl || (identifier && categoryCode ? ('/' + resolveLanguage() + '/' + encodeURIComponent(categoryCode) + '/' + encodeURIComponent(identifier) + '.html') : '#')
