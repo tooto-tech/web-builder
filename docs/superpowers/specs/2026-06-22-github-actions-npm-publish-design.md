@@ -50,7 +50,7 @@ The workflow permissions are:
 Each run will:
 
 1. Check out the repository.
-2. Set up Node.js 20 with npm registry URL `https://registry.npmjs.org`.
+2. Set up Node.js 24 with npm registry URL `https://registry.npmjs.org`.
 3. Enable Corepack and activate `pnpm@10.28.1`.
 4. Install dependencies with `pnpm install --frozen-lockfile`.
 5. Run `pnpm guard`.
