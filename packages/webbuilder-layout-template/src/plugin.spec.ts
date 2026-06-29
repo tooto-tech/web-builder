@@ -4,7 +4,7 @@ import { createLayoutTemplatePlugin } from './plugin'
 import type {
   ResourceTransactionParticipant,
   WebBuilderPluginContext,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 const createContext = (): WebBuilderPluginContext => ({
   editor: {} as any,

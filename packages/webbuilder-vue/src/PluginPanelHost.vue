@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { WebBuilderPanelContribution } from '@tooto-tech/webbuilder-core'
+import type { WebBuilderPanelContribution } from '@toototech/webbuilder-core'
 
 interface Props {
   panels: WebBuilderPanelContribution[]

@@ -30,7 +30,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         '@iconify/vue',
-        '@tooto-tech/webbuilder-core',
+        '@toototech/webbuilder-core',
         'element-plus',
         'vue',
       ],

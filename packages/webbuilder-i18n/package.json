@@ -1,5 +1,5 @@
 {
-  "name": "@tooto-tech/webbuilder-i18n",
+  "name": "@toototech/webbuilder-i18n",
   "version": "0.1.2",
   "type": "module",
   "private": false,
@@ -30,17 +30,17 @@
     "./style.css": "./dist/style.css"
   },
   "peerDependencies": {
-    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
     "@vitejs/plugin-vue": "5.0.4",
     "vite": "5.1.4",
     "vue-tsc": "^1.8.27"
   },
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-i18n",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-i18n",
   "publishConfig": {
     "access": "public"
   }

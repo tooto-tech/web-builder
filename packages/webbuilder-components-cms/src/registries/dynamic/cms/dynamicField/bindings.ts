@@ -1,4 +1,4 @@
-import { getLoopItemType } from '@tooto-tech/webbuilder-layout-template'
+import { getLoopItemType } from '@toototech/webbuilder-layout-template'
 
 /**
  * 动态字段 / 动态循环的元数据配置。

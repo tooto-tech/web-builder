@@ -1,0 +1,77 @@
+{
+  "name": "@toototech/webbuilder-plugins",
+  "version": "0.1.0",
+  "type": "module",
+  "private": false,
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "vite build --config vite.config.ts && vue-tsc -p tsconfig.build.json --declaration --emitDeclarationOnly",
+    "prepack": "corepack pnpm@10.28.1 build"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./basic": {
+      "types": "./dist/basic/index.d.ts",
+      "import": "./dist/basic.js"
+    },
+    "./cms": {
+      "types": "./dist/cms/index.d.ts",
+      "import": "./dist/cms.js"
+    },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n.js"
+    },
+    "./global-settings": {
+      "types": "./dist/global-settings/index.d.ts",
+      "import": "./dist/global-settings.js"
+    },
+    "./layout-template": {
+      "types": "./dist/layout-template/index.d.ts",
+      "import": "./dist/layout-template.js"
+    },
+    "./publisher": {
+      "types": "./dist/publisher/index.d.ts",
+      "import": "./dist/publisher.js"
+    },
+    "./vue": {
+      "types": "./dist/vue.d.ts",
+      "import": "./dist/vue.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "peerDependencies": {
+    "@iconify/iconify": "^3.1.1",
+    "@iconify/json": "^2.2.187",
+    "@iconify/vue": "^5.0.0",
+    "@toototech/webbuilder": "^0.1.0",
+    "element-plus": "^2.11.0",
+    "grapesjs": "^0.23.1",
+    "swiper": "^12.1.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@toototech/webbuilder": "workspace:*",
+    "@vitejs/plugin-vue": "5.0.4",
+    "vite": "5.1.4",
+    "vue-tsc": "^1.8.27"
+  },
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-plugins",
+  "publishConfig": {
+    "access": "public"
+  }
+}

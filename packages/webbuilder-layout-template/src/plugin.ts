@@ -3,7 +3,7 @@ import type {
   WebBuilderFeaturePlugin,
   WebBuilderPanelContribution,
   WebBuilderPluginContext,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export const LAYOUT_TEMPLATE_PLUGIN_ID = 'layout-template'
 

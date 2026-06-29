@@ -1,5 +1,5 @@
 {
-  "name": "@tooto-tech/webbuilder-core",
+  "name": "@toototech/webbuilder-core",
   "version": "0.1.0",
   "type": "module",
   "private": false,
@@ -26,7 +26,7 @@
     "grapesjs": "^0.23.1"
   },
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-core",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-core",
   "publishConfig": {
     "access": "public"
   }

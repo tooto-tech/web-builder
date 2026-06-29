@@ -29,7 +29,7 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        '@tooto-tech/webbuilder-core',
+        '@toototech/webbuilder-core',
         'vue',
       ],
     },

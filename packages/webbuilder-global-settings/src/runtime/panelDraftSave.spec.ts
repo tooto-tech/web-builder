@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { createGlobalSettingsSource } from './settingsSource.js'
 import { saveGlobalSettingsPanelDraft } from './panelDraftSave.js'
-import type { GlobalSettingsSnapshot, GlobalSettingsService } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot, GlobalSettingsService } from '@toototech/webbuilder-core'
 
 const createSnapshot = (
   overrides: Partial<GlobalSettingsSnapshot> = {}

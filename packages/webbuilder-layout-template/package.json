@@ -1,5 +1,5 @@
 {
-  "name": "@tooto-tech/webbuilder-layout-template",
+  "name": "@toototech/webbuilder-layout-template",
   "version": "0.1.1",
   "type": "module",
   "private": false,
@@ -33,19 +33,19 @@
   },
   "peerDependencies": {
     "@iconify/vue": "^5.0.0",
-    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
     "element-plus": "^2.11.0",
     "grapesjs": "^0.23.1",
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "vite": "^5.1.4",
     "vue-tsc": "^2.2.12"
   },
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-layout-template",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-layout-template",
   "publishConfig": {
     "access": "public"
   }

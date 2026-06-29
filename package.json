@@ -1,14 +1,14 @@
 {
-  "name": "@tooto-tech/webbuilder-packages",
+  "name": "@toototech/webbuilder-packages",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.28.1",
   "scripts": {
-    "build": "pnpm --filter @tooto-tech/webbuilder-core build && pnpm --filter \"@tooto-tech/webbuilder-*\" --filter \"!@tooto-tech/webbuilder-core\" build",
+    "build": "pnpm --filter @toototech/webbuilder build && pnpm --filter @toototech/webbuilder-plugins build",
     "guard": "node scripts/webbuilder-packages-guard.mjs",
     "test": "pnpm run build && vitest run --config vitest.config.ts",
-    "pack:dry-run": "pnpm run guard && pnpm run build && pnpm --filter \"@tooto-tech/webbuilder-*\" exec npm pack --dry-run --json"
+    "pack:dry-run": "pnpm run guard && pnpm run build && pnpm --filter @toototech/webbuilder --filter @toototech/webbuilder-plugins exec npm pack --dry-run --json"
   },
   "devDependencies": {
     "@iconify/iconify": "^3.1.1",

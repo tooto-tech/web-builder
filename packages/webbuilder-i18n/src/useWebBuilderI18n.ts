@@ -15,7 +15,7 @@ import type {
   HostUi,
   PageResourceIdentity,
   WebBuilderPluginAction
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 import type {
   WebBuilderI18nBundleResp,
   WebBuilderI18nEntry,

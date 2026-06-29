@@ -4,7 +4,7 @@ import {
   createGlobalSettingsSource,
   createMemoryGlobalSettingsSource,
 } from './settingsSource.js'
-import type { GlobalSettingsSnapshot } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot } from '@toototech/webbuilder-core'
 
 const createSnapshot = (
   overrides: Partial<GlobalSettingsSnapshot> = {}

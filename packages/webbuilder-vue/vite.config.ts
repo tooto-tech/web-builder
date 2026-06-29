@@ -16,7 +16,7 @@ export default defineConfig({
       external: [
         '@monaco-editor/loader',
         '@iconify/vue',
-        '@tooto-tech/webbuilder-core',
+        '@toototech/webbuilder-core',
         'element-plus',
         'grapesjs',
         'monaco-editor',

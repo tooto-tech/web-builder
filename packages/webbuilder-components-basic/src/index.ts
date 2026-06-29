@@ -2,7 +2,7 @@ export type {
   WebBuilderBlock,
   WebBuilderBlockPack,
   WebBuilderBlockPackProvider,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export * from './traitFactory.js'
 export * from './traitBridge.js'

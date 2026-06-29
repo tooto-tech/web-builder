@@ -1,4 +1,4 @@
-import type { PageResourceIdentity } from '@tooto-tech/webbuilder-core'
+import type { PageResourceIdentity } from '@toototech/webbuilder-core'
 
 export type WebBuilderI18nField =
   | 'text'

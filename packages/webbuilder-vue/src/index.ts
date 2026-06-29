@@ -9,4 +9,4 @@ export { default as WebBuilderShell } from './WebBuilderShell.vue'
 export type {
   WebBuilderPanelContribution,
   WebBuilderPanelLayout,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'

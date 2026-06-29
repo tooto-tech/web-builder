@@ -1,7 +1,7 @@
 import type {
   GlobalSettingsSnapshot,
   SettingsSource,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export type { GlobalSettingsSnapshot, SettingsSource }
 

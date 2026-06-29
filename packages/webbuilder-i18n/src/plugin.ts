@@ -3,7 +3,7 @@ import {
   type WebBuilderFeaturePlugin,
   type WebBuilderPanelContribution,
   type WebBuilderPluginAction,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export const I18N_PLUGIN_ID = 'i18n'
 export const I18N_PLUGIN_CAPABILITY = 'webbuilder:i18n'

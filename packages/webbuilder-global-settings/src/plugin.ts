@@ -1,7 +1,7 @@
 import {
   WEB_BUILDER_PROJECT_PAINT_EVENT,
   type WebBuilderFeaturePlugin,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 import { renderGlobalSettingsPublishedAssets } from './publisher.js'
 import { injectGlobalSettingsIntoDocument } from './runtime/canvasInjection.js'
 

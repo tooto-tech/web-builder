@@ -1,4 +1,4 @@
-# @tooto-tech/webbuilder-publisher
+# @toototech/webbuilder-publisher
 
 Headless WebBuilder publisher package for stable publisher helper exports.
 
@@ -7,7 +7,7 @@ Headless WebBuilder publisher package for stable publisher helper exports.
 Use only the package exports declared in `package.json`:
 
 ```ts
-import {} from '@tooto-tech/webbuilder-publisher'
+import {} from '@toototech/webbuilder-publisher'
 ```
 
 Internal `src/*` paths are not public API.

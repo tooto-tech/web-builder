@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 const distStylePath = resolve(__dirname, '../dist/style.css')
 const distVueEntryPath = resolve(__dirname, '../dist/vue.js')
 
-describe('@tooto-tech/webbuilder-i18n style contract', () => {
+describe('@toototech/webbuilder-i18n style contract', () => {
   it('loads panel styles from the vue sub-entry without app-level style imports', () => {
     const css = readFileSync(distStylePath, 'utf8')
     const vueEntry = readFileSync(distVueEntryPath, 'utf8')

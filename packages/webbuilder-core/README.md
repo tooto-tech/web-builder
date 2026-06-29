@@ -1,4 +1,4 @@
-# @tooto-tech/webbuilder-core
+# @toototech/webbuilder-core
 
 Core WebBuilder package for plugin loading and editor-facing primitives.
 
@@ -11,7 +11,7 @@ import {
   deriveGlobalNames,
   loadPluginFromCode,
   loadPluginFromUrl,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 ```
 
 Internal `src/*` paths are not public API.

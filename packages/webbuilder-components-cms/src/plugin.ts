@@ -5,7 +5,7 @@ import {
   type WebBuilderFeaturePlugin,
   type WebBuilderPluginCleanup,
   type WebBuilderPluginContext,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export const CMS_COMPONENTS_PLUGIN_ID = 'cms-components'
 export const CMS_COMPONENTS_CAPABILITY = 'webbuilder:cms-components'

@@ -1,7 +1,7 @@
 import type { Editor } from 'grapesjs'
 
-import { registerBasicPublisherComponents } from '@tooto-tech/webbuilder-components-basic/publisher'
-import { registerCmsPublisherComponents } from '@tooto-tech/webbuilder-components-cms/publisher'
+import { registerBasicPublisherComponents } from '@toototech/webbuilder-components-basic/publisher'
+import { registerCmsPublisherComponents } from '@toototech/webbuilder-components-cms/publisher'
 
 export interface WebBuilderPublisherComponentRegistrar {
   id: string

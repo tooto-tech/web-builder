@@ -1,5 +1,5 @@
 {
-  "name": "@tooto-tech/webbuilder-components-basic",
+  "name": "@toototech/webbuilder-components-basic",
   "version": "0.1.1",
   "type": "module",
   "private": false,
@@ -29,15 +29,15 @@
   "peerDependencies": {
     "@iconify/iconify": "^3.1.1",
     "@iconify/json": "^2.2.187",
-    "@tooto-tech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
     "grapesjs": "^0.23.1",
     "swiper": "^12.1.0"
   },
   "devDependencies": {
-    "@tooto-tech/webbuilder-core": "^0.1.0"
+    "@toototech/webbuilder-core": "^0.1.0"
   },
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-components-basic",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-components-basic",
   "publishConfig": {
     "access": "public"
   }

@@ -1,6 +1,6 @@
 # WebBuilder Packages
 
-`web-builder` 是 `@tooto-tech/webbuilder-*` 包源码仓库。
+`web-builder` 是 `@toototech/webbuilder-*` 包源码仓库。
 
 ## 包目录
 
@@ -21,4 +21,4 @@
 - 构建全部包：`pnpm build`
 - 发布前打包检查：`pnpm pack:dry-run`
 
-`b2b-admin` 默认只消费 npm 上发布的 `@tooto-tech/webbuilder-*` 版本。修改包源码、构建和发布包时优先在本仓库完成，然后再回到 `b2b-admin` 更新依赖版本。
+`b2b-admin` 默认只消费 npm 上发布的 `@toototech/webbuilder-*` 版本。修改包源码、构建和发布包时优先在本仓库完成，然后再回到 `b2b-admin` 更新依赖版本。

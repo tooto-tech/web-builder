@@ -1,4 +1,4 @@
-import type { PageResourceIdentity } from '@tooto-tech/webbuilder-core'
+import type { PageResourceIdentity } from '@toototech/webbuilder-core'
 
 export interface LayoutTemplatePageRecord extends PageResourceIdentity {
   id?: number

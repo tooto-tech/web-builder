@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { renderGlobalSettingsPublishedAssets } from './publisher.js'
-import type { GlobalSettingsSnapshot } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot } from '@toototech/webbuilder-core'
 
 const createSnapshot = (
   overrides: Partial<GlobalSettingsSnapshot> = {}

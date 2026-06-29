@@ -1,4 +1,4 @@
-import type { GlobalSettingsSnapshot } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot } from '@toototech/webbuilder-core'
 
 export const GLOBAL_SETTINGS_STYLE_IDS = {
   colors: 'wb-global-colors',

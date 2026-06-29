@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { registerDynamicBreadcrumbBlock } from './breadcrumbBlock.js'
 import { WB_CMS_DYN_BREADCRUMB_TYPE } from '../constants.js'
 import { DYNAMIC_FIELD_STYLES, DYNAMIC_FIELD_STYLE_KEY } from '../styles.js'
-import { getInjectedPublishCss } from '@tooto-tech/webbuilder-components-basic'
+import { getInjectedPublishCss } from '@toototech/webbuilder-components-basic'
 
 describe('cms dynamic breadcrumb block', () => {
   it('repeats breadcrumb list items instead of the list container', () => {

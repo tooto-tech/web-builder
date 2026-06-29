@@ -1,5 +1,5 @@
 {
-  "name": "@tooto-tech/webbuilder-publisher",
+  "name": "@toototech/webbuilder-publisher",
   "version": "0.1.0",
   "type": "module",
   "private": false,
@@ -23,20 +23,20 @@
     }
   },
   "peerDependencies": {
-    "@tooto-tech/webbuilder-components-basic": "^0.1.0",
-    "@tooto-tech/webbuilder-components-cms": "^0.1.0",
-    "@tooto-tech/webbuilder-core": "^0.1.0",
-    "@tooto-tech/webbuilder-global-settings": "^0.1.0",
+    "@toototech/webbuilder-components-basic": "^0.1.0",
+    "@toototech/webbuilder-components-cms": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-global-settings": "^0.1.0",
     "grapesjs": "^0.23.1"
   },
   "devDependencies": {
-    "@tooto-tech/webbuilder-components-basic": "^0.1.0",
-    "@tooto-tech/webbuilder-components-cms": "^0.1.0",
-    "@tooto-tech/webbuilder-core": "^0.1.0",
-    "@tooto-tech/webbuilder-global-settings": "^0.1.0"
+    "@toototech/webbuilder-components-basic": "^0.1.0",
+    "@toototech/webbuilder-components-cms": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-global-settings": "^0.1.0"
   },
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-publisher",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-publisher",
   "publishConfig": {
     "access": "public"
   }

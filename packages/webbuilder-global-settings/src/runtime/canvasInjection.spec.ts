@@ -4,7 +4,7 @@ import {
   GLOBAL_SETTINGS_STYLE_IDS,
   injectGlobalSettingsIntoDocument,
 } from './canvasInjection.js'
-import type { GlobalSettingsSnapshot } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot } from '@toototech/webbuilder-core'
 
 class FakeElement {
   id = ''

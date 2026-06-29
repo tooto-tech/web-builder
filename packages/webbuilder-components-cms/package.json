@@ -1,5 +1,5 @@
 {
-  "name": "@tooto-tech/webbuilder-components-cms",
+  "name": "@toototech/webbuilder-components-cms",
   "version": "0.1.1",
   "type": "module",
   "private": false,
@@ -31,18 +31,18 @@
     }
   },
   "peerDependencies": {
-    "@tooto-tech/webbuilder-components-basic": "^0.1.0",
-    "@tooto-tech/webbuilder-core": "^0.1.0",
-    "@tooto-tech/webbuilder-layout-template": "^0.1.0",
+    "@toototech/webbuilder-components-basic": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-layout-template": "^0.1.0",
     "grapesjs": "^0.23.1"
   },
   "devDependencies": {
-    "@tooto-tech/webbuilder-components-basic": "^0.1.0",
-    "@tooto-tech/webbuilder-core": "^0.1.0",
-    "@tooto-tech/webbuilder-layout-template": "^0.1.0"
+    "@toototech/webbuilder-components-basic": "^0.1.0",
+    "@toototech/webbuilder-core": "^0.1.0",
+    "@toototech/webbuilder-layout-template": "^0.1.0"
   },
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/@tooto-tech/webbuilder-components-cms",
+  "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-components-cms",
   "publishConfig": {
     "access": "public"
   }

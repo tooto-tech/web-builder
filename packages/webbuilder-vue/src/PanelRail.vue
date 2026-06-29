@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
-import type { WebBuilderPanelContribution } from '@tooto-tech/webbuilder-core'
+import type { WebBuilderPanelContribution } from '@toototech/webbuilder-core'
 
 type PanelId = string
 type PanelButton = { id: PanelId; icon: string; title: string }

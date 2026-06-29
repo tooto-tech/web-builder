@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createGlobalSettingsPlugin } from './plugin.js'
 import { createGlobalSettingsSource } from './runtime/settingsSource.js'
 import { GLOBAL_SETTINGS_STYLE_IDS } from './runtime/canvasInjection.js'
-import type { GlobalSettingsSnapshot, WebBuilderPluginContext } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot, WebBuilderPluginContext } from '@toototech/webbuilder-core'
 
 const PROJECT_PAINT_EVENT = 'webbuilder:project:paint'
 

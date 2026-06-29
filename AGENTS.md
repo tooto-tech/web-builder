@@ -2,7 +2,7 @@
 
 ## 工作协议
 
-- 本仓库是 `@tooto-tech/webbuilder-*` packages 的源码位置。
+- 本仓库是 `@toototech/webbuilder-*` packages 的源码位置。
 - 安装依赖时优先使用 `pnpm`。
 - 修改包源码、构建、打包检查和发布都优先在本仓库完成。
 - `b2b-admin` 只应消费 npm 发布版本；不要把本仓库源码作为 `b2b-admin` 客户交付内容一起交付。

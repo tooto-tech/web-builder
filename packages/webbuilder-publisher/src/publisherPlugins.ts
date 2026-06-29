@@ -6,7 +6,7 @@ import {
   type WebBuilderPublisherAssets,
   type WebBuilderPublisherContext,
   type WebBuilderPublisherContribution,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export interface WebBuilderPublisherPluginRegistryOptions {
   plugins: WebBuilderFeaturePlugin[]

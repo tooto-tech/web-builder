@@ -4,10 +4,10 @@ import type {
   WebBuilderFeaturePlugin,
   WebBuilderPublisherAssets,
   WebBuilderPublisherContext,
-} from '@tooto-tech/webbuilder-core'
-import { collectProjectDataComponentTypes } from '@tooto-tech/webbuilder-core'
-import { createCmsComponentsPlugin } from '@tooto-tech/webbuilder-components-cms/plugin'
-import { createGlobalSettingsPlugin } from '@tooto-tech/webbuilder-global-settings/plugin'
+} from '@toototech/webbuilder-core'
+import { collectProjectDataComponentTypes } from '@toototech/webbuilder-core'
+import { createCmsComponentsPlugin } from '@toototech/webbuilder-components-cms/plugin'
+import { createGlobalSettingsPlugin } from '@toototech/webbuilder-global-settings/plugin'
 import { createWebBuilderPublisherPluginRegistry } from './publisherPlugins.js'
 
 export interface WebBuilderPublisherRuntimeRenderOptions

@@ -4,7 +4,7 @@ import {
   createWebBuilderPublisherRuntimeRegistry,
   renderWebBuilderPublisherPluginAssets,
 } from './publisherAssets.js'
-import type { GlobalSettingsSnapshot } from '@tooto-tech/webbuilder-core'
+import type { GlobalSettingsSnapshot } from '@toototech/webbuilder-core'
 
 const createGlobalSettingsSnapshot = (): GlobalSettingsSnapshot => ({
   version: 'published-v1',

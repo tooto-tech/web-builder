@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { ElInput } from 'element-plus'
 import { Icon } from '@iconify/vue'
-import type { HostUi } from '@tooto-tech/webbuilder-core'
+import type { HostUi } from '@toototech/webbuilder-core'
 import { useFontManager, type InstalledFont } from '../useFontManager.js'
 import type { GoogleFontItem } from '../useGoogleFonts.js'
 import FontFamilySelect from './FontFamilySelect.vue'

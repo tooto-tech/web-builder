@@ -4,7 +4,7 @@ import type {
   GlobalSettingsSnapshot,
   PageResourceIdentity,
   SettingsSource,
-} from '@tooto-tech/webbuilder-core'
+} from '@toototech/webbuilder-core'
 
 export interface GlobalSettingsPanelCacheSnapshot {
   colors: unknown[]

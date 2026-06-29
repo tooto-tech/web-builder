@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 const distStylePath = resolve(__dirname, '../dist/style.css')
 
-describe('@tooto-tech/webbuilder-vue style contract', () => {
+describe('@toototech/webbuilder-vue style contract', () => {
   it('ships prefixed shell utilities without Tailwind base reset', () => {
     const css = readFileSync(distStylePath, 'utf8')
 

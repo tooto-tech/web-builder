@@ -66,142 +66,7 @@ importers:
         specifier: ^1.8.27
         version: 1.8.27(typescript@5.3.3)
 
-  packages/webbuilder-components-basic:
-    dependencies:
-      '@iconify/iconify':
-        specifier: ^3.1.1
-        version: 3.1.1
-      '@iconify/json':
-        specifier: ^2.2.187
-        version: 2.2.482
-      grapesjs:
-        specifier: 0.23.1
-        version: 0.23.1
-      swiper:
-        specifier: ^12.1.0
-        version: 12.2.0
-    devDependencies:
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
-
-  packages/webbuilder-components-cms:
-    dependencies:
-      grapesjs:
-        specifier: 0.23.1
-        version: 0.23.1
-    devDependencies:
-      '@tooto-tech/webbuilder-components-basic':
-        specifier: ^0.1.0
-        version: link:../webbuilder-components-basic
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
-      '@tooto-tech/webbuilder-layout-template':
-        specifier: ^0.1.0
-        version: link:../webbuilder-layout-template
-
-  packages/webbuilder-core:
-    dependencies:
-      grapesjs:
-        specifier: 0.23.1
-        version: 0.23.1
-
-  packages/webbuilder-global-settings:
-    dependencies:
-      '@iconify/vue':
-        specifier: ^5.0.0
-        version: 5.0.1(vue@3.5.12(typescript@5.3.3))
-      element-plus:
-        specifier: ^2.11.0
-        version: 2.11.1(vue@3.5.12(typescript@5.3.3))
-      grapesjs:
-        specifier: 0.23.1
-        version: 0.23.1
-      vue:
-        specifier: ^3.5.0
-        version: 3.5.12(typescript@5.3.3)
-    devDependencies:
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
-      '@vitejs/plugin-vue':
-        specifier: 5.0.4
-        version: 5.0.4(vite@5.1.4(@types/node@20.19.41))(vue@3.5.12(typescript@5.3.3))
-      vite:
-        specifier: 5.1.4
-        version: 5.1.4(@types/node@20.19.41)
-      vue-tsc:
-        specifier: ^1.8.27
-        version: 1.8.27(typescript@5.3.3)
-
-  packages/webbuilder-i18n:
-    dependencies:
-      vue:
-        specifier: ^3.5.0
-        version: 3.5.12(typescript@5.3.3)
-    devDependencies:
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
-      '@vitejs/plugin-vue':
-        specifier: 5.0.4
-        version: 5.0.4(vite@5.1.4(@types/node@20.19.41))(vue@3.5.12(typescript@5.3.3))
-      vite:
-        specifier: 5.1.4
-        version: 5.1.4(@types/node@20.19.41)
-      vue-tsc:
-        specifier: ^1.8.27
-        version: 1.8.27(typescript@5.3.3)
-
-  packages/webbuilder-layout-template:
-    dependencies:
-      '@iconify/vue':
-        specifier: ^5.0.0
-        version: 5.0.1(vue@3.5.12(typescript@5.3.3))
-      element-plus:
-        specifier: ^2.11.0
-        version: 2.11.1(vue@3.5.12(typescript@5.3.3))
-      grapesjs:
-        specifier: 0.23.1
-        version: 0.23.1
-      vue:
-        specifier: ^3.5.0
-        version: 3.5.12(typescript@5.3.3)
-    devDependencies:
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
-      '@vitejs/plugin-vue':
-        specifier: ^5.0.4
-        version: 5.0.4(vite@5.1.4(@types/node@20.19.41))(vue@3.5.12(typescript@5.3.3))
-      vite:
-        specifier: ^5.1.4
-        version: 5.1.4(@types/node@20.19.41)
-      vue-tsc:
-        specifier: ^2.2.12
-        version: 2.2.12(typescript@5.3.3)
-
-  packages/webbuilder-publisher:
-    dependencies:
-      grapesjs:
-        specifier: 0.23.1
-        version: 0.23.1
-    devDependencies:
-      '@tooto-tech/webbuilder-components-basic':
-        specifier: ^0.1.0
-        version: link:../webbuilder-components-basic
-      '@tooto-tech/webbuilder-components-cms':
-        specifier: ^0.1.0
-        version: link:../webbuilder-components-cms
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
-      '@tooto-tech/webbuilder-global-settings':
-        specifier: ^0.1.0
-        version: link:../webbuilder-global-settings
-
-  packages/webbuilder-vue:
+  packages/webbuilder:
     dependencies:
       '@iconify/vue':
         specifier: ^5.0.0
@@ -222,9 +87,43 @@ importers:
         specifier: ^3.5.0
         version: 3.5.12(typescript@5.3.3)
     devDependencies:
-      '@tooto-tech/webbuilder-core':
-        specifier: ^0.1.0
-        version: link:../webbuilder-core
+      '@vitejs/plugin-vue':
+        specifier: 5.0.4
+        version: 5.0.4(vite@5.1.4(@types/node@20.19.41))(vue@3.5.12(typescript@5.3.3))
+      vite:
+        specifier: 5.1.4
+        version: 5.1.4(@types/node@20.19.41)
+      vue-tsc:
+        specifier: ^1.8.27
+        version: 1.8.27(typescript@5.3.3)
+
+  packages/webbuilder-plugins:
+    dependencies:
+      '@iconify/iconify':
+        specifier: ^3.1.1
+        version: 3.1.1
+      '@iconify/json':
+        specifier: ^2.2.187
+        version: 2.2.482
+      '@iconify/vue':
+        specifier: ^5.0.0
+        version: 5.0.1(vue@3.5.12(typescript@5.3.3))
+      element-plus:
+        specifier: ^2.11.0
+        version: 2.11.1(vue@3.5.12(typescript@5.3.3))
+      grapesjs:
+        specifier: 0.23.1
+        version: 0.23.1
+      swiper:
+        specifier: ^12.1.0
+        version: 12.2.0
+      vue:
+        specifier: ^3.5.0
+        version: 3.5.12(typescript@5.3.3)
+    devDependencies:
+      '@toototech/webbuilder':
+        specifier: workspace:*
+        version: link:../webbuilder
       '@vitejs/plugin-vue':
         specifier: 5.0.4
         version: 5.0.4(vite@5.1.4(@types/node@20.19.41))(vue@3.5.12(typescript@5.3.3))
@@ -816,20 +715,11 @@ packages:
   '@volar/language-core@1.11.1':
     resolution: {integrity: sha512-dOcNn3i9GgZAcJt43wuaEykSluAuOkQgzni1cuxLxTV0nJKanQztp7FxyswdRILaKH+P2XZMPRp2S4MV/pElCw==}
 
-  '@volar/language-core@2.4.15':
-    resolution: {integrity: sha512-3VHw+QZU0ZG9IuQmzT68IyN4hZNd9GchGPhbD9+pa8CVv7rnoOZwo7T8weIbrRmihqy3ATpdfXFnqRrfPVK6CA==}
-
   '@volar/source-map@1.11.1':
     resolution: {integrity: sha512-hJnOnwZ4+WT5iupLRnuzbULZ42L7BWWPMmruzwtLhJfpDVoZLjNBxHDi2sY2bgZXCKlpU5XcsMFoYrsQmPhfZg==}
 
-  '@volar/source-map@2.4.15':
-    resolution: {integrity: sha512-CPbMWlUN6hVZJYGcU/GSoHu4EnCHiLaXI9n8c9la6RaI9W5JHX+NqG+GSQcB0JdC2FIBLdZJwGsfKyBB71VlTg==}
-
   '@volar/typescript@1.11.1':
     resolution: {integrity: sha512-iU+t2mas/4lYierSnoFOeRFQUhAEMgsFuQxoxvwn5EdQopw43j+J27a4lt9LMInx1gLJBC6qL14WYGlgymaSMQ==}
-
-  '@volar/typescript@2.4.15':
-    resolution: {integrity: sha512-2aZ8i0cqPGjXb4BhkMsPYDkkuc2ZQ6yOpqwAuNwUoncELqoy5fRgOQtLR9gB0g902iS0NAkvpIzs27geVyVdPg==}
 
   '@vue/compiler-core@3.5.12':
     resolution: {integrity: sha512-ISyBTRMmMYagUxhcpyEH0hpXRd/KqDU4ymofPgl2XAkY9ZhQ+h0ovEZJIiPop13UmR/54oA2cgMDjgroRelaEw==}
@@ -849,19 +739,8 @@ packages:
   '@vue/compiler-ssr@3.5.12':
     resolution: {integrity: sha512-eLwc7v6bfGBSM7wZOGPmRavSWzNFF6+PdRhE+VFJhNCgHiF8AM7ccoqcv5kBXA2eWUfigD7byekvf/JsOfKvPA==}
 
-  '@vue/compiler-vue2@2.7.16':
-    resolution: {integrity: sha512-qYC3Psj9S/mfu9uVi5WvNZIzq+xnXMhOwbTFKKDD7b1lhpnn71jXSFdTQ+WsIEk0ONCd7VV2IMm7ONl6tbQ86A==}
-
   '@vue/language-core@1.8.27':
     resolution: {integrity: sha512-L8Kc27VdQserNaCUNiSFdDl9LWT24ly8Hpwf1ECy3aFb9m6bDhBGQYOujDm21N7EW3moKIOKEanQwe1q5BK+mA==}
-    peerDependencies:
-      typescript: '*'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  '@vue/language-core@2.2.12':
-    resolution: {integrity: sha512-IsGljWbKGU1MZpBPN+BvPAdr55YPkj2nB/TBNGNC32Vy2qLG25DYu/NBN2vNtZqdRbTRjaoYrahLrToim2NanA==}
     peerDependencies:
       typescript: '*'
     peerDependenciesMeta:
@@ -896,9 +775,6 @@ packages:
 
   '@vueuse/shared@9.13.0':
     resolution: {integrity: sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==}
-
-  alien-signals@1.0.13:
-    resolution: {integrity: sha512-OGj9yyTnJEttvzhTUWuscOvtqxq5vrhF7vL9oS0xJ2mK0ItPYP1/y+vCFebfxoEyAz0++1AIwJ5CMr+Fk3nDmg==}
 
   any-promise@1.3.0:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
@@ -1181,9 +1057,6 @@ packages:
 
   muggle-string@0.3.1:
     resolution: {integrity: sha512-ckmWDJjphvd/FvZawgygcUeQCxzvohjFO5RxTjj4eq8kw359gFF3E1brjfI+viLMxss5JrHTDRHZvu2/tuy0Qg==}
-
-  muggle-string@0.4.1:
-    resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==}
 
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
@@ -1510,9 +1383,6 @@ packages:
       jsdom:
         optional: true
 
-  vscode-uri@3.1.0:
-    resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
-
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
     engines: {node: '>=12'}
@@ -1532,12 +1402,6 @@ packages:
     hasBin: true
     peerDependencies:
       typescript: '*'
-
-  vue-tsc@2.2.12:
-    resolution: {integrity: sha512-P7OP77b2h/Pmk+lZdJ0YWs+5tJ6J2+uOQPo7tlBnY44QqQSPYvS0qVT4wqDJgwrZaLe47etJLLQRFia71GYITw==}
-    hasBin: true
-    peerDependencies:
-      typescript: '>=5.0.0'
 
   vue@3.5.12:
     resolution: {integrity: sha512-CLVZtXtn2ItBIi/zHZ0Sg1Xkb7+PU32bJJ8Bmy7ts3jxXTcbfsEfBivFYYWz1Hur+lalqGAh65Coin0r+HRUfg==}
@@ -1939,26 +1803,14 @@ snapshots:
     dependencies:
       '@volar/source-map': 1.11.1
 
-  '@volar/language-core@2.4.15':
-    dependencies:
-      '@volar/source-map': 2.4.15
-
   '@volar/source-map@1.11.1':
     dependencies:
       muggle-string: 0.3.1
-
-  '@volar/source-map@2.4.15': {}
 
   '@volar/typescript@1.11.1':
     dependencies:
       '@volar/language-core': 1.11.1
       path-browserify: 1.0.1
-
-  '@volar/typescript@2.4.15':
-    dependencies:
-      '@volar/language-core': 2.4.15
-      path-browserify: 1.0.1
-      vscode-uri: 3.1.0
 
   '@vue/compiler-core@3.5.12':
     dependencies:
@@ -2003,11 +1855,6 @@ snapshots:
       '@vue/compiler-dom': 3.5.12
       '@vue/shared': 3.5.12
 
-  '@vue/compiler-vue2@2.7.16':
-    dependencies:
-      de-indent: 1.0.2
-      he: 1.2.0
-
   '@vue/language-core@1.8.27(typescript@5.3.3)':
     dependencies:
       '@volar/language-core': 1.11.1
@@ -2019,19 +1866,6 @@ snapshots:
       muggle-string: 0.3.1
       path-browserify: 1.0.1
       vue-template-compiler: 2.7.16
-    optionalDependencies:
-      typescript: 5.3.3
-
-  '@vue/language-core@2.2.12(typescript@5.3.3)':
-    dependencies:
-      '@volar/language-core': 2.4.15
-      '@vue/compiler-dom': 3.5.35
-      '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.5.35
-      alien-signals: 1.0.13
-      minimatch: 9.0.9
-      muggle-string: 0.4.1
-      path-browserify: 1.0.1
     optionalDependencies:
       typescript: 5.3.3
 
@@ -2079,8 +1913,6 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
-
-  alien-signals@1.0.13: {}
 
   any-promise@1.3.0: {}
 
@@ -2387,8 +2219,6 @@ snapshots:
 
   muggle-string@0.3.1: {}
 
-  muggle-string@0.4.1: {}
-
   mz@2.7.0:
     dependencies:
       any-promise: 1.3.0
@@ -2670,8 +2500,6 @@ snapshots:
       - tsx
       - yaml
 
-  vscode-uri@3.1.0: {}
-
   vue-demi@0.14.10(vue@3.5.12(typescript@5.3.3)):
     dependencies:
       vue: 3.5.12(typescript@5.3.3)
@@ -2686,12 +2514,6 @@ snapshots:
       '@volar/typescript': 1.11.1
       '@vue/language-core': 1.8.27(typescript@5.3.3)
       semver: 7.8.1
-      typescript: 5.3.3
-
-  vue-tsc@2.2.12(typescript@5.3.3):
-    dependencies:
-      '@volar/typescript': 2.4.15
-      '@vue/language-core': 2.2.12(typescript@5.3.3)
       typescript: 5.3.3
 
   vue@3.5.12(typescript@5.3.3):
