@@ -8,14 +8,8 @@ on:
         required: true
         type: choice
         options:
-          - '@tooto-tech/webbuilder-core'
-          - '@tooto-tech/webbuilder-components-basic'
-          - '@tooto-tech/webbuilder-components-cms'
-          - '@tooto-tech/webbuilder-global-settings'
-          - '@tooto-tech/webbuilder-i18n'
-          - '@tooto-tech/webbuilder-layout-template'
-          - '@tooto-tech/webbuilder-publisher'
-          - '@tooto-tech/webbuilder-vue'
+          - '@toototech/webbuilder'
+          - '@toototech/webbuilder-plugins'
       mode:
         description: Publish mode
         required: true
@@ -65,5 +59,3 @@ jobs:
       - name: Publish selected package
         if: inputs.mode == 'publish'
         run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --access public
-        env:
-          NPM_CONFIG_PROVENANCE: "false"
