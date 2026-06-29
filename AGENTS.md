@@ -2,14 +2,14 @@
 
 ## 工作协议
 
-- 本仓库是 `@toototech/webbuilder-*` packages 的源码位置。
+- 本仓库是 `@toototech/webbuilder` 与 `@toototech/webbuilder-plugins` 的源码位置。
 - 安装依赖时优先使用 `pnpm`。
 - 修改包源码、构建、打包检查和发布都优先在本仓库完成。
 - `b2b-admin` 只应消费 npm 发布版本；不要把本仓库源码作为 `b2b-admin` 客户交付内容一起交付。
 
 ## 包结构
 
-- 包源码位于 `packages/*`。
+- 包源码位于 `packages/webbuilder` 与 `packages/webbuilder-plugins`。
 - 包构建共享配置位于仓库根目录，包括 `tsconfig.webbuilder-package.json`、`postcss.config.js` 和 `pnpm-workspace.yaml`。
 - 不提交 `node_modules/`、`dist/`、`packages/*/dist/` 等生成目录。
 
