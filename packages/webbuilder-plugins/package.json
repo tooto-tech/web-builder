@@ -70,6 +70,11 @@
     "vue-tsc": "^1.8.27"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tooto-tech/web-builder",
+    "directory": "packages/webbuilder-plugins"
+  },
   "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-plugins",
   "publishConfig": {
     "access": "public"
