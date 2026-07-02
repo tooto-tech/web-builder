@@ -18,6 +18,7 @@ import type {
   TenantContext,
   WebBuilderFeaturePlugin,
 } from './featurePlugin.js'
+import type { StorageAdapter } from './storageAdapter.js'
 
 export interface WebBuilderDeviceOption {
   id: string
@@ -34,6 +35,15 @@ export interface WebBuilderCanvasOptions {
   bottomDropZone?: boolean
 }
 
+export interface WebBuilderThemeTokens {
+  [cssVar: string]: string
+}
+
+export interface WebBuilderI18nOptions {
+  locale?: string
+  messages?: Record<string, unknown>
+}
+
 export interface WebBuilderOptions {
   grapesjs?: Partial<EditorConfig>
   plugins?: WebBuilderFeaturePlugin[]
@@ -41,6 +51,7 @@ export interface WebBuilderOptions {
   canvas?: WebBuilderCanvasOptions
   commands?: WebBuilderCommandContext
   hostServices?: HostServices
+  storage?: StorageAdapter
   settings?: SettingsSource
   resource?: PageResourceIdentity
   tenant?: TenantContext
@@ -48,6 +59,8 @@ export interface WebBuilderOptions {
     entitlements?: StaticEntitlementMap
     superAdminRoles?: readonly string[]
   }
+  theme?: WebBuilderThemeTokens
+  i18n?: WebBuilderI18nOptions
   ui?: HostUi
   route?: RouteAdapter
 }
@@ -59,6 +72,7 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
   canvas: WebBuilderCanvasOptions
   commands: WebBuilderCommandContext
   hostServices: HostServices
+  storage: WebBuilderOptions['storage']
   settings: SettingsSource
   resource: PageResourceIdentity
   tenant: TenantContext
@@ -66,6 +80,8 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
     snapshot: WebBuilderCapabilitySnapshot
     capabilityIds: Set<string>
   }
+  theme: WebBuilderThemeTokens
+  i18n: WebBuilderI18nOptions & { messages: Record<string, unknown> }
   ui: HostUi
   route: RouteAdapter
 }
@@ -146,6 +162,7 @@ export const resolveWebBuilderOptions = (
     },
     commands: options.commands ?? {},
     hostServices: options.hostServices ?? {},
+    storage: options.storage,
     settings: options.settings ?? createMemorySettingsSource(),
     resource,
     tenant,
@@ -153,6 +170,11 @@ export const resolveWebBuilderOptions = (
       ...options.capabilities,
       snapshot: capabilitySnapshot,
       capabilityIds: capabilitySnapshot.capabilityIds,
+    },
+    theme: options.theme ?? {},
+    i18n: {
+      messages: {},
+      ...options.i18n,
     },
     ui: options.ui ?? createDefaultUi(),
     route: options.route ?? createDefaultRoute(),

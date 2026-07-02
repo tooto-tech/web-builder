@@ -16,7 +16,9 @@ export type {
   ResolvedWebBuilderOptions,
   WebBuilderCanvasOptions,
   WebBuilderDeviceOption,
+  WebBuilderI18nOptions,
   WebBuilderOptions,
+  WebBuilderThemeTokens,
 } from '../core/index.js'
 export type {
   WebBuilderPanelContribution,

@@ -56,6 +56,19 @@ jobs:
       - name: Pack selected package
         run: pnpm --filter "${{ inputs.package_name }}" exec npm pack --dry-run
 
+      - name: Resolve npm dist-tag
+        id: npm-tag
+        shell: bash
+        run: |
+          version="$(pnpm --filter "${{ inputs.package_name }}" exec node -p "require('./package.json').version")"
+          if [[ "$version" == *-* ]]; then
+            tag="alpha"
+          else
+            tag="latest"
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Publishing ${{ inputs.package_name }}@$version with dist-tag $tag"
+
       - name: Publish selected package
         if: inputs.mode == 'publish'
-        run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --access public
+        run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --access public --tag "${{ steps.npm-tag.outputs.tag }}"

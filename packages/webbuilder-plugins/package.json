@@ -1,6 +1,6 @@
 {
   "name": "@toototech/webbuilder-plugins",
-  "version": "0.1.1",
+  "version": "0.2.0-alpha.0",
   "type": "module",
   "private": false,
   "sideEffects": [
@@ -53,6 +53,37 @@
     },
     "./style.css": "./dist/style.css"
   },
+  "typesVersions": {
+    "*": {
+      "basic": [
+        "dist/components-basic/index.d.ts"
+      ],
+      "cms": [
+        "dist/components-cms/index.d.ts"
+      ],
+      "i18n": [
+        "dist/localization/index.d.ts"
+      ],
+      "global-settings": [
+        "dist/global-settings/index.d.ts"
+      ],
+      "layout-template": [
+        "dist/layout-templates/index.d.ts"
+      ],
+      "publisher": [
+        "dist/publishing/index.d.ts"
+      ],
+      "vue": [
+        "dist/vue-components.d.ts"
+      ],
+      "style.css": [
+        "dist/style.css"
+      ],
+      "*": [
+        "dist/index.d.ts"
+      ]
+    }
+  },
   "dependencies": {
     "@iconify/iconify": "^3.1.1",
     "@iconify/json": "^2.2.187",
@@ -62,7 +93,7 @@
     "swiper": "^12.1.0"
   },
   "peerDependencies": {
-    "@toototech/webbuilder": "^0.1.1",
+    "@toototech/webbuilder": "^0.2.0-alpha.0",
     "vue": "^3.5.0"
   },
   "devDependencies": {

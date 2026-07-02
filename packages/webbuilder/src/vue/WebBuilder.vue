@@ -15,6 +15,7 @@ import {
   type WebBuilderPluginActivationDiagnostic,
   type WebBuilderPluginContext,
 } from '../core/index.js'
+import DefaultBlocksPanel from './DefaultBlocksPanel.vue'
 import PanelRail from './PanelRail.vue'
 import PluginPanelHost from './PluginPanelHost.vue'
 import TopBar from './TopBar.vue'
@@ -288,14 +289,17 @@ onBeforeUnmount(() => {
       </template>
 
       <template #side-panel>
+        <DefaultBlocksPanel
+          v-if="activePanel === 'blocks'"
+        />
         <PluginPanelHost
-          v-if="activePanelContribution?.component && activePanelContribution.layout !== 'full'"
+          v-else-if="activePanelContribution?.component && activePanelContribution.layout !== 'full'"
           :panels="panelContributions"
           :active-panel-id="activePanel"
         />
         <div v-else class="wb-default-panel">
           <div class="wb-default-panel__title">{{ activePanelTitle }}</div>
-          <div class="wb-default-panel__empty">No panel provider is registered.</div>
+          <div class="wb-default-panel__empty">No panel is registered for this section.</div>
         </div>
       </template>
 
