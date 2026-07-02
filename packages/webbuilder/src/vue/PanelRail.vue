@@ -44,7 +44,7 @@ const panelButtons = computed<PanelButton[]>(() =>
 </script>
 
 <template>
-  <div class="tw-flex tw-h-full tw-flex-col tw-items-center tw-gap-2 tw-bg-editor-panel tw-py-3">
+  <div class="tw-flex tw-h-full tw-flex-col tw-items-center tw-gap-2 tw-bg-[color:var(--wb-topbar-bg)] tw-py-3">
     <button
       v-for="btn in panelButtons"
       :key="btn.id"
@@ -52,8 +52,8 @@ const panelButtons = computed<PanelButton[]>(() =>
       class="tw-flex tw-size-8 tw-items-center tw-justify-center tw-rounded tw-text-lg tw-transition-colors"
       :class="
         props.activePanel === btn.id
-          ? 'tw-bg-editor-btn-active tw-text-white'
-          : 'tw-text-white hover:tw-bg-editor-btn-hover'
+          ? 'tw-bg-[color:var(--wb-btn-active-bg)] tw-text-white'
+          : 'tw-text-white hover:tw-bg-[color:var(--wb-btn-hover-bg)]'
       "
       :title="btn.title"
       @click="emit('select-panel', btn.id)"

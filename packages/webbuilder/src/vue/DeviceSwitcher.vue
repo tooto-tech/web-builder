@@ -29,7 +29,7 @@ const getDeviceIcon = (device: any) => {
         v-for="device in devices"
         :key="getDeviceId(device)"
         :class="{
-          'tw-bg-editor-btn-active':
+          'tw-bg-[color:var(--wb-btn-active-bg)]':
             getDeviceId(device) === selected,
         }"
         class="tw-aspect-square tw-w-8 tw-flex tw-items-center tw-justify-center tw-rounded tw-text-white"

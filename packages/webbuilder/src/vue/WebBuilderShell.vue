@@ -2,6 +2,8 @@
 import type { StyleValue } from 'vue'
 import { Icon } from '@iconify/vue'
 
+import { resolveShellMessages, type WebBuilderShellMessages } from './messages.js'
+
 withDefaults(defineProps<{
   registrationDiagnosticText?: string
   editorReady: boolean
@@ -14,6 +16,7 @@ withDefaults(defineProps<{
   editorLoadingVisible?: boolean
   blockingProcessingActive?: boolean
   editorLoadingText?: string
+  messages?: WebBuilderShellMessages
 }>(), {
   registrationDiagnosticText: '',
   isPageSwitching: false,
@@ -25,6 +28,7 @@ withDefaults(defineProps<{
   editorLoadingVisible: false,
   blockingProcessingActive: false,
   editorLoadingText: '',
+  messages: () => resolveShellMessages(),
 })
 
 const emit = defineEmits<{
@@ -72,8 +76,8 @@ const emit = defineEmits<{
             <slot name="side-panel"></slot>
           </div>
           <div
-            class="tw-absolute tw-right-0 tw-top-0 tw-z-20 tw-h-full tw-w-1 tw-cursor-col-resize tw-bg-transparent tw-transition-colors hover:tw-bg-blue-300/70"
-            :class="isResizingSidePanel ? 'tw-bg-blue-400/80' : ''"
+            class="tw-absolute tw-right-0 tw-top-0 tw-z-20 tw-h-full tw-w-1 tw-cursor-col-resize tw-bg-transparent tw-transition-colors hover:tw-bg-[color:var(--wb-resize-hover-bg)]"
+            :class="isResizingSidePanel ? 'tw-bg-[color:var(--wb-resize-active-bg)]' : ''"
             @mousedown.prevent="emit('start-side-panel-resize', $event)"
           ></div>
         </div>
@@ -99,15 +103,15 @@ const emit = defineEmits<{
             class="tw-absolute tw-inset-x-0 tw-bottom-0 tw-h-14 tw-border-t tw-bg-white/95 tw-backdrop-blur-sm tw-flex tw-items-center tw-justify-center tw-text-xs tw-transition-colors"
             :class="
               isBottomDropActive
-                ? 'tw-border-blue-500 tw-text-blue-600 tw-bg-blue-50'
-                : 'tw-border-gray-200 tw-text-gray-400'
+                ? 'tw-border-[color:var(--wb-accent)] tw-text-[color:var(--wb-accent-text)] tw-bg-[color:var(--wb-accent-soft-bg)]'
+                : 'tw-border-[color:var(--wb-drop-idle-border)] tw-text-[color:var(--wb-drop-idle-text)]'
             "
             @dragenter="emit('bottom-drop-drag-enter', $event)"
             @dragleave="emit('bottom-drop-drag-leave', $event)"
             @dragover="emit('bottom-drop-drag-over', $event)"
             @drop="emit('bottom-drop', $event)"
           >
-            拖拽组件到这里，追加到页面底部（不影响页面代码结构）
+            {{ messages['shell.bottomDropHint'] }}
           </div>
 
           <button
@@ -117,7 +121,7 @@ const emit = defineEmits<{
             @click="emit('exit-preview')"
           >
             <Icon icon="mdi:eye-off-outline" class="tw-text-base" />
-            退出预览
+            {{ messages['shell.exitPreview'] }}
           </button>
         </div>
 
@@ -144,7 +148,7 @@ const emit = defineEmits<{
         <div class="wb-editor-loading__text">{{ editorLoadingText }}</div>
         <div class="wb-editor-loading__mark"></div>
         <div v-if="blockingProcessingActive" class="wb-editor-loading__subtext">
-          正在处理复杂任务，请保持页面打开
+          {{ messages['shell.blockingProcessing'] }}
         </div>
       </div>
     </div>
@@ -162,10 +166,10 @@ const emit = defineEmits<{
   gap: 8px;
   max-width: min(560px, calc(100vw - 24px));
   padding: 8px 12px;
-  border: 1px solid #f59e0b;
+  border: 1px solid var(--wb-diagnostic-border);
   border-radius: 6px;
-  background: #fffbeb;
-  color: #92400e;
+  background: var(--wb-diagnostic-bg);
+  color: var(--wb-diagnostic-text);
   font-size: 12px;
   line-height: 18px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
@@ -178,13 +182,13 @@ const emit = defineEmits<{
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
-  color: #1f2937;
+  background: var(--wb-loading-bg);
+  color: var(--wb-loading-text);
   pointer-events: auto;
 }
 
 .wb-editor-loading--blocking {
-  background: #f0f2f5;
+  background: var(--wb-loading-bg);
 }
 
 .wb-editor-loading__panel {
@@ -200,8 +204,8 @@ const emit = defineEmits<{
   position: relative;
   width: 48px;
   height: 48px;
-  border: 3px solid #e5e7eb;
-  border-top-color: #4b5563;
+  border: 3px solid var(--wb-loading-spinner-track);
+  border-top-color: var(--wb-loading-spinner-head);
   border-radius: 50%;
   box-sizing: border-box;
   animation: wb-editor-loading-spin 1.1s linear infinite;
@@ -211,7 +215,7 @@ const emit = defineEmits<{
 
 .wb-editor-loading__text {
   margin-bottom: 30px;
-  color: #1f2937;
+  color: var(--wb-loading-text);
   font-size: 18px;
   font-weight: 600;
   line-height: 26px;
@@ -219,7 +223,7 @@ const emit = defineEmits<{
 
 .wb-editor-loading__subtext {
   margin-top: 18px;
-  color: #6b7280;
+  color: var(--wb-loading-subtext);
   font-size: 12px;
   line-height: 18px;
 }

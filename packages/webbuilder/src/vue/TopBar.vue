@@ -4,21 +4,30 @@ import { Icon } from '@iconify/vue'
 import { ElPopover } from 'element-plus'
 
 import DeviceSwitcher from './DeviceSwitcher.vue'
+import { resolveShellMessages, type WebBuilderShellMessages } from './messages.js'
+import type { WebBuilderBrandingOptions } from '../core/index.js'
 
-const props = defineProps<{
-  showLayers: boolean
+const props = withDefaults(defineProps<{
   showCode: boolean
   showBorders: boolean
   showDevActions?: boolean
   isPublishing?: boolean
   isTemplateResource?: boolean
-}>()
+  messages?: WebBuilderShellMessages
+  branding?: WebBuilderBrandingOptions
+}>(), {
+  messages: () => resolveShellMessages(),
+  branding: () => ({}),
+})
+
+const publishLabel = computed(() =>
+  props.branding.publishLabel ?? props.messages['topbar.publish'],
+)
 
 type TopBarEvent =
   | 'back'
   | 'open-page-settings'
   | 'toggle-borders'
-  | 'toggle-layers'
   | 'toggle-code'
   | 'preview'
   | 'save-draft'
@@ -40,9 +49,11 @@ const centerButtons = computed(() => [
       ? 'carbon:task-settings'
       : 'qlementine-icons:page-setup-16',
     ariaLabel: props.isTemplateResource ? 'Template settings' : 'Page settings',
-    title: props.isTemplateResource ? '模板设置' : '页面设置',
+    title: props.isTemplateResource
+      ? props.messages['topbar.templateSettings']
+      : props.messages['topbar.pageSettings'],
     event: 'open-page-settings' as const,
-    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-editor-btn-active tw-text-white',
+    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-[color:var(--wb-btn-active-bg)] tw-text-white',
   },
 ])
 
@@ -63,49 +74,40 @@ const rightButtons = computed(() => [
         ariaLabel: 'Toggle code editor',
         ariaPressed: props.showCode,
         event: 'toggle-code' as const,
-        class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-editor-btn-hover',
-        activeClass: props.showCode ? 'tw-bg-editor-btn-active tw-text-white' : 'tw-text-white',
+        class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-[color:var(--wb-btn-hover-bg)]',
+        activeClass: props.showCode ? 'tw-bg-[color:var(--wb-btn-active-bg)] tw-text-white' : 'tw-text-white',
       }]
     : []),
-  {
-    id: 'layers',
-    icon: 'si:layers-line',
-    ariaLabel: 'Toggle layers',
-    ariaPressed: props.showLayers,
-    event: 'toggle-layers' as const,
-    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-editor-btn-hover',
-    activeClass: props.showLayers ? 'tw-bg-editor-btn-active tw-text-white' : 'tw-text-white',
-  },
   {
     id: 'preview',
     icon: 'mdi:eye-outline',
     ariaLabel: 'Preview',
     event: 'preview' as const,
-    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-[#ffffff29] tw-text-white',
+    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-[color:var(--wb-btn-hover-bg)] tw-text-white',
   },
   {
     id: 'save-draft',
     icon: 'fluent:save-16-regular',
     ariaLabel: 'Save draft',
     event: 'save-draft' as const,
-    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-editor-btn-hover tw-text-white',
+    class: 'tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-[color:var(--wb-btn-hover-bg)] tw-text-white',
   },
 ])
 
-const publishMenuItems = [
+const publishMenuItems = computed(() => [
   {
-    label: '导出',
+    label: props.messages['topbar.export'],
     icon: 'stash:file-export',
     event: 'export-project' as const,
     class: 'tw-w-full tw-flex tw-items-center tw-gap-2 tw-text-left tw-px-3 tw-py-2 hover:tw-bg-gray-50 tw-rounded tw-text-gray-700',
   },
   {
-    label: '导入',
+    label: props.messages['topbar.import'],
     icon: 'stash:file-import',
     event: 'import-project' as const,
     class: 'tw-w-full tw-flex tw-items-center tw-gap-2 tw-text-left tw-px-3 tw-py-2 hover:tw-bg-gray-50 tw-rounded tw-text-gray-700',
   },
-]
+])
 
 const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | 'import-project'>) => {
   showPublishPopover.value = false
@@ -114,15 +116,21 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
 </script>
 
 <template>
-  <div class="topbar tw-h-10 tw-flex-shrink-0 tw-bg-editor-panel tw-grid tw-grid-cols-[1fr_auto_1fr] tw-items-center">
+  <div class="topbar tw-h-10 tw-flex-shrink-0 tw-bg-[color:var(--wb-topbar-bg)] tw-grid tw-grid-cols-[1fr_auto_1fr] tw-items-center">
     <div class="tw-flex tw-h-full tw-items-center tw-gap-2 tw-relative">
-      <div class="tw-h-full tw-mr-3">
+      <div v-if="props.branding.showDashboardButton !== false" class="tw-h-full tw-mr-3">
         <button
           title="Dashboard"
-          class="tw-flex tw-items-center tw-text-xl tw-justify-center tw-h-full tw-px-3.5 tw-py-1 tw-bg-editor-primary tw-text-white hover:tw-bg-blue-600 tw-transition-colors"
+          class="tw-flex tw-items-center tw-text-xl tw-justify-center tw-h-full tw-px-3.5 tw-py-1 tw-bg-[color:var(--wb-primary)] tw-text-white hover:tw-bg-[color:var(--wb-primary-hover)] tw-transition-colors"
           @click="emit('back')"
         >
-          <Icon icon="clarity:dashboard-line" />
+          <img
+            v-if="props.branding.logo"
+            :src="props.branding.logo"
+            alt="Logo"
+            class="tw-h-5 tw-max-w-24 tw-object-contain"
+          />
+          <Icon v-else :icon="props.branding.homeIcon || 'clarity:dashboard-line'" />
         </button>
       </div>
     </div>
@@ -146,11 +154,11 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
     <div class="tw-flex tw-h-full tw-justify-end tw-pl-3 tw-gap-3 tw-relative">
       <button
         type="button"
-        class="tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-editor-btn-hover"
-        :class="props.showBorders ? 'tw-bg-editor-btn-active tw-text-white' : 'tw-text-white'"
+        class="tw-w-8 tw-h-8 tw-self-center tw-flex tw-items-center tw-justify-center tw-rounded hover:tw-bg-[color:var(--wb-btn-hover-bg)]"
+        :class="props.showBorders ? 'tw-bg-[color:var(--wb-btn-active-bg)] tw-text-white' : 'tw-text-white'"
         :aria-pressed="props.showBorders"
         aria-label="Toggle component borders"
-        title="显示组件边框"
+        :title="props.messages['topbar.toggleBorders']"
         @click="emit('toggle-borders')"
       >
         <Icon icon="fluent:border-none-16-regular" />
@@ -170,12 +178,12 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
 
       <div class="tw-flex">
         <button
-          class="tw-h-full tw-flex tw-justify-center tw-items-center tw-gap-2 tw-text-sm tw-px-6 tw-py-1 tw-bg-editor-primary tw-text-white hover:tw-bg-blue-600 tw-transition-opacity disabled:tw-cursor-not-allowed disabled:tw-opacity-70 disabled:hover:tw-bg-editor-primary"
+          class="tw-h-full tw-flex tw-justify-center tw-items-center tw-gap-2 tw-text-sm tw-px-6 tw-py-1 tw-bg-[color:var(--wb-primary)] tw-text-white hover:tw-bg-[color:var(--wb-primary-hover)] tw-transition-opacity disabled:tw-cursor-not-allowed disabled:tw-opacity-70 disabled:hover:tw-bg-[color:var(--wb-primary)]"
           :disabled="props.isPublishing"
           @click="emit('publish')"
         >
           <Icon v-if="props.isPublishing" icon="mdi:loading" class="tw-animate-spin" />
-          {{ props.isPublishing ? '发布中' : '发布' }}
+          {{ props.isPublishing ? props.messages['topbar.publishing'] : publishLabel }}
         </button>
         <ElPopover
           v-model:visible="showPublishPopover"
@@ -187,7 +195,7 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
         >
           <template #reference>
             <button
-              class="tw-h-full tw-flex tw-border-l tw-border-white/20 tw-items-center tw-justify-center tw-px-3 tw-py-1 tw-bg-editor-primary tw-text-white hover:tw-bg-blue-600 disabled:tw-cursor-not-allowed disabled:tw-opacity-70 disabled:hover:tw-bg-editor-primary"
+              class="tw-h-full tw-flex tw-border-l tw-border-white/20 tw-items-center tw-justify-center tw-px-3 tw-py-1 tw-bg-[color:var(--wb-primary)] tw-text-white hover:tw-bg-[color:var(--wb-primary-hover)] disabled:tw-cursor-not-allowed disabled:tw-opacity-70 disabled:hover:tw-bg-[color:var(--wb-primary)]"
               :disabled="props.isPublishing"
             >
               <Icon icon="ep:arrow-down" />

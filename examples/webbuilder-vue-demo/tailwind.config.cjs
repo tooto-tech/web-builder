@@ -6,15 +6,9 @@ module.exports = {
     './src/**/*.{vue,js,ts}',
     '../../packages/webbuilder/src/**/*.vue',
   ],
+  // 包外壳颜色走 --wb-* CSS 变量（见包内 src/vue/theme.ts），消费端无需定义 editor-* 色板
   theme: {
-    extend: {
-      colors: {
-        'editor-panel': '#001533',
-        'editor-primary': '#2251FF',
-        'editor-btn-hover': '#ffffff29',
-        'editor-btn-active': '#ffffff29',
-      },
-    },
+    extend: {},
   },
   plugins: [],
 }

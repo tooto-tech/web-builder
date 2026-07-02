@@ -3,6 +3,10 @@ import { WebBuilder, type WebBuilderOptions } from '@toototech/webbuilder'
 import { componentsBasic } from '@toototech/webbuilder-plugins/basic'
 
 const options: WebBuilderOptions = {
+  // 白标示例：解除注释即可换肤/换品牌/换文案
+  // theme: { '--wb-topbar-bg': '#1e293b', '--wb-primary': '#16a34a' },
+  // branding: { homeIcon: 'lucide:rocket', publishLabel: 'Ship it' },
+  // i18n: { locale: 'en', messages: { 'shell.bottomDropHint': 'Drop blocks here' } },
   plugins: [
     componentsBasic({
       onRegistrationFailure: diagnostic => {

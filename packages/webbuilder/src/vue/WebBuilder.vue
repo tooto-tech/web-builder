@@ -23,6 +23,8 @@ import TopBar from './TopBar.vue'
 import WebBuilderShell from './WebBuilderShell.vue'
 import { WEB_BUILDER_CONTEXT, type WebBuilderContext } from './context.js'
 import { AssetsModalHost, getBuiltinPanelComponent, ModalHost } from './panels/index.js'
+import { mergeTheme } from './theme.js'
+import { resolveShellMessages } from './messages.js'
 import {
   useAutosaveController,
   useDraftController,
@@ -54,7 +56,6 @@ const editor = ref<Editor | null>(null)
 const editorReady = ref(false)
 const isPreviewMode = ref(false)
 const showBorders = ref(false)
-const showLayers = ref(false)
 const showCode = ref(false)
 const activePanel = ref('blocks')
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
@@ -87,8 +88,14 @@ const activePanelTitle = computed(() => {
   return activePanelContribution.value?.label ?? activePanel.value
 })
 
+const themeVars = computed(() =>
+  Object.fromEntries(Object.entries(mergeTheme(resolvedOptions.value.theme))),
+)
+
+const shellMessages = computed(() => resolveShellMessages(resolvedOptions.value.i18n))
+
 const sidePanelGridStyle = computed(() => ({
-  gridTemplateColumns: '40px 280px minmax(0, 1fr)',
+  gridTemplateColumns: 'var(--wb-rail-width) var(--wb-side-panel-width) minmax(0, 1fr)',
 }))
 
 const diagnosticText = computed(() =>
@@ -349,6 +356,8 @@ onBeforeUnmount(() => {
     @update="onUpdate"
   >
     <WebBuilderShell
+      :style="themeVars"
+      :messages="shellMessages"
       :editor-ready="editorReady"
       :registration-diagnostic-text="diagnosticText"
       :is-preview-mode="isPreviewMode"
@@ -367,13 +376,13 @@ onBeforeUnmount(() => {
           :select-panel="selectPanel"
         >
           <TopBar
-            :show-layers="showLayers"
             :show-code="showCode"
             :show-borders="showBorders"
+            :messages="shellMessages"
+            :branding="resolvedOptions.branding"
             @back="emit('back')"
             @open-page-settings="selectPanel('settings')"
             @toggle-borders="showBorders = !showBorders"
-            @toggle-layers="showLayers = !showLayers"
             @toggle-code="showCode = !showCode"
             @preview="togglePreview"
             :is-publishing="publishController.isPublishing.value"

@@ -39,6 +39,8 @@
  */
 import type { EditorConfig } from 'grapesjs'
 
+import type { WebBuilderThemeTokens } from '../vue/theme.js'
+
 import {
   createWebBuilderCapabilitySnapshot,
   type StaticEntitlementMap,
@@ -74,8 +76,17 @@ export interface WebBuilderCanvasOptions {
   bottomDropZone?: boolean
 }
 
-export interface WebBuilderThemeTokens {
-  [cssVar: string]: string
+export type { WebBuilderThemeTokens } from '../vue/theme.js'
+
+export interface WebBuilderBrandingOptions {
+  /** Logo image URL rendered in the top-left dashboard button. */
+  logo?: string
+  /** Iconify icon name for the dashboard button (default `clarity:dashboard-line`). */
+  homeIcon?: string
+  /** Publish button label; overrides the i18n message. */
+  publishLabel?: string
+  /** Hide the top-left dashboard button entirely when `false`. */
+  showDashboardButton?: boolean
 }
 
 export interface WebBuilderI18nOptions {
@@ -105,7 +116,8 @@ export interface WebBuilderOptions {
     entitlements?: StaticEntitlementMap
     superAdminRoles?: readonly string[]
   }
-  theme?: WebBuilderThemeTokens
+  theme?: Partial<WebBuilderThemeTokens>
+  branding?: WebBuilderBrandingOptions
   i18n?: WebBuilderI18nOptions
   ui?: HostUi
   route?: RouteAdapter
@@ -127,7 +139,8 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
     snapshot: WebBuilderCapabilitySnapshot
     capabilityIds: Set<string>
   }
-  theme: WebBuilderThemeTokens
+  theme: Partial<WebBuilderThemeTokens>
+  branding: WebBuilderBrandingOptions
   i18n: WebBuilderI18nOptions & { messages: Record<string, unknown> }
   ui: HostUi
   route: RouteAdapter
@@ -219,6 +232,7 @@ export const resolveWebBuilderOptions = (
       capabilityIds: capabilitySnapshot.capabilityIds,
     },
     theme: options.theme ?? {},
+    branding: options.branding ?? {},
     i18n: {
       messages: {},
       ...options.i18n,
