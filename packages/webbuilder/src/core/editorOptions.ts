@@ -1,3 +1,42 @@
+/*
+ * Legacy b2b-admin WebBuilder inputs -> WebBuilderOptions mapping
+ *
+ * WebBuilderControllerProps:
+ * - resourceId/resourceKey/resourceType/resourceScope/ownerType/ownerId
+ *   -> resource: PageResourceIdentity. The legacy route-derived fallback is
+ *      supplied by the host route adapter and normalized before passing options.
+ *
+ * Legacy browser adapters and capability context:
+ * - createBrowserHostServices(...)
+ *   -> hostServices, settings, ui, route.
+ * - createBrowserCapabilityAdapter().resolve(pageResource)
+ *   -> tenant and capabilities snapshots.
+ *
+ * Legacy GrapesJS initialization:
+ * - container -> package-owned <Canvas>; not exposed to hosts.
+ * - panels.defaults, height -> package defaults in resolveWebBuilderOptions.
+ * - deviceManager.devices -> devices.
+ * - canvas.styles/canvas.scripts -> canvas.styles/canvas.scripts.
+ * - canvas.frameStyle -> grapesjs.canvas.frameStyle.
+ * - dragMode/showOffsets/showOffsetsSelected/stylePrefix/selectorManager
+ *   /assetManager/parser/plugins/storageManager -> grapesjs.
+ * - storageManager.type:'' -> default grapesjs.storageManager:false plus
+ *   storage for host persistence adapters.
+ *
+ * Legacy useEditorInit responsibilities:
+ * - canvas frame reset and bottom drop zone -> canvas.frameReset/bottomDropZone.
+ * - registerCommands -> commands.
+ * - setupAssetManager, font manager, component style synchronization,
+ *   project load/save/publish hooks, page settings, preview/template lifecycle
+ *   -> TODO(P3): migrate from admin controller/plugins into package plugins
+ *      and host services as those feature areas are lifted.
+ *
+ * Legacy config files:
+ * - config/storage.ts -> storage.
+ * - config/sharedResources.ts -> TODO(P3): plugin/resource participants.
+ * - config/globalStyles.ts and config/wbStyleSectors.ts -> TODO(P4): theme
+ *   tokens and style manager schema.
+ */
 import type { EditorConfig } from 'grapesjs'
 
 import {
