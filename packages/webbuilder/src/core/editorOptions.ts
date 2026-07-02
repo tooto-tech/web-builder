@@ -30,6 +30,8 @@ export interface WebBuilderCanvasOptions {
   initialComponents?: string
   styles?: string[]
   scripts?: string[]
+  frameReset?: boolean
+  bottomDropZone?: boolean
 }
 
 export interface WebBuilderOptions {
@@ -137,7 +139,11 @@ export const resolveWebBuilderOptions = (
     },
     plugins,
     devices,
-    canvas: options.canvas ?? {},
+    canvas: {
+      frameReset: true,
+      bottomDropZone: true,
+      ...options.canvas,
+    },
     commands: options.commands ?? {},
     hostServices: options.hostServices ?? {},
     settings: options.settings ?? createMemorySettingsSource(),

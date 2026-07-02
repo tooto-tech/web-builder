@@ -7,6 +7,11 @@ export { default as PluginPanelHost } from './PluginPanelHost.vue'
 export { default as TopBar } from './TopBar.vue'
 export { default as WebBuilder } from './WebBuilder.vue'
 export { default as WebBuilderShell } from './WebBuilderShell.vue'
+export {
+  WEB_BUILDER_CONTEXT,
+  useWebBuilderContext,
+} from './context.js'
+export type { WebBuilderContext } from './context.js'
 export type {
   ResolvedWebBuilderOptions,
   WebBuilderCanvasOptions,

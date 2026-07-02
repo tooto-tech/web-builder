@@ -13,6 +13,8 @@ describe('resolveWebBuilderOptions', () => {
     expect(resolved.grapesjs.height).toBe('100%')
     expect(resolved.grapesjs.storageManager).toBe(false)
     expect(resolved.grapesjs.panels).toEqual({ defaults: [] })
+    expect(resolved.canvas.frameReset).toBe(true)
+    expect(resolved.canvas.bottomDropZone).toBe(true)
     expect(resolved.capabilities.capabilityIds.size).toBe(0)
   })
 

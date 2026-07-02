@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, provide, ref, watch } from 'vue'
 import grapesjs from 'grapesjs'
 import type { Editor, EditorConfig } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
@@ -19,6 +19,8 @@ import PanelRail from './PanelRail.vue'
 import PluginPanelHost from './PluginPanelHost.vue'
 import TopBar from './TopBar.vue'
 import WebBuilderShell from './WebBuilderShell.vue'
+import { WEB_BUILDER_CONTEXT, type WebBuilderContext } from './context.js'
+import { useCanvasSetup } from './useCanvasSetup.js'
 
 const props = withDefaults(defineProps<{
   options?: WebBuilderOptions
@@ -44,6 +46,7 @@ const showCode = ref(false)
 const activePanel = ref('blocks')
 const selectedDeviceId = ref<string | null>(null)
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
+let canvasSetupCleanup: (() => void) | null = null
 
 const resolvedOptions = computed(() => resolveWebBuilderOptions(props.options))
 const grapesConfig = computed(() => resolvedOptions.value.grapesjs as EditorConfig)
@@ -95,6 +98,29 @@ const diagnosticText = computed(() =>
 )
 
 const getProjectData = () => editor.value?.getProjectData() as Record<string, unknown> | null ?? null
+
+const webBuilderContext: WebBuilderContext = {
+  get editor() {
+    if (!editor.value) {
+      throw new Error('WebBuilder editor is not ready')
+    }
+    return editor.value
+  },
+  get capabilities() {
+    return resolvedOptions.value.capabilities.snapshot
+  },
+  get hostServices() {
+    return resolvedOptions.value.hostServices
+  },
+  get settings() {
+    return resolvedOptions.value.settings
+  },
+  get ui() {
+    return resolvedOptions.value.ui
+  },
+}
+
+provide(WEB_BUILDER_CONTEXT, webBuilderContext)
 
 const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message
@@ -154,6 +180,11 @@ const grapesPlugins = computed<PluginTypeToLoad[]>(() =>
 const onReady = (activeEditor: Editor) => {
   editor.value = activeEditor
   editorReady.value = true
+  canvasSetupCleanup?.()
+  canvasSetupCleanup = useCanvasSetup(activeEditor, {
+    frameReset: resolvedOptions.value.canvas.frameReset,
+    bottomDropZone: resolvedOptions.value.canvas.bottomDropZone,
+  })
 
   const initialComponents = resolvedOptions.value.canvas.initialComponents
   if (initialComponents) {
@@ -201,6 +232,11 @@ const exitPreview = () => {
   isPreviewMode.value = false
   activeEditor.stopCommand('preview')
 }
+
+onBeforeUnmount(() => {
+  canvasSetupCleanup?.()
+  canvasSetupCleanup = null
+})
 </script>
 
 <template>
