@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { ElPopover } from 'element-plus'
+import { NPopover } from 'naive-ui'
 import WbColorPicker from '../fields/WbColorPicker.vue'
 import type { WbStyleProperty } from '../../config/wbStyleSectors'
 import {
@@ -40,13 +40,13 @@ const displayText = computed(() => {
 </script>
 
 <template>
-  <el-popover
+  <NPopover
     placement="bottom-start"
-    :width="270"
+    style="width: 270px"
     trigger="click"
-    popper-class="wb-color-popover"
+    class="wb-color-popover"
   >
-    <template #reference>
+    <template #trigger>
       <div class="wb-ctrl-color-btn" :class="{ 'wb-ctrl-color-btn--linked': resolvedColor }">
         <span
           class="wb-ctrl-color-swatch"
@@ -63,7 +63,7 @@ const displayText = computed(() => {
       @update:model-value="(v) => emit('update:modelValue', v)"
       @clear="() => emit('update:modelValue', '')"
     />
-  </el-popover>
+  </NPopover>
 </template>
 
 <style scoped>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
+import { computed, h, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import type { Component } from 'grapesjs'
-import { ElTree } from 'element-plus'
+import { NTree } from 'naive-ui'
+import type { TreeDropInfo, TreeOption } from 'naive-ui'
 import { Icon } from '@iconify/vue'
 import { useEditor } from '@tootix/grapesjs-vue'
 
@@ -20,7 +21,7 @@ interface LayerNode {
   children: LayerNode[]
 }
 
-type DropPosition = 'prev' | 'inner' | 'next' | 'before' | 'after'
+type NaiveDropPosition = 'before' | 'inside' | 'after'
 
 const props = defineProps<{
   root: Component
@@ -30,15 +31,21 @@ const editor = useEditor()
 const layers = editor.Layers
 
 const treeData = shallowRef<LayerNode[]>([])
+const treeOptions = computed(() => treeData.value as unknown as TreeOption[])
 const expandedIds = shallowRef<string[]>([])
 const selectedIds = shallowRef(new Set<string>())
+const selectedKeys = computed(() => Array.from(selectedIds.value))
 const hoveredId = ref('')
 const editingId = ref('')
 const editingName = ref('')
 
 let componentsById = new Map<string, Component>()
 
-const componentOf = (node: LayerNode) => componentsById.get(node.id)
+const componentOf = (node?: LayerNode | null) =>
+  node ? componentsById.get(node.id) : undefined
+
+const toLayerNode = (node: TreeOption | null | undefined): LayerNode | null =>
+  node ? node as unknown as LayerNode : null
 
 const buildNodes = (
   component: Component,
@@ -159,17 +166,14 @@ const cancelRename = () => {
 }
 
 /*
- * el-tree drop positions map onto GrapesJS moves against the raw child
+ * Tree drop positions map onto GrapesJS moves against the raw child
  * collection: `at` counts every child (text nodes included), so indices come
  * from component.index()/components().length rather than the layer tree.
  */
-/* el-tree 回调的 Node 形参与本地结构类型不兼容，参数放宽后在入口处收窄 */
-type ElTreeNode = { data: LayerNode }
-
-const resolveDropTarget = (dropNode: ElTreeNode, type: DropPosition) => {
-  const dropComponent = componentOf(dropNode.data)
+const resolveDropTarget = (dropNode: LayerNode, type: NaiveDropPosition) => {
+  const dropComponent = componentOf(dropNode)
   if (!dropComponent) return null
-  if (type === 'inner') {
+  if (type === 'inside') {
     return { target: dropComponent, index: dropComponent.components().length }
   }
   const target = dropComponent.parent()
@@ -177,23 +181,20 @@ const resolveDropTarget = (dropNode: ElTreeNode, type: DropPosition) => {
   const index = dropComponent.index()
   return {
     target,
-    index: type === 'prev' || type === 'before' ? index : index + 1,
+    index: type === 'before' ? index : index + 1,
   }
 }
 
-const allowDrag = (node: any) =>
-  componentOf((node as ElTreeNode).data)?.get('draggable') !== false
-
-const allowDrop = (draggingNode: any, dropNode: any, type: DropPosition) => {
-  const source = componentOf((draggingNode as ElTreeNode).data)
-  const resolved = resolveDropTarget(dropNode as ElTreeNode, type)
-  if (!source || !resolved) return false
-  return editor.Components.canMove(resolved.target, source, resolved.index).result
+const allowDrop = (info: { node: TreeOption, dropPosition: NaiveDropPosition }) => {
+  const dropNode = toLayerNode(info.node)
+  const resolved = dropNode ? resolveDropTarget(dropNode, info.dropPosition) : null
+  return Boolean(resolved)
 }
 
-const onNodeDrop = (draggingNode: any, dropNode: any, type: DropPosition) => {
-  const source = componentOf((draggingNode as ElTreeNode).data)
-  const resolved = resolveDropTarget(dropNode as ElTreeNode, type)
+const onNodeDrop = ({ dragNode, node, dropPosition }: TreeDropInfo) => {
+  const source = componentOf(toLayerNode(dragNode))
+  const dropNode = toLayerNode(node)
+  const resolved = dropNode ? resolveDropTarget(dropNode, dropPosition) : null
   if (!source || !resolved || !editor.Components.canMove(resolved.target, source, resolved.index).result) {
     scheduleRefresh()
     return
@@ -202,84 +203,127 @@ const onNodeDrop = (draggingNode: any, dropNode: any, type: DropPosition) => {
   scheduleRefresh()
 }
 
-const onNodeExpand = (data: LayerNode) => {
-  const component = componentOf(data)
-  if (component) layers.setOpen(component, true)
+const onExpandedKeysUpdate = (
+  keys: Array<string | number>,
+  _options: Array<TreeOption | null>,
+  meta: { node: TreeOption, action: 'expand' | 'collapse' } | { node: null, action: 'filter' },
+) => {
+  expandedIds.value = keys.map(String)
+  const component = componentOf(toLayerNode(meta.node))
+  if (component && meta.action !== 'filter') {
+    layers.setOpen(component, meta.action === 'expand')
+  }
 }
-const onNodeCollapse = (data: LayerNode) => {
-  const component = componentOf(data)
-  if (component) layers.setOpen(component, false)
+
+const stopTreeNodeEvent = (event: Event) => event.stopPropagation()
+
+const renderLayerLabel = ({ option }: { option: TreeOption }) => {
+  const data = toLayerNode(option)
+  if (!data) return null
+  const isRenaming = editingId.value === data.id
+
+  return h(
+    'div',
+    {
+      class: [
+        'wb-layers-node',
+        {
+          'is-selected': selectedIds.value.has(data.id),
+          'is-hovered': hoveredId.value === data.id,
+          'is-hidden': !data.visible,
+          'is-locked': data.locked,
+        },
+      ],
+      onClick: (event: MouseEvent) => selectLayer(data, event),
+      onDblclick: (event: MouseEvent) => {
+        event.stopPropagation()
+        startRename(data)
+      },
+      onMouseenter: () => setHovered(data, true),
+      onMouseleave: () => setHovered(data, false),
+    },
+    [
+      isRenaming
+        ? h('input', {
+          ref: setRenameInput,
+          value: editingName.value,
+          class: 'wb-layers-node__rename',
+          onClick: stopTreeNodeEvent,
+          onDblclick: stopTreeNodeEvent,
+          onInput: (event: Event) => {
+            editingName.value = (event.target as HTMLInputElement).value
+          },
+          onBlur: () => commitRename(data),
+          onKeydown: (event: KeyboardEvent) => {
+            if (event.key === 'Enter') {
+              event.preventDefault()
+              commitRename(data)
+            }
+            if (event.key === 'Escape') {
+              event.preventDefault()
+              cancelRename()
+            }
+          },
+        })
+        : h('span', {
+          class: 'wb-layers-node__label',
+          title: data.label,
+        }, data.label),
+      h('span', {
+        class: 'wb-layers-node__actions',
+        onClick: stopTreeNodeEvent,
+        onDblclick: stopTreeNodeEvent,
+      }, [
+        h('button', {
+          type: 'button',
+          class: [
+            'wb-layers-node__action',
+            { 'is-active': !data.visible },
+          ],
+          'aria-label': data.visible ? 'Hide layer' : 'Show layer',
+          'aria-pressed': !data.visible,
+          onClick: () => toggleVisible(data),
+        }, [
+          h(Icon, { icon: data.visible ? 'mdi:eye-outline' : 'mdi:eye-off-outline' }),
+        ]),
+        h('button', {
+          type: 'button',
+          class: [
+            'wb-layers-node__action',
+            { 'is-active': data.locked },
+          ],
+          'aria-label': data.locked ? 'Unlock layer' : 'Lock layer',
+          'aria-pressed': data.locked,
+          onClick: () => toggleLocked(data),
+        }, [
+          h(Icon, { icon: data.locked ? 'mdi:lock-outline' : 'mdi:lock-open-variant-outline' }),
+        ]),
+      ]),
+    ],
+  )
 }
 </script>
 
 <template>
   <div class="wb-layers-panel" data-testid="wb-layers-panel">
-    <ElTree
+    <NTree
       class="wb-layers-tree"
-      :data="treeData"
-      node-key="id"
-      :props="{ label: 'label', children: 'children' }"
-      :default-expanded-keys="expandedIds"
-      :expand-on-click-node="false"
+      :data="treeOptions"
+      key-field="id"
+      label-field="label"
+      children-field="children"
+      :expanded-keys="expandedIds"
+      :selected-keys="selectedKeys"
+      :expand-on-click="false"
+      :selectable="false"
       draggable
-      :allow-drag="allowDrag"
+      block-line
       :allow-drop="allowDrop"
+      :render-label="renderLayerLabel"
       empty-text="No layers are available."
-      @node-expand="onNodeExpand"
-      @node-collapse="onNodeCollapse"
-      @node-drop="onNodeDrop"
-    >
-      <template #default="{ data }">
-        <div
-          class="wb-layers-node"
-          :class="{
-            'is-selected': selectedIds.has(data.id),
-            'is-hovered': hoveredId === data.id,
-            'is-hidden': !data.visible,
-            'is-locked': data.locked,
-          }"
-          @click="selectLayer(data, $event)"
-          @dblclick.stop="startRename(data)"
-          @mouseenter="setHovered(data, true)"
-          @mouseleave="setHovered(data, false)"
-        >
-          <input
-            v-if="editingId === data.id"
-            :ref="setRenameInput"
-            v-model="editingName"
-            class="wb-layers-node__rename"
-            @click.stop
-            @dblclick.stop
-            @blur="commitRename(data)"
-            @keydown.enter.prevent="commitRename(data)"
-            @keydown.esc.prevent="cancelRename"
-          />
-          <span v-else class="wb-layers-node__label" :title="data.label">{{ data.label }}</span>
-          <span class="wb-layers-node__actions" @click.stop @dblclick.stop>
-            <button
-              type="button"
-              class="wb-layers-node__action"
-              :class="{ 'is-active': !data.visible }"
-              :aria-label="data.visible ? 'Hide layer' : 'Show layer'"
-              :aria-pressed="!data.visible"
-              @click="toggleVisible(data)"
-            >
-              <Icon :icon="data.visible ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" />
-            </button>
-            <button
-              type="button"
-              class="wb-layers-node__action"
-              :class="{ 'is-active': data.locked }"
-              :aria-label="data.locked ? 'Unlock layer' : 'Lock layer'"
-              :aria-pressed="data.locked"
-              @click="toggleLocked(data)"
-            >
-              <Icon :icon="data.locked ? 'mdi:lock-outline' : 'mdi:lock-open-variant-outline'" />
-            </button>
-          </span>
-        </div>
-      </template>
-    </ElTree>
+      @update:expanded-keys="onExpandedKeysUpdate"
+      @drop="onNodeDrop"
+    />
   </div>
 </template>
 
@@ -292,28 +336,28 @@ const onNodeCollapse = (data: LayerNode) => {
 }
 
 .wb-layers-tree {
-  --el-tree-node-hover-bg-color: #f3f4f6;
   background: transparent;
   font-size: 12px;
   color: #374151;
 }
 
-.wb-layers-tree :deep(.el-tree-node__content) {
+.wb-layers-tree :deep(.n-tree-node-content) {
   height: 28px;
   border-radius: 4px;
 }
 
-.wb-layers-tree :deep(.el-tree-node__content:has(.wb-layers-node.is-hovered)) {
+.wb-layers-tree :deep(.n-tree-node-content:has(.wb-layers-node.is-hovered)) {
   background: #f3f4f6;
 }
 
-.wb-layers-tree :deep(.el-tree-node__content:has(.wb-layers-node.is-selected)) {
+.wb-layers-tree :deep(.n-tree-node-content:has(.wb-layers-node.is-selected)) {
   background: #eff6ff;
   color: #1d4ed8;
 }
 
-.wb-layers-tree :deep(.el-tree__drop-indicator) {
-  background-color: var(--wb-accent, #3b82f6);
+.wb-layers-tree :deep(.n-tree-node-content__text) {
+  min-width: 0;
+  flex: 1;
 }
 
 .wb-layers-node {

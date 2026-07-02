@@ -14,9 +14,9 @@ type ProviderProperty = Property & {
   getProperties?: () => ProviderProperty[]
   getUnit?: () => string
   getUnits?: () => string[]
-  getMin?: () => number
-  getMax?: () => number
-  getStep?: () => number
+  getMin?: () => unknown
+  getMax?: () => unknown
+  getStep?: () => unknown
 }
 
 const readModelValue = (
@@ -55,11 +55,31 @@ const mapPropertyType = (property: ProviderProperty, propertyName: string): WbCt
   if (propertyName === 'font-family') return 'font'
 
   const type = toStringValue(property.getType?.() ?? readModelValue(property, 'type'), 'text')
-  if (type === 'number' || type === 'integer') return 'number'
+  if (type === 'base' || type === 'text') return 'text'
+  if (type === 'number') return 'number'
+  if (type === 'integer') return 'integer'
   if (type === 'color') return 'color'
   if (type === 'select') return 'select'
-  if (type === 'radio' || type === 'button' || type === 'icon-radio') return 'icon-radio'
+  if (type === 'radio' || type === 'button') return 'radio'
+  if (type === 'slider') return 'slider'
+  if (type === 'file') return 'file'
+  if (type === 'composite') return 'composite'
+  if (type === 'stack') return 'stack'
+  if (type === 'icon-radio') return 'icon-radio'
   return 'text'
+}
+
+const normalizeUnits = (property: ProviderProperty): string[] | undefined => {
+  const units = property.getUnits?.()
+  if (units?.length) return units
+  const unit = property.getUnit?.()
+  return unit ? [unit] : undefined
+}
+
+const normalizeNumber = (value: unknown): number | undefined => {
+  if (value == null || value === '') return undefined
+  const numberValue = Number(value)
+  return Number.isFinite(numberValue) ? numberValue : undefined
 }
 
 const normalizeOptions = (property: ProviderProperty): WbCtrlOption[] | undefined => {
@@ -127,6 +147,7 @@ export const normalizeStyleProperty = (
 ): WbStyleProperty => {
   const id = getPropertyName(property)
   const type = mapPropertyType(property, id)
+  const children = property.getProperties?.() ?? []
 
   return {
     id,
@@ -134,10 +155,13 @@ export const normalizeStyleProperty = (
     type,
     default: toStringValue(property.getDefaultValue?.() ?? readModelValue(property, 'defaults')),
     options: normalizeOptions(property),
-    units: property.getUnits?.() ?? undefined,
-    min: property.getMin?.(),
-    max: property.getMax?.(),
-    step: property.getStep?.(),
+    units: normalizeUnits(property),
+    min: normalizeNumber(property.getMin?.()),
+    max: normalizeNumber(property.getMax?.()),
+    step: normalizeNumber(property.getStep?.()),
+    children: type === 'composite' || type === 'stack'
+      ? children.map(child => normalizeStyleProperty(child))
+      : undefined,
     subProperties: type === 'spacing' || type === 'border-radius'
       ? normalizeSubProperties(property, id)
       : undefined,

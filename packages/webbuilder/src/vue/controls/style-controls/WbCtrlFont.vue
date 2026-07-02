@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onBeforeUnmount, nextTick, shallowRef } from 'vue'
-import { ElPopover, ElInput } from 'element-plus'
+import { NInput, NPopover } from 'naive-ui'
 import { Icon } from '@iconify/vue'
 import type { WbStyleProperty } from '../../config/wbStyleSectors'
 import {
@@ -244,16 +244,16 @@ function selectGoogleFont(family: string, googleName: string, cssFamily: string)
 </script>
 
 <template>
-  <el-popover
-    v-model:visible="visible"
+  <NPopover
+    v-model:show="visible"
     placement="bottom-start"
-    :width="270"
+    style="width: 270px"
     trigger="click"
-    popper-class="wb-font-popover"
+    class="wb-font-popover"
     @show="onShow"
   >
     <!-- 触发按钮 -->
-    <template #reference>
+    <template #trigger>
       <button
         class="wb-font-trigger"
         :style="modelValue ? { fontFamily: modelValue } : {}"
@@ -269,8 +269,8 @@ function selectGoogleFont(family: string, googleName: string, cssFamily: string)
 
       <!-- 搜索框 -->
       <div class="wb-fp-search">
-        <el-input
-          v-model="search"
+        <NInput
+          v-model:value="search"
           size="small"
           placeholder="搜索字体..."
           clearable
@@ -278,7 +278,7 @@ function selectGoogleFont(family: string, googleName: string, cssFamily: string)
           <template #prefix>
             <Icon icon="lucide:search" :size="12" />
           </template>
-        </el-input>
+        </NInput>
       </div>
 
       <!-- Tab 切换 -->
@@ -410,7 +410,7 @@ function selectGoogleFont(family: string, googleName: string, cssFamily: string)
 
       </div>
     </div>
-  </el-popover>
+  </NPopover>
 </template>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { ElPopover } from 'element-plus'
+import { NPopover } from 'naive-ui'
 
 import DeviceSwitcher from './DeviceSwitcher.vue'
 import { resolveShellMessages, type WebBuilderShellMessages } from './messages.js'
@@ -185,15 +185,16 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
           <Icon v-if="props.isPublishing" icon="mdi:loading" class="tw-animate-spin" />
           {{ props.isPublishing ? props.messages['topbar.publishing'] : publishLabel }}
         </button>
-        <ElPopover
-          v-model:visible="showPublishPopover"
+        <NPopover
+          v-model:show="showPublishPopover"
           placement="bottom-end"
-          popper-class="wb-shell-popper"
-          :width="160"
+          class="wb-shell-popper"
+          style="width: 160px"
           trigger="click"
           :disabled="props.isPublishing"
+          :show-arrow="false"
         >
-          <template #reference>
+          <template #trigger>
             <button
               class="tw-h-full tw-flex tw-border-l tw-border-white/20 tw-items-center tw-justify-center tw-px-3 tw-py-1 tw-bg-[color:var(--wb-primary)] tw-text-white hover:tw-bg-[color:var(--wb-primary-hover)] disabled:tw-cursor-not-allowed disabled:tw-opacity-70 disabled:hover:tw-bg-[color:var(--wb-primary)]"
               :disabled="props.isPublishing"
@@ -213,7 +214,7 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
               {{ item.label }}
             </button>
           </div>
-        </ElPopover>
+        </NPopover>
       </div>
     </div>
   </div>

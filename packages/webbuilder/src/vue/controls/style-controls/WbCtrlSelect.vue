@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { ElSelect, ElOption } from 'element-plus'
+import { computed } from 'vue'
+import { NSelect } from 'naive-ui'
+import type { SelectOption } from 'naive-ui'
 import type { WbStyleProperty } from '../../config/wbStyleSectors'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     property: WbStyleProperty
     modelValue: string
@@ -11,31 +13,27 @@ withDefaults(
   { teleported: true },
 )
 
+const options = computed<SelectOption[]>(() =>
+  (props.property.options ?? []).map(option => ({
+    label: option.label,
+    value: option.value,
+  })),
+)
+
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
 </script>
 
 <template>
-  <el-select
+  <NSelect
     size="small"
     class="w-full"
     clearable
-    :teleported="teleported"
-    :model-value="modelValue"
+    :to="teleported ? 'body' : false"
+    :value="modelValue"
+    :options="options"
     :placeholder="property.default ?? '默认'"
-    @update:model-value="(v) => emit('update:modelValue', v ?? '')"
-  >
-    <el-option
-      v-for="opt in property.options"
-      :key="opt.value"
-      :label="opt.label"
-      :value="opt.value"
-    />
-  </el-select>
+    @update:value="(v) => emit('update:modelValue', String(v ?? ''))"
+  />
 </template>
-<style scoped>
-.el-select-dropdown__item{
---el-font-size-base: 12px;
-}
-</style>

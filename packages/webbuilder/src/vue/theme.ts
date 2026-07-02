@@ -1,3 +1,5 @@
+import type { GlobalThemeOverrides } from 'naive-ui'
+
 /*
  * WebBuilder shell theme tokens.
  *
@@ -87,4 +89,105 @@ export const mergeTheme = (
 ): WebBuilderThemeTokens => ({
   ...DEFAULT_THEME,
   ...theme,
+})
+
+export const createNaiveThemeOverrides = (
+  theme: WebBuilderThemeTokens,
+): GlobalThemeOverrides => ({
+  common: {
+    primaryColor: theme['--wb-primary'],
+    primaryColorHover: theme['--wb-primary-hover'],
+    primaryColorPressed: theme['--wb-primary-hover'],
+    primaryColorSuppl: theme['--wb-primary'],
+    borderRadius: '6px',
+    borderColor: theme['--wb-drop-idle-border'],
+    fontSize: '12px',
+    textColorBase: theme['--wb-loading-text'],
+    textColor1: theme['--wb-loading-text'],
+    textColor2: theme['--wb-loading-text'],
+    textColor3: theme['--wb-loading-subtext'],
+    placeholderColor: theme['--wb-loading-subtext'],
+  },
+  Button: {
+    colorPrimary: theme['--wb-primary'],
+    colorHoverPrimary: theme['--wb-primary-hover'],
+    colorPressedPrimary: theme['--wb-primary-hover'],
+    colorFocusPrimary: theme['--wb-primary'],
+    textColorPrimary: '#ffffff',
+    textColorHoverPrimary: '#ffffff',
+    textColorPressedPrimary: '#ffffff',
+    borderRadiusSmall: '5px',
+    heightSmall: '28px',
+  },
+  Checkbox: {
+    colorChecked: theme['--wb-primary'],
+    borderChecked: `1px solid ${theme['--wb-primary']}`,
+  },
+  Collapse: {
+    titleTextColor: theme['--wb-loading-text'],
+    titleTextColorDisabled: theme['--wb-loading-subtext'],
+    dividerColor: theme['--wb-drop-idle-border'],
+    itemMargin: '0',
+  },
+  Input: {
+    border: `1px solid ${theme['--wb-drop-idle-border']}`,
+    borderHover: `1px solid ${theme['--wb-primary-hover']}`,
+    borderFocus: `1px solid ${theme['--wb-primary']}`,
+    boxShadowFocus: `0 0 0 2px ${theme['--wb-accent-soft-bg']}`,
+    heightSmall: '28px',
+  },
+  InputNumber: {
+    border: `1px solid ${theme['--wb-drop-idle-border']}`,
+    borderHover: `1px solid ${theme['--wb-primary-hover']}`,
+    borderFocus: `1px solid ${theme['--wb-primary']}`,
+    boxShadowFocus: `0 0 0 2px ${theme['--wb-accent-soft-bg']}`,
+    heightSmall: '28px',
+  },
+  Popover: {
+    color: '#ffffff',
+    textColor: theme['--wb-loading-text'],
+    borderRadius: '6px',
+    boxShadow: '0 12px 30px rgba(15, 23, 42, 0.16)',
+  },
+  Radio: {
+    buttonBorderColor: theme['--wb-drop-idle-border'],
+    buttonBorderColorActive: theme['--wb-primary'],
+    buttonBoxShadowFocus: `0 0 0 2px ${theme['--wb-accent-soft-bg']}`,
+    buttonTextColorActive: theme['--wb-primary'],
+  },
+  Select: {
+    peers: {
+      InternalSelection: {
+        border: `1px solid ${theme['--wb-drop-idle-border']}`,
+        borderHover: `1px solid ${theme['--wb-primary-hover']}`,
+        borderActive: `1px solid ${theme['--wb-primary']}`,
+        boxShadowActive: `0 0 0 2px ${theme['--wb-accent-soft-bg']}`,
+        heightSmall: '28px',
+      },
+    },
+  },
+  Slider: {
+    fillColor: theme['--wb-primary'],
+    fillColorHover: theme['--wb-primary-hover'],
+    handleColor: '#ffffff',
+  },
+  Tabs: {
+    colorSegment: theme['--wb-accent-soft-bg'],
+    tabColorSegment: '#ffffff',
+    tabTextColorSegment: theme['--wb-loading-text'],
+    tabTextColorActiveSegment: theme['--wb-primary'],
+    tabTextColorHoverSegment: theme['--wb-primary-hover'],
+    tabTextColorDisabledSegment: theme['--wb-loading-subtext'],
+    tabBorderRadius: '5px',
+  },
+  Tree: {
+    nodeColorHover: theme['--wb-accent-soft-bg'],
+    nodeColorPressed: theme['--wb-accent-soft-bg'],
+    nodeColorActive: theme['--wb-accent-soft-bg'],
+    nodeTextColor: theme['--wb-loading-text'],
+    nodeTextColorDisabled: theme['--wb-loading-subtext'],
+    dropMarkColor: theme['--wb-accent'],
+    nodeHeight: '28px',
+    nodeBorderRadius: '4px',
+  },
 })

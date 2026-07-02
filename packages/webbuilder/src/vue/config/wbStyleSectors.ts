@@ -10,8 +10,14 @@
 export type WbCtrlType =
   | 'text'           // 纯文本输入
   | 'number'         // 数值 + 单位选择
+  | 'integer'        // 整数 + 单位选择
   | 'color'          // 颜色选择器
   | 'select'         // 下拉选择
+  | 'radio'          // 横向单选按钮组
+  | 'slider'         // 滑块 + 数字输入
+  | 'file'           // 资源/文件选择
+  | 'composite'      // 复合属性
+  | 'stack'          // 可叠加多层属性
   | 'icon-radio'     // 图标单选按钮组
   | 'spacing'        // Margin/Padding 四方向控制（封装 SpacingControl）
   | 'border-radius'  // 圆角四方向控制
@@ -51,6 +57,7 @@ export interface WbStyleProperty {
   min?: number
   max?: number
   step?: number
+  children?: WbStyleProperty[]
   /**
    * 复合属性映射：spacing / border-radius 类型实际读写多个 CSS 属性。
    * key 为方向标识（top/right/bottom/left 或 tl/tr/br/bl），

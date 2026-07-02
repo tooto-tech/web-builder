@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ElCheckbox, ElInput, ElInputNumber, ElOption, ElSelect } from 'element-plus'
+import { NCheckbox, NInput, NInputNumber, NSelect } from 'naive-ui'
+import type { SelectOption } from 'naive-ui'
 import { TraitsProvider } from '@tootix/grapesjs-vue'
 
 import { FieldWrapper, WbColorPicker } from '../controls/fields'
@@ -8,6 +9,14 @@ import TraitCodeField from './trait-fields/TraitCodeField.vue'
 import TraitImagePickerField from './trait-fields/TraitImagePickerField.vue'
 import TraitPageLinkField from './trait-fields/TraitPageLinkField.vue'
 import TraitSvgIconField from './trait-fields/TraitSvgIconField.vue'
+
+const toSelectOptions = (
+  options: Array<{ label: string, value: string }>,
+): SelectOption[] =>
+  options.map(option => ({
+    label: option.label,
+    value: option.value,
+  }))
 </script>
 
 <template>
@@ -25,36 +34,30 @@ import TraitSvgIconField from './trait-fields/TraitSvgIconField.vue'
         :label="row.label"
         layout="stacked"
       >
-        <ElInput
+        <NInput
           v-if="row.type === 'text'"
-          :model-value="String(row.value ?? '')"
+          :value="String(row.value ?? '')"
           size="small"
-          @update:model-value="row.setValue"
+          @update:value="row.setValue"
         />
-        <ElInputNumber
+        <NInputNumber
           v-else-if="row.type === 'number'"
-          :model-value="Number(row.value || 0)"
+          :value="Number(row.value || 0)"
           size="small"
-          controls-position="right"
-          @update:model-value="row.setValue"
+          button-placement="right"
+          @update:value="(value) => row.setValue(value ?? 0)"
         />
-        <ElSelect
+        <NSelect
           v-else-if="row.type === 'select'"
-          :model-value="String(row.value ?? '')"
+          :value="String(row.value ?? '')"
+          :options="toSelectOptions(row.options)"
           size="small"
-          @update:model-value="row.setValue"
-        >
-          <ElOption
-            v-for="option in row.options"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
-          />
-        </ElSelect>
-        <ElCheckbox
+          @update:value="(value) => row.setValue(String(value ?? ''))"
+        />
+        <NCheckbox
           v-else-if="row.type === 'checkbox'"
-          :model-value="Boolean(row.value)"
-          @update:model-value="row.setValue"
+          :checked="Boolean(row.value)"
+          @update:checked="row.setValue"
         />
         <TraitImagePickerField
           v-else-if="row.kind === 'image'"
@@ -78,11 +81,11 @@ import TraitSvgIconField from './trait-fields/TraitSvgIconField.vue'
           @update:model-value="row.setValue"
           @clear="row.setValue('')"
         />
-        <ElInput
+        <NInput
           v-else
-          :model-value="String(row.value ?? '')"
+          :value="String(row.value ?? '')"
           size="small"
-          @update:model-value="row.setValue"
+          @update:value="row.setValue"
         />
       </FieldWrapper>
     </section>

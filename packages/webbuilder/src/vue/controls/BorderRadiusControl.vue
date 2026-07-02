@@ -169,7 +169,7 @@ function onAllBlur() {
   font-family: inherit;
   transition: box-shadow 0.15s;
   background-color: #fff;
-  box-shadow: 0 0 0 1px var(--el-border-color);
+  box-shadow: 0 0 0 1px var(--wb-drop-idle-border);
 }
 
 .rc-field input:focus {

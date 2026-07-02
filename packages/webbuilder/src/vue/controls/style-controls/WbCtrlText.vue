@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ElInput } from 'element-plus'
+import { NInput } from 'naive-ui'
 import type { WbStyleProperty } from '../../config/wbStyleSectors'
 
 defineProps<{
@@ -13,11 +13,11 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <el-input
+  <NInput
     size="small"
     class="w-full"
-    :model-value="modelValue"
+    :value="modelValue"
     :placeholder="property.default ?? ''"
-    @update:model-value="(v) => emit('update:modelValue', String(v ?? ''))"
+    @update:value="(v) => emit('update:modelValue', String(v ?? ''))"
   />
 </template>

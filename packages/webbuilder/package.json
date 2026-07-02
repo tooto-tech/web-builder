@@ -45,8 +45,8 @@
   "dependencies": {
     "@iconify/vue": "^5.0.0",
     "@tootix/grapesjs-vue": "0.0.2",
-    "element-plus": "^2.11.0",
-    "grapesjs": "^0.23.1"
+    "grapesjs": "^0.23.1",
+    "naive-ui": "^2.44.1"
   },
   "peerDependencies": {
     "@monaco-editor/loader": "^1.7.0",

@@ -88,8 +88,10 @@ const activePanelTitle = computed(() => {
   return activePanelContribution.value?.label ?? activePanel.value
 })
 
+const resolvedTheme = computed(() => mergeTheme(resolvedOptions.value.theme))
+
 const themeVars = computed(() =>
-  Object.fromEntries(Object.entries(mergeTheme(resolvedOptions.value.theme))),
+  Object.fromEntries(Object.entries(resolvedTheme.value)),
 )
 
 const shellMessages = computed(() => resolveShellMessages(resolvedOptions.value.i18n))
@@ -357,6 +359,7 @@ onBeforeUnmount(() => {
   >
     <WebBuilderShell
       :style="themeVars"
+      :theme="resolvedTheme"
       :messages="shellMessages"
       :editor-ready="editorReady"
       :registration-diagnostic-text="diagnosticText"

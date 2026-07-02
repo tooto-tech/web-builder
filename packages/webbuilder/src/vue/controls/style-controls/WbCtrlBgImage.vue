@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ElInput } from 'element-plus'
+import { NInput } from 'naive-ui'
 import { Icon } from '@iconify/vue'
 import type { WbStyleProperty } from '../../config/wbStyleSectors'
 
@@ -27,13 +27,13 @@ function openImagePicker() {
 
 <template>
   <div class="flex gap-1 items-center">
-    <el-input
+    <NInput
       size="small"
       class="flex-1"
-      :model-value="modelValue"
+      :value="modelValue"
       placeholder="url(...)"
       clearable
-      @update:model-value="(v) => emit('update:modelValue', v ?? '')"
+      @update:value="(v) => emit('update:modelValue', v ?? '')"
     />
     <button
       v-if="imageManager"

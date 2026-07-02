@@ -19,3 +19,4 @@ export type {
 export { default as BorderRadiusControl } from './BorderRadiusControl.vue'
 export { default as SpacingControl } from './SpacingControl.vue'
 export { default as WbSector } from './WbSector.vue'
+export { default as WbStyleControl } from './WbStyleControl.vue'

@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import type { StyleValue } from 'vue'
+import { computed, type StyleValue } from 'vue'
 import { Icon } from '@iconify/vue'
+import { NConfigProvider } from 'naive-ui'
 
 import { resolveShellMessages, type WebBuilderShellMessages } from './messages.js'
+import { createNaiveThemeOverrides, DEFAULT_THEME, type WebBuilderThemeTokens } from './theme.js'
 
-withDefaults(defineProps<{
+defineOptions({
+  inheritAttrs: false,
+})
+
+const props = withDefaults(defineProps<{
   registrationDiagnosticText?: string
   editorReady: boolean
   isPageSwitching?: boolean
@@ -17,6 +23,7 @@ withDefaults(defineProps<{
   blockingProcessingActive?: boolean
   editorLoadingText?: string
   messages?: WebBuilderShellMessages
+  theme?: WebBuilderThemeTokens
 }>(), {
   registrationDiagnosticText: '',
   isPageSwitching: false,
@@ -29,6 +36,7 @@ withDefaults(defineProps<{
   blockingProcessingActive: false,
   editorLoadingText: '',
   messages: () => resolveShellMessages(),
+  theme: () => DEFAULT_THEME,
 })
 
 const emit = defineEmits<{
@@ -41,10 +49,19 @@ const emit = defineEmits<{
   (event: 'side-panel-resize-move', value: MouseEvent): void
   (event: 'stop-side-panel-resize', value: MouseEvent): void
 }>()
+
+const naiveThemeOverrides = computed(() => createNaiveThemeOverrides(props.theme))
 </script>
 
 <template>
-  <div class="wb-shell tw-h-screen tw-relative tw-bg-white">
+  <NConfigProvider
+    :theme-overrides="naiveThemeOverrides"
+    abstract
+  >
+  <div
+    v-bind="$attrs"
+    class="wb-shell tw-h-screen tw-relative tw-bg-white"
+  >
     <div
       v-if="registrationDiagnosticText"
       class="wb-registration-diagnostics"
@@ -70,7 +87,7 @@ const emit = defineEmits<{
 
         <div
           v-show="!isPreviewMode && !isActivePanelFullWidth"
-          class="tw-relative tw-min-h-0 tw-overflow-hidden tw-border-r tw-bg-white"
+          class="tw-relative tw-min-h-0 tw-overflow-hidden tw-border-r tw-border-solid tw-border-[color:var(--wb-drop-idle-border)] tw-bg-white"
         >
           <div class="tw-size-full tw-overflow-y-auto tw-overflow-x-hidden">
             <slot name="side-panel"></slot>
@@ -153,6 +170,7 @@ const emit = defineEmits<{
       </div>
     </div>
   </div>
+  </NConfigProvider>
 </template>
 
 <style scoped>

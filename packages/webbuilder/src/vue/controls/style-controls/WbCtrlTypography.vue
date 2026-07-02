@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, watchEffect } from 'vue'
-import { ElPopover } from 'element-plus'
+import { NPopover } from 'naive-ui'
 import { Icon } from '@iconify/vue'
 import type { WbStyleManager } from '../../composables/useWbStyleManager'
 import { typographySector } from '../../config/wbStyleSectors'
@@ -71,16 +71,16 @@ function commit(field: { val: string; focused: boolean }, id: string) {
     <span class="text-[10px]">排版</span>
 
 
-    <el-popover
+    <NPopover
       trigger="click"
       placement="bottom-end"
-      :width="260"
+      style="width: 260px"
       :show-arrow="false"
-      popper-class="ty-popper"
+      class="ty-popper"
       transition="none"
     >
       <!-- 触发行：label + icon -->
-      <template #reference>
+      <template #trigger>
         <button type="button" class="ty-trigger-btn" title="配置排版">
           <Icon icon="nimbus:font" />
         </button>
@@ -219,7 +219,7 @@ function commit(field: { val: string; focused: boolean }, id: string) {
         </div>
 
       </div>
-    </el-popover>
+    </NPopover>
   </div>
 
 </template>
@@ -315,7 +315,7 @@ function commit(field: { val: string; focused: boolean }, id: string) {
   color: #333;
   font-family: inherit;
   transition: box-shadow 0.15s;
-  box-shadow: 0 0 0 1px var(--el-border-color);
+  box-shadow: 0 0 0 1px var(--wb-drop-idle-border);
 }
 
 .ty-num input:focus {
@@ -334,9 +334,9 @@ function commit(field: { val: string; focused: boolean }, id: string) {
 }
 </style>
 
-<!-- 全局：覆盖 ElPopover 默认 padding -->
+<!-- 全局：覆盖弹层默认 padding -->
 <style>
-.ty-popper.el-popover {
+.ty-popper.n-popover {
   padding: 10px !important;
 }
 </style>
