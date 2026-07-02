@@ -10,6 +10,9 @@ describe('@toototech/webbuilder style contract', () => {
 
     expect(css).toContain('.tw-bg-editor-panel')
     expect(css).toContain('.tw-h-screen')
+    expect(css).toContain(':where(.wb-shell, .wb-shell-popper) button')
+    expect(css).not.toContain('.wb-shell button')
+    expect(css).not.toContain('.wb-shell-popper button')
     expect(css).not.toContain('*, ::before, ::after')
     expect(css).not.toContain('html, :host')
   })

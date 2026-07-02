@@ -40,7 +40,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="tw-h-screen tw-relative tw-bg-white">
+  <div class="wb-shell tw-h-screen tw-relative tw-bg-white">
     <div
       v-if="registrationDiagnosticText"
       class="wb-registration-diagnostics"

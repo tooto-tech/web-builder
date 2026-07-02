@@ -1,3 +1,42 @@
 @config "../../tailwind.config.ts";
 
+.wb-shell,
+.wb-shell-popper {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.wb-shell,
+.wb-shell *,
+.wb-shell *::before,
+.wb-shell *::after,
+.wb-shell-popper,
+.wb-shell-popper *,
+.wb-shell-popper *::before,
+.wb-shell-popper *::after {
+  box-sizing: border-box;
+}
+
+:where(.wb-shell, .wb-shell-popper) button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-transform: none;
+}
+
+:where(.wb-shell, .wb-shell-popper) button:not(:disabled) {
+  cursor: pointer;
+}
+
+:where(.wb-shell, .wb-shell-popper) button:disabled {
+  cursor: not-allowed;
+}
+
 @tailwind utilities;

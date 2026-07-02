@@ -1,3 +1,4 @@
 packages:
   - "packages/webbuilder"
   - "packages/webbuilder-plugins"
+  - "examples/*"

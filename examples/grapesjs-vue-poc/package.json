@@ -1,0 +1,25 @@
+{
+  "name": "grapesjs-vue-poc",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@iconify/vue": "^5.0.0",
+    "@tootix/grapesjs-vue": "0.0.2",
+    "element-plus": "2.11.1",
+    "grapesjs": "0.23.1",
+    "vue": "3.5.12"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.0.4",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "sass": "^1.101.0",
+    "tailwindcss": "^3.4.19",
+    "typescript": "5.3.3",
+    "vite": "5.1.4"
+  }
+}

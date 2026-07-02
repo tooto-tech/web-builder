@@ -186,6 +186,7 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
         <ElPopover
           v-model:visible="showPublishPopover"
           placement="bottom-end"
+          popper-class="wb-shell-popper"
           :width="160"
           trigger="click"
           :disabled="props.isPublishing"

@@ -19,6 +19,7 @@ export default defineConfig({
       external: [
         '@iconify/vue',
         '@monaco-editor/loader',
+        '@tootix/grapesjs-vue',
         'element-plus',
         'grapesjs',
         'monaco-editor',

@@ -53,19 +53,22 @@
     },
     "./style.css": "./dist/style.css"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@iconify/iconify": "^3.1.1",
     "@iconify/json": "^2.2.187",
     "@iconify/vue": "^5.0.0",
-    "@toototech/webbuilder": "^0.1.1",
     "element-plus": "^2.11.0",
     "grapesjs": "^0.23.1",
-    "swiper": "^12.1.0",
+    "swiper": "^12.1.0"
+  },
+  "peerDependencies": {
+    "@toototech/webbuilder": "^0.1.1",
     "vue": "^3.5.0"
   },
   "devDependencies": {
     "@toototech/webbuilder": "workspace:*",
     "@vitejs/plugin-vue": "5.0.4",
+    "typescript": "5.3.3",
     "vite": "5.1.4",
     "vue-tsc": "^1.8.27"
   },

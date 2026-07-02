@@ -7,6 +7,7 @@ export type {
 export * from './blockContributions.js'
 export * from './capabilityAdapter.js'
 export * from './commandContext.js'
+export * from './editorOptions.js'
 export * from './events.js'
 export * from './featurePlugin.js'
 export * from './grapesPluginAdapter.js'
