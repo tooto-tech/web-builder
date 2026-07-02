@@ -1,27 +1,19 @@
 <script setup lang="ts">
 import { LayersProvider } from '@tootix/grapesjs-vue'
 
-import LayerTreeItem from './LayerTreeItem.vue'
+import LayersPanelContent from './LayersPanelContent.vue'
 </script>
 
 <template>
   <LayersProvider v-slot="{ root }">
-    <div class="wb-layers-panel" data-testid="wb-layers-panel">
-      <LayerTreeItem v-if="root" :component="root" />
-      <div v-else class="wb-layers-panel__empty">No layers are available.</div>
-    </div>
+    <LayersPanelContent v-if="root" :root="root" />
+    <div v-else class="wb-layers-panel__empty">No layers are available.</div>
   </LayersProvider>
 </template>
 
 <style scoped>
-.wb-layers-panel {
-  min-height: 100%;
-  padding: 8px;
-  color: #111827;
-  background: #fff;
-}
-
 .wb-layers-panel__empty {
+  margin: 8px;
   border: 1px dashed #d1d5db;
   border-radius: 6px;
   padding: 16px;

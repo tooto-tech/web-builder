@@ -21,12 +21,6 @@ export const BUILTIN_WEB_BUILDER_PANELS: WebBuilderPanelContribution[] = [
     order: 40,
   },
   {
-    id: 'pages',
-    label: 'Pages',
-    icon: 'lucide:file-stack',
-    order: 50,
-  },
-  {
     id: 'assets',
     label: 'Assets',
     icon: 'ph:image-light',

@@ -17,7 +17,6 @@ describe('built-in Provider panels', () => {
       ['BlocksPanel.vue', 'BlocksProvider'],
       ['StylePanel.vue', 'StylesProvider'],
       ['LayersPanel.vue', 'LayersProvider'],
-      ['PagesPanel.vue', 'PagesProvider'],
       ['AssetsPanel.vue', 'AssetsProvider'],
       ['ModalHost.vue', 'ModalProvider'],
     ] as const
@@ -27,6 +26,24 @@ describe('built-in Provider panels', () => {
       expect(source, file).toContain(provider)
       expect(source, file).toContain('@tootix/grapesjs-vue')
     })
+  })
+
+  it('assembles the layers panel from ElTree wired to the GrapesJS LayerManager', () => {
+    const panelSource = readPanelFile('LayersPanel.vue')
+    const contentSource = readPanelFile('LayersPanelContent.vue')
+
+    expect(panelSource).toContain('<LayersPanelContent')
+    expect(contentSource).toContain("import { ElTree } from 'element-plus'")
+    expect(contentSource).toContain("import { useEditor } from '@tootix/grapesjs-vue'")
+    expect(contentSource).toContain('getLayerData')
+    expect(contentSource).toContain('setVisible')
+    expect(contentSource).toContain('setLocked')
+    expect(contentSource).toContain('setName')
+    expect(contentSource).toContain('setOpen')
+    expect(contentSource).toContain('canMove')
+    expect(contentSource).toContain('.move(resolved.target')
+    expect(contentSource).toContain(':allow-drop="allowDrop"')
+    expect(contentSource).toContain('@node-drop="onNodeDrop"')
   })
 
   it('assembles the style panel from grapesjs-vue providers and adapters', () => {

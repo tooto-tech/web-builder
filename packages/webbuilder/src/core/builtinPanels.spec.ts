@@ -25,7 +25,6 @@ describe('collectBuiltinWebBuilderPanels', () => {
       expect.objectContaining({ id: 'styles', order: 20 }),
       expect.objectContaining({ id: 'seo', order: 30 }),
       expect.objectContaining({ id: 'layers', order: 40 }),
-      expect.objectContaining({ id: 'pages', order: 50 }),
       expect.objectContaining({ id: 'assets', order: 60 }),
     ])
   })
