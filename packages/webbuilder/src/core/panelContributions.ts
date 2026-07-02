@@ -3,7 +3,7 @@ import type {
   WebBuilderPanelContribution,
 } from './featurePlugin.js'
 
-const sortPanels = (panels: WebBuilderPanelContribution[]) =>
+export const sortWebBuilderPanels = (panels: WebBuilderPanelContribution[]) =>
   [...panels].sort((left, right) => {
     const orderDelta = (left.order ?? 0) - (right.order ?? 0)
     if (orderDelta !== 0) return orderDelta
@@ -26,7 +26,7 @@ export const collectWebBuilderPanelContributions = (
     })
   })
 
-  return sortPanels(panels)
+  return sortWebBuilderPanels(panels)
 }
 
 export const findWebBuilderPanelContribution = (

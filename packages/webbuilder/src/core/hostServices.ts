@@ -50,11 +50,32 @@ export interface I18nService {
   getEnabledProviderConfigs?: () => Promise<unknown[]> | unknown[]
 }
 
+export interface MediaAssetLike {
+  src?: string
+  url?: string | (() => string)
+  getSrc?: () => string
+  get?: (key: string) => unknown
+}
+
+export interface MediaSelectionTarget {
+  isStyleProp?: boolean
+  filterType?: string
+  selectCallback?: (asset: MediaAssetLike) => void
+  [key: string]: unknown
+}
+
+export interface MediaService {
+  openAssetsDialog?: (target?: MediaSelectionTarget) => void
+  openAssetsDialogWithTarget?: (target: MediaSelectionTarget) => void
+  loadAssets?: (params?: Record<string, unknown>) => Promise<unknown> | unknown
+  uploadAssets?: (files: File[], params?: Record<string, unknown>) => Promise<unknown> | unknown
+}
+
 export interface HostServices {
   page?: PageStorageService
   globalSettings?: GlobalSettingsService
   i18n?: I18nService
-  media?: Record<string, unknown>
+  media?: MediaService
   product?: Record<string, unknown>
   menu?: Record<string, unknown>
   faq?: Record<string, unknown>
