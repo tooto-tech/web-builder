@@ -1,21 +1,21 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
-import type { WebBuilderPanelContribution } from '../core/index.js'
+import {
+  BUILTIN_WEB_BUILDER_PANEL_IDS,
+  collectBuiltinWebBuilderPanels,
+  type WebBuilderPanelContribution,
+} from '../core/index.js'
 
 type PanelId = string
 type PanelButton = { id: PanelId; icon: string; title: string }
-const CORE_PANEL_IDS = new Set([
-  'blocks',
-  'styles',
-  'assets',
-])
 const PLUGIN_PANEL_FALLBACK_ICON = 'lucide:panel-right'
 
 const props = defineProps<{
   activePanel: PanelId
   showLayoutPanel?: boolean
   showTemplatePanel?: boolean
+  panels?: WebBuilderPanelContribution[]
   pluginPanels?: WebBuilderPanelContribution[]
 }>()
 
@@ -23,9 +23,13 @@ const emit = defineEmits<{
   (event: 'select-panel', panel: PanelId): void
 }>()
 
-const pluginPanelButtons = computed<PanelButton[]>(() =>
-  (props.pluginPanels ?? [])
-    .filter(panel => panel.component && !CORE_PANEL_IDS.has(panel.id))
+const railPanels = computed(() =>
+  props.panels ?? collectBuiltinWebBuilderPanels(props.pluginPanels ?? []),
+)
+
+const panelButtons = computed<PanelButton[]>(() =>
+  railPanels.value
+    .filter(panel => BUILTIN_WEB_BUILDER_PANEL_IDS.has(panel.id) || panel.component)
     .filter(panel => {
       if (panel.id === 'layout') return props.showLayoutPanel !== false
       if (panel.id === 'template') return props.showTemplatePanel !== false
@@ -37,25 +41,6 @@ const pluginPanelButtons = computed<PanelButton[]>(() =>
       title: panel.label,
     }))
 )
-
-const panelButtons = computed<PanelButton[]>(() => [
-  {
-    id: 'blocks',
-    icon: 'uit:create-dashboard',
-    title: 'Components',
-  },
-  {
-    id: 'styles',
-    icon: 'material-symbols-light:palette-outline',
-    title: 'Styles',
-  },
-  ...pluginPanelButtons.value,
-  {
-    id: 'assets',
-    icon: 'ph:image-light',
-    title: 'Assets',
-  },
-])
 </script>
 
 <template>

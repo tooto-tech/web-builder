@@ -8,15 +8,34 @@ const webBuilderSource = readFileSync(
   'utf-8',
 )
 const blocksPanelSource = readFileSync(
-  fileURLToPath(new URL('./DefaultBlocksPanel.vue', import.meta.url)),
+  fileURLToPath(new URL('./panels/BlocksPanel.vue', import.meta.url)),
+  'utf-8',
+)
+const panelsIndexSource = readFileSync(
+  fileURLToPath(new URL('./panels/index.ts', import.meta.url)),
+  'utf-8',
+)
+const deviceSwitcherSource = readFileSync(
+  fileURLToPath(new URL('./DeviceSwitcher.vue', import.meta.url)),
+  'utf-8',
+)
+const vueIndexSource = readFileSync(
+  fileURLToPath(new URL('./index.ts', import.meta.url)),
   'utf-8',
 )
 
 describe('WebBuilder default panels', () => {
-  it('renders a package-owned blocks panel for the default blocks tab', () => {
-    expect(webBuilderSource).toContain("import DefaultBlocksPanel from './DefaultBlocksPanel.vue'")
-    expect(webBuilderSource).toContain('activePanel === \'blocks\'')
-    expect(webBuilderSource).toContain('<DefaultBlocksPanel')
+  it('renders package-owned panels through host-overridable slot fallbacks', () => {
+    expect(webBuilderSource).toContain('getBuiltinPanelComponent')
+    expect(webBuilderSource).toContain('ModalHost')
+    expect(webBuilderSource).toContain('AssetsModalHost')
+    expect(webBuilderSource).toContain('<slot')
+    expect(webBuilderSource).toContain('name="rail"')
+    expect(webBuilderSource).toContain('name="side-panel"')
+    expect(webBuilderSource).toContain('<component')
+    expect(webBuilderSource).toContain('builtinPanelFor(activePanel)')
+    expect(panelsIndexSource).toContain('blocks: BlocksPanel')
+    expect(panelsIndexSource).toContain('AssetsModalHost')
     expect(webBuilderSource).not.toContain('No panel provider is registered.')
   })
 
@@ -27,9 +46,15 @@ describe('WebBuilder default panels', () => {
     expect(blocksPanelSource).toContain('dragStop()')
   })
 
-  it('applies selected devices to GrapesJS canvas dimensions', () => {
-    expect(webBuilderSource).toContain('applyEditorDevice(activeEditor, device)')
-    expect(webBuilderSource).toContain('deviceManager?.select?.(device.id)')
-    expect(webBuilderSource).toContain('activeEditor.setDevice?.(device.name)')
+  it('uses DevicesProvider for device selection', () => {
+    expect(deviceSwitcherSource).toContain("import { DevicesProvider } from '@tootix/grapesjs-vue'")
+    expect(deviceSwitcherSource).toContain('<DevicesProvider')
+    expect(webBuilderSource).not.toContain(':devices="devices"')
+    expect(webBuilderSource).not.toContain(':selected-device="selectedDevice"')
+  })
+
+  it('exports package-owned panels and controls for slot overrides', () => {
+    expect(vueIndexSource).toContain("export * from './panels/index.js'")
+    expect(vueIndexSource).toContain("export * from './controls/index.js'")
   })
 })

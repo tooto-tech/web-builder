@@ -5,6 +5,7 @@ export type {
   LoadPluginFromUrlOptions,
 } from './pluginLoader.js'
 export * from './blockContributions.js'
+export * from './builtinPanels.js'
 export * from './capabilityAdapter.js'
 export * from './commandContext.js'
 export * from './editorOptions.js'

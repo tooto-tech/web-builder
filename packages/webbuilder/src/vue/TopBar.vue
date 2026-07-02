@@ -11,8 +11,6 @@ const props = defineProps<{
   showBorders: boolean
   showDevActions?: boolean
   isPublishing?: boolean
-  devices: any[]
-  selectedDevice: any
   isTemplateResource?: boolean
 }>()
 
@@ -31,7 +29,6 @@ type TopBarEvent =
 
 const emit = defineEmits<{
   (event: TopBarEvent): void
-  (event: 'set-device', device: any): void
 }>()
 
 const showPublishPopover = ref(false)
@@ -143,9 +140,6 @@ const handlePublishMenuClick = (event: Extract<TopBarEvent, 'export-project' | '
         <Icon :icon="btn.icon" />
       </button>
       <DeviceSwitcher
-        :devices="props.devices"
-        :selected-device="props.selectedDevice"
-        @select-device="emit('set-device', $event)"
       />
     </div>
 

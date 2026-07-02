@@ -1,14 +1,6 @@
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue'
-
-const props = defineProps<{
-  devices: any[]
-  selectedDevice: any
-}>()
-
-const emit = defineEmits<{
-  (e: 'select-device', device: any): void
-}>()
+import { DevicesProvider } from '@tootix/grapesjs-vue'
 
 const getDeviceId = (device: any) => {
   if (typeof device === 'string') return device
@@ -31,20 +23,22 @@ const getDeviceIcon = (device: any) => {
 </script>
 
 <template>
-  <div class="tw-flex">
-    <template v-for="device in props.devices" :key="getDeviceId(device)">
+  <DevicesProvider v-slot="{ devices, selected, select }">
+    <div class="tw-flex">
       <button
+        v-for="device in devices"
+        :key="getDeviceId(device)"
         :class="{
           'tw-bg-editor-btn-active':
-            getDeviceId(device) === getDeviceId(props.selectedDevice),
+            getDeviceId(device) === selected,
         }"
-        @click="emit('select-device', device)"
         class="tw-aspect-square tw-w-8 tw-flex tw-items-center tw-justify-center tw-rounded tw-text-white"
         :title="getDeviceName(device)"
         :aria-label="getDeviceName(device)"
+        @click="select(getDeviceId(device))"
       >
         <Icon :icon="getDeviceIcon(device)" />
       </button>
-    </template>
-  </div>
+    </div>
+  </DevicesProvider>
 </template>

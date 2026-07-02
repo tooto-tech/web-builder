@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, provide, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, provide, ref } from 'vue'
 import grapesjs from 'grapesjs'
 import type { Editor, EditorConfig } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
@@ -7,6 +7,7 @@ import { Canvas, GjsEditor } from '@tootix/grapesjs-vue'
 import type { PluginTypeToLoad } from '@tootix/grapesjs-vue'
 
 import {
+  collectBuiltinWebBuilderPanels,
   collectWebBuilderPanelContributions,
   createGrapesPluginDescriptor,
   resolveWebBuilderOptions,
@@ -15,12 +16,12 @@ import {
   type WebBuilderPluginActivationDiagnostic,
   type WebBuilderPluginContext,
 } from '../core/index.js'
-import DefaultBlocksPanel from './DefaultBlocksPanel.vue'
 import PanelRail from './PanelRail.vue'
 import PluginPanelHost from './PluginPanelHost.vue'
 import TopBar from './TopBar.vue'
 import WebBuilderShell from './WebBuilderShell.vue'
 import { WEB_BUILDER_CONTEXT, type WebBuilderContext } from './context.js'
+import { AssetsModalHost, getBuiltinPanelComponent, ModalHost } from './panels/index.js'
 import { useCanvasSetup } from './useCanvasSetup.js'
 
 const props = withDefaults(defineProps<{
@@ -45,48 +46,33 @@ const showBorders = ref(false)
 const showLayers = ref(false)
 const showCode = ref(false)
 const activePanel = ref('blocks')
-const selectedDeviceId = ref<string | null>(null)
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
 let canvasSetupCleanup: (() => void) | null = null
 
 const resolvedOptions = computed(() => resolveWebBuilderOptions(props.options))
 const grapesConfig = computed(() => resolvedOptions.value.grapesjs as EditorConfig)
-const devices = computed(() => resolvedOptions.value.devices)
-
-watch(
-  devices,
-  (nextDevices) => {
-    if (!nextDevices.length) {
-      selectedDeviceId.value = null
-      return
-    }
-    if (!nextDevices.some(device => device.id === selectedDeviceId.value)) {
-      selectedDeviceId.value = nextDevices[0].id
-    }
-  },
-  { immediate: true },
-)
-
-const selectedDevice = computed(() =>
-  devices.value.find(device => device.id === selectedDeviceId.value) ?? devices.value[0],
-)
 
 const panelContributions = computed<WebBuilderPanelContribution[]>(() =>
   collectWebBuilderPanelContributions(resolvedOptions.value.plugins),
 )
 
+const availablePanels = computed<WebBuilderPanelContribution[]>(() =>
+  collectBuiltinWebBuilderPanels(panelContributions.value),
+)
+
 const activePanelContribution = computed(() =>
+  availablePanels.value.find(panel => panel.id === activePanel.value) ?? null,
+)
+
+const activePluginPanelContribution = computed(() =>
   panelContributions.value.find(panel => panel.id === activePanel.value) ?? null,
 )
 
 const isActivePanelFullWidth = computed(() =>
-  activePanelContribution.value?.layout === 'full',
+  activePluginPanelContribution.value?.layout === 'full',
 )
 
 const activePanelTitle = computed(() => {
-  if (activePanel.value === 'blocks') return 'Components'
-  if (activePanel.value === 'styles') return 'Styles'
-  if (activePanel.value === 'assets') return 'Assets'
   return activePanelContribution.value?.label ?? activePanel.value
 })
 
@@ -178,15 +164,6 @@ const grapesPlugins = computed<PluginTypeToLoad[]>(() =>
   }),
 )
 
-const applyEditorDevice = (
-  activeEditor: Editor,
-  device: { id: string; name: string },
-) => {
-  const deviceManager = activeEditor.Devices ?? activeEditor.DeviceManager
-  deviceManager?.select?.(device.id)
-  activeEditor.setDevice?.(device.name)
-}
-
 const onReady = (activeEditor: Editor) => {
   editor.value = activeEditor
   editorReady.value = true
@@ -201,11 +178,6 @@ const onReady = (activeEditor: Editor) => {
     activeEditor.setComponents(initialComponents)
   }
 
-  const device = selectedDevice.value
-  if (device) {
-    applyEditorDevice(activeEditor, device)
-  }
-
   emit('ready', activeEditor)
 }
 
@@ -213,12 +185,12 @@ const onUpdate = (projectData: unknown, activeEditor: Editor) => {
   emit('update', projectData as Record<string, unknown>, activeEditor)
 }
 
-const setDevice = (device: { id: string; name: string }) => {
-  selectedDeviceId.value = device.id
-  const activeEditor = editor.value
-  if (activeEditor) {
-    applyEditorDevice(activeEditor, device)
-  }
+const selectPanel = (panelId: string) => {
+  activePanel.value = panelId
+}
+
+const builtinPanelFor = (panelId: string) => {
+  return getBuiltinPanelComponent(panelId)
 }
 
 const emitProjectEvent = (event: 'save' | 'publish') => {
@@ -271,61 +243,97 @@ onBeforeUnmount(() => {
       @exit-preview="exitPreview"
     >
       <template #top-bar>
-        <TopBar
-          :show-layers="showLayers"
-          :show-code="showCode"
-          :show-borders="showBorders"
-          :devices="devices"
-          :selected-device="selectedDevice"
-          @back="emit('back')"
-          @open-page-settings="activePanel = 'settings'"
-          @toggle-borders="showBorders = !showBorders"
-          @toggle-layers="showLayers = !showLayers"
-          @toggle-code="showCode = !showCode"
-          @preview="togglePreview"
-          @save-draft="emitProjectEvent('save')"
-          @publish="emitProjectEvent('publish')"
-          @export-project="emitProjectEvent('save')"
-          @import-project="activePanel = 'assets'"
-          @reset-editor="editor?.setComponents('')"
-          @set-device="setDevice"
-        />
+        <slot
+          name="top-bar"
+          :active-panel="activePanel"
+          :editor="editor"
+          :panels="availablePanels"
+          :select-panel="selectPanel"
+        >
+          <TopBar
+            :show-layers="showLayers"
+            :show-code="showCode"
+            :show-borders="showBorders"
+            @back="emit('back')"
+            @open-page-settings="selectPanel('settings')"
+            @toggle-borders="showBorders = !showBorders"
+            @toggle-layers="showLayers = !showLayers"
+            @toggle-code="showCode = !showCode"
+            @preview="togglePreview"
+            @save-draft="emitProjectEvent('save')"
+            @publish="emitProjectEvent('publish')"
+            @export-project="emitProjectEvent('save')"
+            @import-project="selectPanel('assets')"
+            @reset-editor="editor?.setComponents('')"
+          />
+        </slot>
       </template>
 
       <template #rail>
-        <PanelRail
+        <slot
+          name="rail"
           :active-panel="activePanel"
-          :plugin-panels="panelContributions"
-          @select-panel="activePanel = $event"
-        />
+          :panels="availablePanels"
+          :select-panel="selectPanel"
+        >
+          <PanelRail
+            :active-panel="activePanel"
+            :panels="availablePanels"
+            @select-panel="selectPanel"
+          />
+        </slot>
       </template>
 
       <template #side-panel>
-        <DefaultBlocksPanel
-          v-if="activePanel === 'blocks'"
-        />
-        <PluginPanelHost
-          v-else-if="activePanelContribution?.component && activePanelContribution.layout !== 'full'"
-          :panels="panelContributions"
-          :active-panel-id="activePanel"
-        />
-        <div v-else class="wb-default-panel">
-          <div class="wb-default-panel__title">{{ activePanelTitle }}</div>
-          <div class="wb-default-panel__empty">No panel is registered for this section.</div>
-        </div>
+        <slot
+          name="side-panel"
+          :active-panel="activePanel"
+          :editor="editor"
+          :panels="availablePanels"
+          :select-panel="selectPanel"
+        >
+          <component
+            :is="builtinPanelFor(activePanel)"
+            v-if="builtinPanelFor(activePanel)"
+          />
+          <PluginPanelHost
+            v-else-if="activePluginPanelContribution?.component && activePluginPanelContribution.layout !== 'full'"
+            :panels="panelContributions"
+            :active-panel-id="activePanel"
+          />
+          <div v-else class="wb-default-panel">
+            <div class="wb-default-panel__title">{{ activePanelTitle }}</div>
+            <div class="wb-default-panel__empty">No panel is registered for this section.</div>
+          </div>
+        </slot>
       </template>
 
       <template #full-panel>
-        <PluginPanelHost
-          :panels="panelContributions"
-          :active-panel-id="activePanel"
-        />
+        <slot
+          name="full-panel"
+          :active-panel="activePanel"
+          :editor="editor"
+          :panels="availablePanels"
+          :select-panel="selectPanel"
+        >
+          <PluginPanelHost
+            :panels="panelContributions"
+            :active-panel-id="activePanel"
+          />
+        </slot>
       </template>
 
       <template #canvas>
-        <Canvas />
+        <slot
+          name="canvas"
+          :editor="editor"
+        >
+          <Canvas />
+        </slot>
       </template>
     </WebBuilderShell>
+    <ModalHost />
+    <AssetsModalHost />
   </GjsEditor>
 </template>
 
