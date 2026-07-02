@@ -1,6 +1,6 @@
 {
   "name": "@toototech/webbuilder-packages",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.28.1",
