@@ -57,4 +57,18 @@ describe('WebBuilder default panels', () => {
     expect(vueIndexSource).toContain("export * from './panels/index.js'")
     expect(vueIndexSource).toContain("export * from './controls/index.js'")
   })
+
+  it('wires package-owned controllers into WebBuilder context and top bar actions', () => {
+    expect(webBuilderSource).toContain('useDraftController')
+    expect(webBuilderSource).toContain('useAutosaveController')
+    expect(webBuilderSource).toContain('usePublishController')
+    expect(webBuilderSource).toContain('useLockController')
+    expect(webBuilderSource).toContain('useRevisionController')
+    expect(webBuilderSource).toContain('get controllers()')
+    expect(webBuilderSource).toContain("event: 'save-success'")
+    expect(webBuilderSource).toContain("event: 'publish-success'")
+    expect(webBuilderSource).toContain("event: 'lock-changed'")
+    expect(webBuilderSource).toContain('@save-draft="handleSaveDraft"')
+    expect(webBuilderSource).toContain('@publish="handlePublish"')
+  })
 })

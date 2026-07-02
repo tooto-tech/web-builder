@@ -83,11 +83,18 @@ export interface WebBuilderI18nOptions {
   messages?: Record<string, unknown>
 }
 
+export interface WebBuilderAutosaveOptions {
+  enabled?: boolean
+  debounceMs?: number
+  retryBackoffMs?: number
+}
+
 export interface WebBuilderOptions {
   grapesjs?: Partial<EditorConfig>
   plugins?: WebBuilderFeaturePlugin[]
   devices?: WebBuilderDeviceOption[]
   canvas?: WebBuilderCanvasOptions
+  autosave?: WebBuilderAutosaveOptions
   commands?: WebBuilderCommandContext
   hostServices?: HostServices
   storage?: StorageAdapter
@@ -109,6 +116,7 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
   plugins: WebBuilderFeaturePlugin[]
   devices: WebBuilderDeviceOption[]
   canvas: WebBuilderCanvasOptions
+  autosave?: WebBuilderAutosaveOptions
   commands: WebBuilderCommandContext
   hostServices: HostServices
   storage: WebBuilderOptions['storage']

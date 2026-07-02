@@ -3,6 +3,8 @@ import type { PageResourceIdentity, WebBuilderPluginCleanup } from './featurePlu
 export interface PageStorageService {
   getDraft: (resource: PageResourceIdentity) => Promise<unknown> | unknown
   saveDraft: (request: Record<string, unknown>) => Promise<unknown> | unknown
+  publish?: (request: Record<string, unknown>) => Promise<unknown> | unknown
+  publishLayoutPage?: (ownerId: number) => Promise<unknown> | unknown
   generateCss: (request: Record<string, unknown>) => Promise<unknown> | unknown
   getHistoryDetail: (id: number) => Promise<unknown> | unknown
   getPagePage: (params: Record<string, unknown>) => Promise<unknown> | unknown
@@ -71,11 +73,99 @@ export interface MediaService {
   uploadAssets?: (files: File[], params?: Record<string, unknown>) => Promise<unknown> | unknown
 }
 
+export interface EditLockHolder {
+  userId: string | number
+  displayName?: string
+  username?: string
+  sessionKey?: string
+  isCurrentUser?: boolean
+  isCurrentSession?: boolean
+}
+
+/**
+ * Normalized edit-lock state exposed by hostServices.lock.
+ * Current admin lock APIs expose holder identity, session ownership, lock/heartbeat
+ * timestamps, and takeover status; package controllers should depend on this
+ * normalized state instead of HTTP response shapes.
+ */
+export interface EditLockState {
+  locked: boolean
+  ownedByMe: boolean
+  holder?: EditLockHolder
+  expiresAt?: string
+  heartbeatIntervalMs?: number
+  message?: string
+  raw?: unknown
+}
+
+export interface HostLockAcquireOptions {
+  sessionKey?: string
+  forceTakeover?: boolean
+  immediateTakeover?: boolean
+}
+
+export interface HostLockHeartbeatOptions {
+  sessionKey?: string
+}
+
+export interface HostLockReleaseOptions {
+  sessionKey?: string
+  keepalive?: boolean
+}
+
+export interface LockService {
+  acquire: (
+    resource: PageResourceIdentity,
+    options?: HostLockAcquireOptions
+  ) => Promise<EditLockState> | EditLockState
+  heartbeat: (
+    resource: PageResourceIdentity,
+    options?: HostLockHeartbeatOptions
+  ) => Promise<EditLockState> | EditLockState
+  release: (
+    resource: PageResourceIdentity,
+    options?: HostLockReleaseOptions
+  ) => Promise<void> | void
+  query: (
+    resource: PageResourceIdentity,
+    options?: HostLockHeartbeatOptions
+  ) => Promise<EditLockState> | EditLockState
+}
+
+/**
+ * Normalized revision row exposed by hostServices.revision.
+ * Current admin history rows are keyed by id and carry created/update time,
+ * operator fields, and optional page metadata/summary text.
+ */
+export interface RevisionSummary {
+  id: number
+  createdAt: string
+  createdBy?: string
+  note?: string
+  updatedAt?: string
+  title?: string
+  raw?: unknown
+}
+
+export interface RevisionService {
+  list: (
+    resource: PageResourceIdentity,
+    params?: Record<string, unknown>
+  ) => Promise<RevisionSummary[]> | RevisionSummary[]
+  getDetail: (id: number) => Promise<unknown> | unknown
+  snapshot?: (
+    resource: PageResourceIdentity,
+    note?: string
+  ) => Promise<RevisionSummary> | RevisionSummary
+}
+
 export interface HostServices {
   page?: PageStorageService
   globalSettings?: GlobalSettingsService
   i18n?: I18nService
   media?: MediaService
+  lock?: LockService
+  revision?: RevisionService
   product?: Record<string, unknown>
   menu?: Record<string, unknown>
   faq?: Record<string, unknown>
