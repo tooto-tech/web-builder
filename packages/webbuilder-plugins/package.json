@@ -1,6 +1,6 @@
 {
   "name": "@toototech/webbuilder-plugins",
-  "version": "0.2.0-alpha.1",
+  "version": "0.2.0-alpha.2",
   "type": "module",
   "private": false,
   "sideEffects": [
@@ -93,7 +93,7 @@
     "swiper": "^12.1.0"
   },
   "peerDependencies": {
-    "@toototech/webbuilder": "^0.2.0-alpha.1",
+    "@toototech/webbuilder": "^0.2.0-alpha.2",
     "vue": "^3.5.0"
   },
   "devDependencies": {
