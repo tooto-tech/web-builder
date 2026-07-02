@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, provide, ref } from 'vue'
+import { computed, onBeforeUnmount, provide, ref, watch } from 'vue'
 import grapesjs from 'grapesjs'
 import type { Editor, EditorConfig } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
@@ -15,6 +15,7 @@ import {
   type WebBuilderPanelContribution,
   type WebBuilderPluginActivationDiagnostic,
   type WebBuilderPluginContext,
+  type EditLockState,
 } from '../core/index.js'
 import PanelRail from './PanelRail.vue'
 import PluginPanelHost from './PluginPanelHost.vue'
@@ -22,6 +23,13 @@ import TopBar from './TopBar.vue'
 import WebBuilderShell from './WebBuilderShell.vue'
 import { WEB_BUILDER_CONTEXT, type WebBuilderContext } from './context.js'
 import { AssetsModalHost, getBuiltinPanelComponent, ModalHost } from './panels/index.js'
+import {
+  useAutosaveController,
+  useDraftController,
+  useLockController,
+  usePublishController,
+  useRevisionController,
+} from './controllers/index.js'
 import { useCanvasSetup } from './useCanvasSetup.js'
 
 const props = withDefaults(defineProps<{
@@ -35,6 +43,9 @@ const emit = defineEmits<{
   (event: 'update', projectData: Record<string, unknown>, editor: Editor): void
   (event: 'save', projectData: Record<string, unknown> | null, editor: Editor | null): void
   (event: 'publish', projectData: Record<string, unknown> | null, editor: Editor | null): void
+  (event: 'save-success', projectData: Record<string, unknown> | null, editor: Editor | null): void
+  (event: 'publish-success', projectData: Record<string, unknown> | null, editor: Editor | null): void
+  (event: 'lock-changed', state: EditLockState): void
   (event: 'back'): void
   (event: 'diagnostics', diagnostics: WebBuilderPluginActivationDiagnostic[]): void
 }>()
@@ -85,6 +96,69 @@ const diagnosticText = computed(() =>
 )
 
 const getProjectData = () => editor.value?.getProjectData() as Record<string, unknown> | null ?? null
+const getPlugins = () => resolvedOptions.value.plugins
+
+const draftController = useDraftController({
+  editor: () => editor.value,
+  resource: () => resolvedOptions.value.resource,
+  hostServices: resolvedOptions.value.hostServices,
+  plugins: getPlugins,
+  commands: resolvedOptions.value.commands,
+  tenant: resolvedOptions.value.tenant,
+  settings: resolvedOptions.value.settings,
+  ui: resolvedOptions.value.ui,
+  route: resolvedOptions.value.route,
+})
+
+const autosaveController = useAutosaveController({
+  saveDraft: draftController.saveDraft,
+  options: resolvedOptions.value.autosave,
+})
+
+const publishController = usePublishController({
+  editor: () => editor.value,
+  resource: () => resolvedOptions.value.resource,
+  hostServices: resolvedOptions.value.hostServices,
+  saveDraft: draftController.saveDraft,
+  plugins: getPlugins,
+  commands: resolvedOptions.value.commands,
+  tenant: resolvedOptions.value.tenant,
+  settings: resolvedOptions.value.settings,
+  ui: resolvedOptions.value.ui,
+  route: resolvedOptions.value.route,
+  getBaseUpdateTime: () => draftController.baseUpdateTime.value,
+  setBaseUpdateTime: value => {
+    draftController.baseUpdateTime.value = value
+  },
+})
+
+const lockController = useLockController({
+  editor: () => editor.value,
+  resource: () => resolvedOptions.value.resource,
+  hostServices: resolvedOptions.value.hostServices,
+  ui: resolvedOptions.value.ui,
+})
+
+const revisionController = useRevisionController({
+  editor: () => editor.value,
+  resource: () => resolvedOptions.value.resource,
+  hostServices: resolvedOptions.value.hostServices,
+  plugins: getPlugins,
+  commands: resolvedOptions.value.commands,
+  tenant: resolvedOptions.value.tenant,
+  settings: resolvedOptions.value.settings,
+  ui: resolvedOptions.value.ui,
+  route: resolvedOptions.value.route,
+  markDirty: draftController.markDirty,
+})
+
+const controllers = {
+  draft: draftController,
+  autosave: autosaveController,
+  publish: publishController,
+  lock: lockController,
+  revision: revisionController,
+}
 
 const webBuilderContext: WebBuilderContext = {
   get editor() {
@@ -105,9 +179,23 @@ const webBuilderContext: WebBuilderContext = {
   get ui() {
     return resolvedOptions.value.ui
   },
+  get controllers() {
+    return controllers
+  },
 }
 
 provide(WEB_BUILDER_CONTEXT, webBuilderContext)
+
+defineExpose({
+  controllers,
+  handleRestoreHistory: revisionController.restore,
+})
+
+watch(
+  () => lockController.lockState.value,
+  state => emit('lock-changed', state),
+  { deep: true },
+)
 
 const getErrorMessage = (error: unknown) => {
   if (error instanceof Error) return error.message
@@ -178,10 +266,19 @@ const onReady = (activeEditor: Editor) => {
     activeEditor.setComponents(initialComponents)
   }
 
+  if (resolvedOptions.value.hostServices.page?.getDraft) {
+    void draftController.loadDraft()
+  }
+  if (resolvedOptions.value.hostServices.lock?.acquire) {
+    void lockController.acquire()
+  }
+
   emit('ready', activeEditor)
 }
 
 const onUpdate = (projectData: unknown, activeEditor: Editor) => {
+  draftController.markDirty()
+  autosaveController.recordChange()
   emit('update', projectData as Record<string, unknown>, activeEditor)
 }
 
@@ -193,12 +290,28 @@ const builtinPanelFor = (panelId: string) => {
   return getBuiltinPanelComponent(panelId)
 }
 
-const emitProjectEvent = (event: 'save' | 'publish') => {
-  if (event === 'save') {
+const handleSaveDraft = async () => {
+  if (!resolvedOptions.value.hostServices.page?.saveDraft) {
     emit('save', getProjectData(), editor.value)
     return
   }
-  emit('publish', getProjectData(), editor.value)
+
+  const saved = await draftController.saveDraft()
+  if (saved) {
+    emit('save-success', getProjectData(), editor.value)
+  }
+}
+
+const handlePublish = async () => {
+  if (!resolvedOptions.value.hostServices.page?.publish) {
+    emit('publish', getProjectData(), editor.value)
+    return
+  }
+
+  const published = await publishController.publish()
+  if (published) {
+    emit('publish-success', getProjectData(), editor.value)
+  }
 }
 
 const togglePreview = () => {
@@ -221,6 +334,9 @@ const exitPreview = () => {
 onBeforeUnmount(() => {
   canvasSetupCleanup?.()
   canvasSetupCleanup = null
+  autosaveController.stop()
+  lockController.stopHeartbeat()
+  void lockController.release()
 })
 </script>
 
@@ -260,9 +376,10 @@ onBeforeUnmount(() => {
             @toggle-layers="showLayers = !showLayers"
             @toggle-code="showCode = !showCode"
             @preview="togglePreview"
-            @save-draft="emitProjectEvent('save')"
-            @publish="emitProjectEvent('publish')"
-            @export-project="emitProjectEvent('save')"
+            :is-publishing="publishController.isPublishing.value"
+            @save-draft="handleSaveDraft"
+            @publish="handlePublish"
+            @export-project="handleSaveDraft"
             @import-project="selectPanel('assets')"
             @reset-editor="editor?.setComponents('')"
           />
