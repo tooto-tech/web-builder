@@ -26,4 +26,10 @@ describe('WebBuilder default panels', () => {
     expect(blocksPanelSource).toContain('dragStart(block, event)')
     expect(blocksPanelSource).toContain('dragStop()')
   })
+
+  it('applies selected devices to GrapesJS canvas dimensions', () => {
+    expect(webBuilderSource).toContain('applyEditorDevice(activeEditor, device)')
+    expect(webBuilderSource).toContain('deviceManager?.select?.(device.id)')
+    expect(webBuilderSource).toContain('activeEditor.setDevice?.(device.name)')
+  })
 })

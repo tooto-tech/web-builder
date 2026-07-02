@@ -178,6 +178,15 @@ const grapesPlugins = computed<PluginTypeToLoad[]>(() =>
   }),
 )
 
+const applyEditorDevice = (
+  activeEditor: Editor,
+  device: { id: string; name: string },
+) => {
+  const deviceManager = activeEditor.Devices ?? activeEditor.DeviceManager
+  deviceManager?.select?.(device.id)
+  activeEditor.setDevice?.(device.name)
+}
+
 const onReady = (activeEditor: Editor) => {
   editor.value = activeEditor
   editorReady.value = true
@@ -194,7 +203,7 @@ const onReady = (activeEditor: Editor) => {
 
   const device = selectedDevice.value
   if (device) {
-    activeEditor.DeviceManager.select(device.id)
+    applyEditorDevice(activeEditor, device)
   }
 
   emit('ready', activeEditor)
@@ -206,7 +215,10 @@ const onUpdate = (projectData: unknown, activeEditor: Editor) => {
 
 const setDevice = (device: { id: string; name: string }) => {
   selectedDeviceId.value = device.id
-  editor.value?.DeviceManager.select(device.id)
+  const activeEditor = editor.value
+  if (activeEditor) {
+    applyEditorDevice(activeEditor, device)
+  }
 }
 
 const emitProjectEvent = (event: 'save' | 'publish') => {
