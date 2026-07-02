@@ -40,3 +40,6 @@
 }
 
 @tailwind utilities;
+.gjs-cv-canvas{
+    background: var(--wb-topbar-bg);
+}

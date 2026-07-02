@@ -255,4 +255,7 @@ const naiveThemeOverrides = computed(() => createNaiveThemeOverrides(props.theme
     transform: rotate(360deg);
   }
 }
+.gjs-cv-canvas{
+  background-color: var(--wb-topbar-bg);
+}
 </style>

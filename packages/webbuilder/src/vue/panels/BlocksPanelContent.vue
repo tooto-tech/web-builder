@@ -117,14 +117,11 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 
 .wb-blocks-panel__group :deep(.n-collapse-item__header-main) {
   min-width: 0;
-}
-
-.wb-blocks-panel__group :deep(.n-collapse-item__content-wrapper) {
-  border-bottom: 1px solid #e5e7eb;
+  user-select: none;
 }
 
 .wb-blocks-panel__group :deep(.n-collapse-item__content-inner) {
-  padding: 4px 0 8px;
+  padding: 4px 0 8px !important;
 }
 
 .wb-blocks-panel__list {
@@ -134,9 +131,8 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 
 .wb-blocks-panel__cell {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
+  grid-template-columns: 24px minmax(0, 1fr);
   width: 100%;
-  min-height: 40px;
   align-items: center;
   gap: 8px;
   border: 1px solid transparent;
@@ -153,15 +149,12 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 
 .wb-blocks-panel__cell-media {
   display: flex;
-  width: 26px;
-  height: 26px;
+  width: 16px;
+  height: 16px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
-  border-radius: 5px;
   color: #4b5563;
-  background: #f9fafb;
 }
 
 .wb-blocks-panel__cell-media.is-empty::before {
@@ -173,8 +166,8 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 }
 
 .wb-blocks-panel__cell-media :deep(svg) {
-  max-width: 18px;
-  max-height: 18px;
+  max-width: 16px;
+  max-height: 16px;
 }
 
 .wb-blocks-panel__cell-media :deep(img) {

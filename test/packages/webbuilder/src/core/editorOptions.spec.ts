@@ -14,7 +14,7 @@ describe('resolveWebBuilderOptions', () => {
     expect(resolved.grapesjs.storageManager).toBe(false)
     expect(resolved.grapesjs.panels).toEqual({ defaults: [] })
     expect(resolved.canvas.frameReset).toBe(true)
-    expect(resolved.canvas.bottomDropZone).toBe(true)
+    expect(resolved.canvas).not.toHaveProperty('bottomDropZone')
     expect(resolved.storage).toBeUndefined()
     expect(resolved.theme).toEqual({})
     expect(resolved.i18n).toEqual({ messages: {} })

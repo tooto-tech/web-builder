@@ -267,7 +267,6 @@ const onReady = (activeEditor: Editor) => {
   canvasSetupCleanup?.()
   canvasSetupCleanup = useCanvasSetup(activeEditor, {
     frameReset: resolvedOptions.value.canvas.frameReset,
-    bottomDropZone: resolvedOptions.value.canvas.bottomDropZone,
   })
 
   const initialComponents = resolvedOptions.value.canvas.initialComponents

@@ -24,7 +24,7 @@
  *   storage for host persistence adapters.
  *
  * Legacy useEditorInit responsibilities:
- * - canvas frame reset and bottom drop zone -> canvas.frameReset/bottomDropZone.
+ * - canvas frame reset -> canvas.frameReset.
  * - registerCommands -> commands.
  * - setupAssetManager, font manager, component style synchronization,
  *   project load/save/publish hooks, page settings, preview/template lifecycle
@@ -73,7 +73,6 @@ export interface WebBuilderCanvasOptions {
   styles?: string[]
   scripts?: string[]
   frameReset?: boolean
-  bottomDropZone?: boolean
 }
 
 export type { WebBuilderThemeTokens } from '../vue/theme.js'
@@ -217,7 +216,6 @@ export const resolveWebBuilderOptions = (
     devices,
     canvas: {
       frameReset: true,
-      bottomDropZone: true,
       ...options.canvas,
     },
     commands: options.commands ?? {},
