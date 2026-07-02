@@ -1,3 +1,42 @@
+/*
+ * Legacy b2b-admin WebBuilder inputs -> WebBuilderOptions mapping
+ *
+ * WebBuilderControllerProps:
+ * - resourceId/resourceKey/resourceType/resourceScope/ownerType/ownerId
+ *   -> resource: PageResourceIdentity. The legacy route-derived fallback is
+ *      supplied by the host route adapter and normalized before passing options.
+ *
+ * Legacy browser adapters and capability context:
+ * - createBrowserHostServices(...)
+ *   -> hostServices, settings, ui, route.
+ * - createBrowserCapabilityAdapter().resolve(pageResource)
+ *   -> tenant and capabilities snapshots.
+ *
+ * Legacy GrapesJS initialization:
+ * - container -> package-owned <Canvas>; not exposed to hosts.
+ * - panels.defaults, height -> package defaults in resolveWebBuilderOptions.
+ * - deviceManager.devices -> devices.
+ * - canvas.styles/canvas.scripts -> canvas.styles/canvas.scripts.
+ * - canvas.frameStyle -> grapesjs.canvas.frameStyle.
+ * - dragMode/showOffsets/showOffsetsSelected/stylePrefix/selectorManager
+ *   /assetManager/parser/plugins/storageManager -> grapesjs.
+ * - storageManager.type:'' -> default grapesjs.storageManager:false plus
+ *   storage for host persistence adapters.
+ *
+ * Legacy useEditorInit responsibilities:
+ * - canvas frame reset and bottom drop zone -> canvas.frameReset/bottomDropZone.
+ * - registerCommands -> commands.
+ * - setupAssetManager, font manager, component style synchronization,
+ *   project load/save/publish hooks, page settings, preview/template lifecycle
+ *   -> TODO(P3): migrate from admin controller/plugins into package plugins
+ *      and host services as those feature areas are lifted.
+ *
+ * Legacy config files:
+ * - config/storage.ts -> storage.
+ * - config/sharedResources.ts -> TODO(P3): plugin/resource participants.
+ * - config/globalStyles.ts and config/wbStyleSectors.ts -> TODO(P4): theme
+ *   tokens and style manager schema.
+ */
 import type { EditorConfig } from 'grapesjs'
 
 import {
@@ -18,6 +57,7 @@ import type {
   TenantContext,
   WebBuilderFeaturePlugin,
 } from './featurePlugin.js'
+import type { StorageAdapter } from './storageAdapter.js'
 
 export interface WebBuilderDeviceOption {
   id: string
@@ -30,6 +70,17 @@ export interface WebBuilderCanvasOptions {
   initialComponents?: string
   styles?: string[]
   scripts?: string[]
+  frameReset?: boolean
+  bottomDropZone?: boolean
+}
+
+export interface WebBuilderThemeTokens {
+  [cssVar: string]: string
+}
+
+export interface WebBuilderI18nOptions {
+  locale?: string
+  messages?: Record<string, unknown>
 }
 
 export interface WebBuilderOptions {
@@ -39,6 +90,7 @@ export interface WebBuilderOptions {
   canvas?: WebBuilderCanvasOptions
   commands?: WebBuilderCommandContext
   hostServices?: HostServices
+  storage?: StorageAdapter
   settings?: SettingsSource
   resource?: PageResourceIdentity
   tenant?: TenantContext
@@ -46,6 +98,8 @@ export interface WebBuilderOptions {
     entitlements?: StaticEntitlementMap
     superAdminRoles?: readonly string[]
   }
+  theme?: WebBuilderThemeTokens
+  i18n?: WebBuilderI18nOptions
   ui?: HostUi
   route?: RouteAdapter
 }
@@ -57,6 +111,7 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
   canvas: WebBuilderCanvasOptions
   commands: WebBuilderCommandContext
   hostServices: HostServices
+  storage: WebBuilderOptions['storage']
   settings: SettingsSource
   resource: PageResourceIdentity
   tenant: TenantContext
@@ -64,6 +119,8 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
     snapshot: WebBuilderCapabilitySnapshot
     capabilityIds: Set<string>
   }
+  theme: WebBuilderThemeTokens
+  i18n: WebBuilderI18nOptions & { messages: Record<string, unknown> }
   ui: HostUi
   route: RouteAdapter
 }
@@ -137,9 +194,14 @@ export const resolveWebBuilderOptions = (
     },
     plugins,
     devices,
-    canvas: options.canvas ?? {},
+    canvas: {
+      frameReset: true,
+      bottomDropZone: true,
+      ...options.canvas,
+    },
     commands: options.commands ?? {},
     hostServices: options.hostServices ?? {},
+    storage: options.storage,
     settings: options.settings ?? createMemorySettingsSource(),
     resource,
     tenant,
@@ -147,6 +209,11 @@ export const resolveWebBuilderOptions = (
       ...options.capabilities,
       snapshot: capabilitySnapshot,
       capabilityIds: capabilitySnapshot.capabilityIds,
+    },
+    theme: options.theme ?? {},
+    i18n: {
+      messages: {},
+      ...options.i18n,
     },
     ui: options.ui ?? createDefaultUi(),
     route: options.route ?? createDefaultRoute(),

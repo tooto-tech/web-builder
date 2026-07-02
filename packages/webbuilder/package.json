@@ -1,6 +1,6 @@
 {
   "name": "@toototech/webbuilder",
-  "version": "0.1.1",
+  "version": "0.2.0-alpha.1",
   "type": "module",
   "private": false,
   "sideEffects": [
@@ -28,6 +28,19 @@
       "import": "./dist/core.js"
     },
     "./style.css": "./dist/style.css"
+  },
+  "typesVersions": {
+    "*": {
+      "core": [
+        "dist/core/index.d.ts"
+      ],
+      "style.css": [
+        "dist/style.css"
+      ],
+      "*": [
+        "dist/index.d.ts"
+      ]
+    }
   },
   "dependencies": {
     "@iconify/vue": "^5.0.0",

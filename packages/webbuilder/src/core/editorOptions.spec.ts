@@ -13,6 +13,11 @@ describe('resolveWebBuilderOptions', () => {
     expect(resolved.grapesjs.height).toBe('100%')
     expect(resolved.grapesjs.storageManager).toBe(false)
     expect(resolved.grapesjs.panels).toEqual({ defaults: [] })
+    expect(resolved.canvas.frameReset).toBe(true)
+    expect(resolved.canvas.bottomDropZone).toBe(true)
+    expect(resolved.storage).toBeUndefined()
+    expect(resolved.theme).toEqual({})
+    expect(resolved.i18n).toEqual({ messages: {} })
     expect(resolved.capabilities.capabilityIds.size).toBe(0)
   })
 
@@ -37,5 +42,38 @@ describe('resolveWebBuilderOptions', () => {
 
     expect(resolved.devices).toEqual(devices)
     expect(resolved.grapesjs.deviceManager).toEqual({ devices })
+  })
+
+  it('preserves host-owned storage, theme, and i18n options', () => {
+    const storage = {
+      mode: 'backend' as const,
+      supportsConflictOverride: true,
+      getDraft: async () => null,
+      saveDraft: async request => ({ ...request }),
+      generateCss: async () => null,
+      getHistoryDetail: async () => null,
+      load: async () => null,
+      save: async request => ({ ...request }),
+    }
+
+    const resolved = resolveWebBuilderOptions({
+      storage,
+      theme: { '--wb-color-accent': '#1d4ed8' },
+      i18n: {
+        locale: 'zh-CN',
+        messages: {
+          publish: '发布',
+        },
+      },
+    })
+
+    expect(resolved.storage).toBe(storage)
+    expect(resolved.theme).toEqual({ '--wb-color-accent': '#1d4ed8' })
+    expect(resolved.i18n).toEqual({
+      locale: 'zh-CN',
+      messages: {
+        publish: '发布',
+      },
+    })
   })
 })
