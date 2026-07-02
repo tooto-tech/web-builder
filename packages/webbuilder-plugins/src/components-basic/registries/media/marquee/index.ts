@@ -288,7 +288,7 @@ export function registerMarqueeComponent(editor: Editor) {
               }
             }
 
-            const tick = function (ts) {
+            const tick = function (ts: number) {
               if (!lastTs) lastTs = ts
               const dt = (ts - lastTs) / 1000
               lastTs = ts

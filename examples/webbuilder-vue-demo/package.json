@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@toototech/webbuilder": "workspace:*",
+    "@toototech/webbuilder-plugins": "workspace:*",
     "vue": "3.5.12"
   },
   "devDependencies": {

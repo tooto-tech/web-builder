@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { WebBuilder, type WebBuilderOptions } from '@toototech/webbuilder'
+import { componentsBasic } from '@toototech/webbuilder-plugins/basic'
 
 const options: WebBuilderOptions = {
+  plugins: [
+    componentsBasic({
+      onRegistrationFailure: diagnostic => {
+        console.warn(diagnostic.message, diagnostic.error)
+      },
+    }),
+  ],
   canvas: {
     initialComponents: `
       <section style="padding: 56px 40px; font-family: Inter, Arial, sans-serif;">
