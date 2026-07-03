@@ -45,6 +45,33 @@ export interface PageSaveRequest extends PageResourceIdentity {
 
 export type DraftStorageMode = 'backend' | 'indexedDb'
 
+export interface WebBuilderSelfStorageLoadContext {
+  editor?: unknown
+  resource: PageResourceIdentity
+}
+
+export interface WebBuilderSelfStorageLoadResult {
+  project: Record<string, unknown> | null
+}
+
+export interface WebBuilderSelfStorageSaveContext {
+  project: Record<string, unknown>
+  schemaJson: string
+  editor: unknown
+  resource: PageResourceIdentity
+}
+
+export interface WebBuilderSelfStorageOptions {
+  type: 'self'
+  autosaveChanges?: number
+  onLoad: (
+    context?: WebBuilderSelfStorageLoadContext
+  ) => Promise<WebBuilderSelfStorageLoadResult> | WebBuilderSelfStorageLoadResult
+  onSave: (
+    context: WebBuilderSelfStorageSaveContext
+  ) => Promise<void> | void
+}
+
 export interface StorageAdapter {
   mode: DraftStorageMode
   supportsConflictOverride: boolean
@@ -61,6 +88,8 @@ export interface StorageAdapter {
     context?: { currentPage?: PageDraftRecord | null }
   ) => Promise<PageDraftRecord>
 }
+
+export type WebBuilderStorageOptions = StorageAdapter | WebBuilderSelfStorageOptions
 
 export interface SharedResourceRecord extends PageResourceIdentity {
   id?: number

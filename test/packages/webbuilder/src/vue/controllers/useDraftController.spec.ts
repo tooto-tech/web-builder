@@ -166,6 +166,64 @@ describe('useDraftController', () => {
     }))
   })
 
+  it('loads project data through Studio SDK style self storage before host services', async () => {
+    const order: string[] = []
+    const project = { pages: [{ id: 'self-home' }] }
+    const loadProjectData = vi.fn()
+    const plugin: WebBuilderFeaturePlugin = {
+      id: 'loader',
+      alwaysEnabled: true,
+      beforeProjectLoad: () => {
+        order.push('beforeProjectLoad')
+      },
+    }
+    const options = baseOptions({
+      editor: {
+        ...createEditor(),
+        loadProjectData,
+      },
+      plugins: [plugin],
+      storage: {
+        type: 'self',
+        onLoad: vi.fn(async () => ({ project })),
+        onSave: vi.fn(),
+      },
+    })
+    const controller = useDraftController(options as any)
+
+    await expect(controller.loadDraft()).resolves.toBe(project)
+
+    expect(options.storage.onLoad).toHaveBeenCalledTimes(1)
+    expect(options.hostServices.page.getDraft).not.toHaveBeenCalled()
+    expect(order).toEqual(['beforeProjectLoad'])
+    expect(loadProjectData).toHaveBeenCalledWith(project)
+  })
+
+  it('saves project data through Studio SDK style self storage before host services', async () => {
+    const project = { pages: [{ id: 'self-home' }] }
+    const editor = createEditor(project)
+    const options = baseOptions({
+      editor,
+      storage: {
+        type: 'self',
+        onLoad: vi.fn(),
+        onSave: vi.fn(async () => undefined),
+      },
+    })
+    const controller = useDraftController(options as any)
+
+    await expect(controller.saveDraft()).resolves.toBe(true)
+
+    expect(options.storage.onSave).toHaveBeenCalledWith(expect.objectContaining({
+      project,
+      schemaJson: JSON.stringify(project),
+      editor,
+      resource: expect.objectContaining({ resourceId: 1, resourceType: 'PAGE' }),
+    }))
+    expect(options.hostServices.page.saveDraft).not.toHaveBeenCalled()
+    expect(controller.isDirty.value).toBe(false)
+  })
+
   it('loads draft data through host services and hydrates the editor', async () => {
     const loadProjectData = vi.fn()
     const options = baseOptions({

@@ -18,7 +18,7 @@ interface LayerNode {
   label: string
   visible: boolean
   locked: boolean
-  children: LayerNode[]
+  children?: LayerNode[]
 }
 
 type NaiveDropPosition = 'before' | 'inside' | 'after'
@@ -47,31 +47,41 @@ const componentOf = (node?: LayerNode | null) =>
 const toLayerNode = (node: TreeOption | null | undefined): LayerNode | null =>
   node ? node as unknown as LayerNode : null
 
+const buildNode = (
+  component: Component,
+  expanded: string[],
+  selected: Set<string>,
+  byId: Map<string, Component>,
+  forceOpen = false,
+): LayerNode => {
+  const data = layers.getLayerData(component)
+  byId.set(component.cid, component)
+  if (data.selected) selected.add(component.cid)
+  const children = buildNodes(component, expanded, selected, byId)
+  if ((forceOpen || data.open) && children.length) expanded.push(component.cid)
+
+  return {
+    id: component.cid,
+    label: data.name || 'Root',
+    visible: data.visible,
+    locked: data.locked,
+    ...(children.length ? { children } : {}),
+  }
+}
+
 const buildNodes = (
   component: Component,
   expanded: string[],
   selected: Set<string>,
   byId: Map<string, Component>,
 ): LayerNode[] =>
-  layers.getComponents(component).map((child) => {
-    const data = layers.getLayerData(child)
-    byId.set(child.cid, child)
-    if (data.open) expanded.push(child.cid)
-    if (data.selected) selected.add(child.cid)
-    return {
-      id: child.cid,
-      label: data.name,
-      visible: data.visible,
-      locked: data.locked,
-      children: buildNodes(child, expanded, selected, byId),
-    }
-  })
+  layers.getComponents(component).map(child => buildNode(child, expanded, selected, byId))
 
 const refresh = () => {
   const expanded: string[] = []
   const selected = new Set<string>()
   const byId = new Map<string, Component>()
-  treeData.value = buildNodes(props.root, expanded, selected, byId)
+  treeData.value = [buildNode(props.root, expanded, selected, byId, true)]
   componentsById = byId
   expandedIds.value = expanded
   selectedIds.value = selected
@@ -330,24 +340,42 @@ const renderLayerLabel = ({ option }: { option: TreeOption }) => {
 <style scoped>
 .wb-layers-panel {
   min-height: 100%;
-  padding: 8px;
+  padding: 10px 8px;
   color: #111827;
   background: #fff;
 }
 
 .wb-layers-tree {
   background: transparent;
-  font-size: 12px;
+  font-size: 13px;
   color: #374151;
+}
+.wb-layers-panel :deep(.n-tree .n-tree-node-wrapper){
+  --n-node-wrapper-padding: 0;
+}
+
+.wb-layers-tree :deep(.n-tree-node) {
+
+}
+
+.wb-layers-tree :deep(.n-tree-node-switcher) {
+  width: 20px;
+  height: auto;
+  color: #64748b;
+}
+
+.wb-layers-tree :deep(.n-tree-node-switcher--hide) {
+  visibility: hidden;
 }
 
 .wb-layers-tree :deep(.n-tree-node-content) {
-  height: 28px;
-  border-radius: 4px;
+  height: auto;
+  min-width: 0;
+  border-radius: 5px;
 }
 
 .wb-layers-tree :deep(.n-tree-node-content:has(.wb-layers-node.is-hovered)) {
-  background: #f3f4f6;
+  background: #f1f5f9;
 }
 
 .wb-layers-tree :deep(.n-tree-node-content:has(.wb-layers-node.is-selected)) {
@@ -361,34 +389,36 @@ const renderLayerLabel = ({ option }: { option: TreeOption }) => {
 }
 
 .wb-layers-node {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   flex: 1;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   min-width: 0;
   height: 100%;
-  padding-right: 4px;
+  padding: 0 6px 0 4px;
 }
 
 .wb-layers-node.is-hidden {
-  opacity: 0.5;
+  opacity: 0.55;
 }
 
 .wb-layers-node__label {
-  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #1f2937;
+  line-height: 18px;
 }
 
 .wb-layers-node__rename {
-  flex: 1;
+  width: 100%;
   min-width: 0;
-  height: 20px;
+  height: 22px;
   border: 1px solid #2563eb;
-  border-radius: 3px;
-  padding: 0 4px;
+  border-radius: 4px;
+  padding: 0 6px;
   color: inherit;
   background: #fff;
   font: inherit;
@@ -398,32 +428,50 @@ const renderLayerLabel = ({ option }: { option: TreeOption }) => {
 .wb-layers-node__actions {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 48px;
+  opacity: 0.72;
+  transition: opacity 0.12s ease;
 }
-
+.wb-layers-panel :deep(.wb-layers-node){
+  display: flex;
+  font-size: 12px;
+}
+.wb-layers-panel :deep(.wb-layers-node__actions){
+  margin-inline-start: auto;
+  display: flex;
+  gap: 6px;
+}
 .wb-layers-node__action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border: 0;
-  border-radius: 3px;
+  border-radius: 4px;
   padding: 0;
-  color: #6b7280;
+  color: #64748b;
   background: transparent;
-  font-size: 13px;
-  visibility: hidden;
+  font-size: 14px;
+  visibility: visible;
   cursor: pointer;
+  margin-inline-start: auto;
 }
 
-.wb-layers-node:hover .wb-layers-node__action,
+.wb-layers-node:hover .wb-layers-node__actions,
+.wb-layers-node.is-selected .wb-layers-node__actions {
+  opacity: 1;
+}
+
 .wb-layers-node__action.is-active {
-  visibility: visible;
+  color: #2563eb;
+  background: #dbeafe;
 }
 
 .wb-layers-node__action:hover {
   color: #111827;
-  background: #e5e7eb;
+  background: #e2e8f0;
 }
 </style>

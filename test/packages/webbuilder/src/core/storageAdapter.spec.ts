@@ -6,6 +6,7 @@ import {
   type PageDraftRecord,
   type PageSaveRequest,
   type StorageAdapter,
+  type WebBuilderSelfStorageOptions,
 } from '../../../../../packages/webbuilder/src/core/index.js'
 
 describe('storage adapter contract', () => {
@@ -65,5 +66,28 @@ describe('storage adapter contract', () => {
         sessionKey: 'session-1',
       })
     ).resolves.toMatchObject({ id: 1, resourceType: 'PAGE' })
+  })
+
+  it('exposes Studio SDK style self storage callbacks from the public package root', async () => {
+    const project = { pages: [{ id: 'home', component: '<h1>New project</h1>' }] }
+    const storage: WebBuilderSelfStorageOptions = {
+      type: 'self',
+      autosaveChanges: 5,
+      onLoad: async () => ({ project }),
+      onSave: async ({ project: savedProject, schemaJson }) => {
+        expect(savedProject).toBe(project)
+        expect(schemaJson).toBe(JSON.stringify(project))
+      },
+    }
+
+    await expect(storage.onLoad()).resolves.toEqual({ project })
+    await expect(
+      storage.onSave({
+        project,
+        schemaJson: JSON.stringify(project),
+        editor: {},
+        resource: { resourceType: 'PAGE' },
+      })
+    ).resolves.toBeUndefined()
   })
 })

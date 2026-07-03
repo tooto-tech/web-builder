@@ -15,6 +15,7 @@ import {
   type WebBuilderPanelContribution,
   type WebBuilderPluginActivationDiagnostic,
   type WebBuilderPluginContext,
+  type WebBuilderSelfStorageOptions,
   type EditLockState,
 } from '../core/index.js'
 import PanelRail from './PanelRail.vue'
@@ -60,9 +61,12 @@ const showCode = ref(false)
 const activePanel = ref('blocks')
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
 let canvasSetupCleanup: (() => void) | null = null
+const COMPONENT_OUTLINE_COMMAND = 'core:component-outline'
 
 const resolvedOptions = computed(() => resolveWebBuilderOptions(props.options))
 const grapesConfig = computed(() => resolvedOptions.value.grapesjs as EditorConfig)
+const storageOptions = computed(() => resolvedOptions.value.storage)
+const sessionOptions = computed(() => resolvedOptions.value.session)
 
 const panelContributions = computed<WebBuilderPanelContribution[]>(() =>
   collectWebBuilderPanelContributions(resolvedOptions.value.plugins),
@@ -106,22 +110,46 @@ const diagnosticText = computed(() =>
 
 const getProjectData = () => editor.value?.getProjectData() as Record<string, unknown> | null ?? null
 const getPlugins = () => resolvedOptions.value.plugins
+const isSelfStorageOptions = (
+  storage: typeof storageOptions.value,
+): storage is WebBuilderSelfStorageOptions =>
+  Boolean(storage && 'type' in storage && storage.type === 'self')
+
+const hasDraftLoadSource = () =>
+  isSelfStorageOptions(storageOptions.value) ||
+  Boolean(storageOptions.value && 'getDraft' in storageOptions.value) ||
+  Boolean(resolvedOptions.value.hostServices.page?.getDraft)
+
+const hasDraftSaveSource = () =>
+  isSelfStorageOptions(storageOptions.value) ||
+  Boolean(storageOptions.value && 'saveDraft' in storageOptions.value) ||
+  Boolean(resolvedOptions.value.hostServices.page?.saveDraft)
+
+const autosaveOptions = computed(() => ({
+  ...resolvedOptions.value.autosave,
+  autosaveChanges:
+    isSelfStorageOptions(storageOptions.value)
+      ? storageOptions.value.autosaveChanges
+      : resolvedOptions.value.autosave?.autosaveChanges,
+}))
 
 const draftController = useDraftController({
   editor: () => editor.value,
   resource: () => resolvedOptions.value.resource,
   hostServices: resolvedOptions.value.hostServices,
+  storage: storageOptions.value,
   plugins: getPlugins,
   commands: resolvedOptions.value.commands,
   tenant: resolvedOptions.value.tenant,
   settings: resolvedOptions.value.settings,
   ui: resolvedOptions.value.ui,
   route: resolvedOptions.value.route,
+  getSessionKey: sessionOptions.value?.getSessionKey,
 })
 
 const autosaveController = useAutosaveController({
   saveDraft: draftController.saveDraft,
-  options: resolvedOptions.value.autosave,
+  options: autosaveOptions.value,
 })
 
 const publishController = usePublishController({
@@ -135,6 +163,7 @@ const publishController = usePublishController({
   settings: resolvedOptions.value.settings,
   ui: resolvedOptions.value.ui,
   route: resolvedOptions.value.route,
+  getSessionKey: sessionOptions.value?.getSessionKey,
   getBaseUpdateTime: () => draftController.baseUpdateTime.value,
   setBaseUpdateTime: value => {
     draftController.baseUpdateTime.value = value
@@ -146,6 +175,7 @@ const lockController = useLockController({
   resource: () => resolvedOptions.value.resource,
   hostServices: resolvedOptions.value.hostServices,
   ui: resolvedOptions.value.ui,
+  getSessionKey: sessionOptions.value?.getSessionKey,
 })
 
 const revisionController = useRevisionController({
@@ -264,6 +294,7 @@ const grapesPlugins = computed<PluginTypeToLoad[]>(() =>
 const onReady = (activeEditor: Editor) => {
   editor.value = activeEditor
   editorReady.value = true
+  showBorders.value = activeEditor.Commands.isActive(COMPONENT_OUTLINE_COMMAND)
   canvasSetupCleanup?.()
   canvasSetupCleanup = useCanvasSetup(activeEditor, {
     frameReset: resolvedOptions.value.canvas.frameReset,
@@ -274,7 +305,7 @@ const onReady = (activeEditor: Editor) => {
     activeEditor.setComponents(initialComponents)
   }
 
-  if (resolvedOptions.value.hostServices.page?.getDraft) {
+  if (hasDraftLoadSource()) {
     void draftController.loadDraft()
   }
   if (resolvedOptions.value.hostServices.lock?.acquire) {
@@ -299,7 +330,7 @@ const builtinPanelFor = (panelId: string) => {
 }
 
 const handleSaveDraft = async () => {
-  if (!resolvedOptions.value.hostServices.page?.saveDraft) {
+  if (!hasDraftSaveSource()) {
     emit('save', getProjectData(), editor.value)
     return
   }
@@ -320,6 +351,21 @@ const handlePublish = async () => {
   if (published) {
     emit('publish-success', getProjectData(), editor.value)
   }
+}
+
+const handleToggleBorders = () => {
+  const activeEditor = editor.value
+  if (!activeEditor) return
+
+  const nextShowBorders = !showBorders.value
+  showBorders.value = nextShowBorders
+
+  if (nextShowBorders) {
+    activeEditor.runCommand(COMPONENT_OUTLINE_COMMAND)
+    return
+  }
+
+  activeEditor.stopCommand(COMPONENT_OUTLINE_COMMAND)
 }
 
 const togglePreview = () => {
@@ -384,7 +430,7 @@ onBeforeUnmount(() => {
             :branding="resolvedOptions.branding"
             @back="emit('back')"
             @open-page-settings="selectPanel('settings')"
-            @toggle-borders="showBorders = !showBorders"
+            @toggle-borders="handleToggleBorders"
             @toggle-code="showCode = !showCode"
             @preview="togglePreview"
             :is-publishing="publishController.isPublishing.value"

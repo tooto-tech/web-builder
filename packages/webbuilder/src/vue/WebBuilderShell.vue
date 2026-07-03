@@ -76,14 +76,18 @@ const naiveThemeOverrides = computed(() => createNaiveThemeOverrides(props.theme
       v-show="editorReady && !isPageSwitching"
       class="tw-h-full tw-flex tw-flex-col"
     >
-      <slot name="top-bar"></slot>
+      <div v-show="!isPreviewMode" class="tw-contents">
+        <slot name="top-bar"></slot>
+      </div>
 
       <div
         class="tw-flex-1 tw-min-h-0"
         :class="isPreviewMode ? '' : 'tw-grid'"
         :style="isPreviewMode ? undefined : sidePanelGridStyle"
       >
-        <slot name="rail"></slot>
+        <div v-show="!isPreviewMode" class="tw-contents">
+          <slot name="rail"></slot>
+        </div>
 
         <div
           v-show="!isPreviewMode && !isActivePanelFullWidth"

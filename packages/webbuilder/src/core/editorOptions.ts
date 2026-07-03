@@ -59,7 +59,7 @@ import type {
   TenantContext,
   WebBuilderFeaturePlugin,
 } from './featurePlugin.js'
-import type { StorageAdapter } from './storageAdapter.js'
+import type { WebBuilderStorageOptions } from './storageAdapter.js'
 
 export interface WebBuilderDeviceOption {
   id: string
@@ -97,6 +97,11 @@ export interface WebBuilderAutosaveOptions {
   enabled?: boolean
   debounceMs?: number
   retryBackoffMs?: number
+  autosaveChanges?: number
+}
+
+export interface WebBuilderSessionOptions {
+  getSessionKey: () => string
 }
 
 export interface WebBuilderOptions {
@@ -107,7 +112,8 @@ export interface WebBuilderOptions {
   autosave?: WebBuilderAutosaveOptions
   commands?: WebBuilderCommandContext
   hostServices?: HostServices
-  storage?: StorageAdapter
+  storage?: WebBuilderStorageOptions
+  session?: WebBuilderSessionOptions
   settings?: SettingsSource
   resource?: PageResourceIdentity
   tenant?: TenantContext
@@ -131,6 +137,7 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
   commands: WebBuilderCommandContext
   hostServices: HostServices
   storage: WebBuilderOptions['storage']
+  session: WebBuilderOptions['session']
   settings: SettingsSource
   resource: PageResourceIdentity
   tenant: TenantContext
@@ -221,6 +228,7 @@ export const resolveWebBuilderOptions = (
     commands: options.commands ?? {},
     hostServices: options.hostServices ?? {},
     storage: options.storage,
+    session: options.session,
     settings: options.settings ?? createMemorySettingsSource(),
     resource,
     tenant,

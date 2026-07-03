@@ -6,6 +6,7 @@ export interface AutosaveControllerOptions {
   enabled?: boolean
   debounceMs?: number
   retryBackoffMs?: number
+  autosaveChanges?: number
 }
 
 export interface UseAutosaveControllerOptions {
@@ -24,12 +25,17 @@ export const useAutosaveController = (input: UseAutosaveControllerOptions) => {
 
   let pendingSinceMs: number | null = null
   let saveTimer: ReturnType<typeof setTimeout> | null = null
+  let pendingChangeCount = 0
 
   const now = () => input.now?.() ?? Date.now()
   const getOptions = () => ({
     enabled: input.options?.enabled !== false,
     debounceMs: input.options?.debounceMs ?? DEFAULT_DEBOUNCE_MS,
     retryBackoffMs: input.options?.retryBackoffMs ?? 0,
+    autosaveChanges:
+      typeof input.options?.autosaveChanges === 'number' && input.options.autosaveChanges > 0
+        ? Math.floor(input.options.autosaveChanges)
+        : undefined,
   })
 
   const clearTimer = () => {
@@ -49,6 +55,7 @@ export const useAutosaveController = (input: UseAutosaveControllerOptions) => {
       if (saved) {
         hasPendingChange.value = false
         pendingSinceMs = null
+        pendingChangeCount = 0
         failureCount.value = 0
         return true
       }
@@ -83,6 +90,7 @@ export const useAutosaveController = (input: UseAutosaveControllerOptions) => {
     if (decision.reason === 'disabled') {
       hasPendingChange.value = false
       pendingSinceMs = null
+      pendingChangeCount = 0
       return
     }
 
@@ -98,11 +106,25 @@ export const useAutosaveController = (input: UseAutosaveControllerOptions) => {
     if (!options.enabled) {
       hasPendingChange.value = false
       pendingSinceMs = null
+      pendingChangeCount = 0
       clearTimer()
       return
     }
 
     hasPendingChange.value = true
+    pendingSinceMs = pendingSinceMs ?? now()
+
+    if (options.autosaveChanges) {
+      pendingChangeCount += 1
+      clearTimer()
+      if (pendingChangeCount >= options.autosaveChanges) {
+        saveTimer = setTimeout(() => {
+          void runSave()
+        }, 0)
+      }
+      return
+    }
+
     pendingSinceMs = now()
     schedule()
   }

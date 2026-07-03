@@ -1,7 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap");
+
 @config "../../tailwind.config.ts";
 
 .wb-shell,
 .wb-shell-popper {
+  --el-font-family: "Open Sans", Arial, sans-serif;
+  font-family: "Open Sans", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -42,4 +46,11 @@
 @tailwind utilities;
 .gjs-cv-canvas{
     background: var(--wb-topbar-bg);
+}
+.n-collapse-item__header-main{
+    user-select: none;
+}
+
+.n-collapse .n-collapse-item .n-collapse-item__content-wrapper .n-collapse-item__content-inner{
+    padding-top: initial;
 }

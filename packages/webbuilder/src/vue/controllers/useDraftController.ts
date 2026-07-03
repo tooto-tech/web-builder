@@ -14,6 +14,7 @@ import {
   serializeDraftProjectData,
   type HostServices,
   type HostUi,
+  type PageDraftRecord,
   type PageResourceIdentity,
   type RouteAdapter,
   type SettingsSource,
@@ -21,6 +22,9 @@ import {
   type WebBuilderCommandContext,
   type WebBuilderFeaturePlugin,
   type WebBuilderPluginContext,
+  type StorageAdapter,
+  type WebBuilderSelfStorageOptions,
+  type WebBuilderStorageOptions,
 } from '../../core/index.js'
 
 export interface SaveDraftOptions {
@@ -31,6 +35,7 @@ export interface UseDraftControllerOptions {
   editor: unknown | (() => unknown)
   resource: PageResourceIdentity | (() => PageResourceIdentity)
   hostServices: HostServices
+  storage?: WebBuilderStorageOptions
   plugins?: WebBuilderFeaturePlugin[] | (() => WebBuilderFeaturePlugin[])
   commands?: WebBuilderCommandContext
   tenant?: TenantContext
@@ -53,6 +58,19 @@ const defaultTenant = (): TenantContext => ({
 const getValue = <T>(value: T | (() => T)): T =>
   typeof value === 'function' ? (value as () => T)() : value
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const isSelfStorage = (
+  storage: WebBuilderStorageOptions | undefined,
+): storage is WebBuilderSelfStorageOptions =>
+  Boolean(storage && 'type' in storage && storage.type === 'self')
+
+const isStorageAdapter = (
+  storage: WebBuilderStorageOptions | undefined,
+): storage is StorageAdapter =>
+  Boolean(storage && !isSelfStorage(storage))
+
 const getErrorMessage = (error: unknown, fallback: string) => {
   if (error instanceof Error) return error.message
   if (typeof error === 'string') return error
@@ -71,6 +89,7 @@ export const useDraftController = (options: UseDraftControllerOptions) => {
   const getEditor = () => getValue(options.editor)
   const getResource = () => normalizePageResourceIdentity(getValue(options.resource))
   const getPlugins = () => getValue(options.plugins ?? [])
+  const getStorage = () => options.storage
 
   const createPluginContext = (
     editor: unknown,
@@ -139,7 +158,11 @@ export const useDraftController = (options: UseDraftControllerOptions) => {
       forceOverride: requestOptions.forceOverride,
     })
 
-    const result = await options.hostServices.page?.saveDraft(request)
+    const storage = getStorage()
+    const adapterStorage = isStorageAdapter(storage) ? storage : undefined
+    const result = adapterStorage?.saveDraft
+      ? await adapterStorage.saveDraft(request, { currentPage: currentPage.value as PageDraftRecord | null })
+      : await options.hostServices.page?.saveDraft(request)
     baseUpdateTime.value = getDraftUpdateTime(result) ?? new Date()
     currentPage.value = result ?? null
     return result
@@ -164,11 +187,15 @@ export const useDraftController = (options: UseDraftControllerOptions) => {
     }
 
     const resource = getResource()
-    if (!hasPageResourceLocator(resource)) {
+    const storage = getStorage()
+    const hasSelfStorage = isSelfStorage(storage)
+    const adapterStorage = isStorageAdapter(storage) ? storage : undefined
+    const hasAdapterSave = typeof adapterStorage?.saveDraft === 'function'
+    if (!hasSelfStorage && !hasPageResourceLocator(resource)) {
       if (!silent) options.ui.message.error('缺少必要参数: resource')
       return false
     }
-    if (!options.hostServices.page?.saveDraft) {
+    if (!hasSelfStorage && !hasAdapterSave && !options.hostServices.page?.saveDraft) {
       if (!silent) options.ui.message.error('缺少 hostServices.page.saveDraft')
       return false
     }
@@ -190,38 +217,55 @@ export const useDraftController = (options: UseDraftControllerOptions) => {
       const resourcesFlushed = await flushResourceDrafts(saveContext)
       if (!resourcesFlushed) return false
 
-      try {
-        await saveOnce({
-          editor,
-          resource,
-          schemaJson: serialized.schemaJson,
-          forceOverride: false,
-        })
-      } catch (error) {
-        if ((error as { code?: unknown })?.code !== PAGE_CONFLICT_CODE) {
+      if (hasSelfStorage) {
+        try {
+          await storage.onSave({
+            project: serialized.projectData,
+            schemaJson: serialized.schemaJson,
+            editor,
+            resource,
+          })
+        } catch (error) {
           if (!silent) options.ui.message.error(getErrorMessage(error, '保存失败，请重试'))
           return false
         }
+      } else {
+        try {
+          await saveOnce({
+            editor,
+            resource,
+            schemaJson: serialized.schemaJson,
+            forceOverride: false,
+          })
+        } catch (error) {
+          if ((error as { code?: unknown })?.code !== PAGE_CONFLICT_CODE) {
+            if (!silent) options.ui.message.error(getErrorMessage(error, '保存失败，请重试'))
+            return false
+          }
 
-        if (options.supportsConflictOverride === false) {
-          options.ui.message.error('当前存储模式下不支持冲突覆盖')
-          return false
+          const supportsConflictOverride =
+            options.supportsConflictOverride ??
+            (hasAdapterSave ? adapterStorage?.supportsConflictOverride : undefined)
+          if (supportsConflictOverride === false) {
+            options.ui.message.error('当前存储模式下不支持冲突覆盖')
+            return false
+          }
+
+          const confirmed = await options.ui.confirm({
+            title: '保存冲突',
+            message: '页面已被他人修改，是否强制覆盖？',
+            confirmText: '强制覆盖',
+            cancelText: '取消',
+          })
+          if (!confirmed) return false
+
+          await saveOnce({
+            editor,
+            resource,
+            schemaJson: serialized.schemaJson,
+            forceOverride: true,
+          })
         }
-
-        const confirmed = await options.ui.confirm({
-          title: '保存冲突',
-          message: '页面已被他人修改，是否强制覆盖？',
-          confirmText: '强制覆盖',
-          cancelText: '取消',
-        })
-        if (!confirmed) return false
-
-        await saveOnce({
-          editor,
-          resource,
-          schemaJson: serialized.schemaJson,
-          forceOverride: true,
-        })
       }
 
       await runAfterSaveSuccessHooks(getPlugins(), {
@@ -247,14 +291,45 @@ export const useDraftController = (options: UseDraftControllerOptions) => {
     }
 
     const resource = getResource()
-    if (!hasPageResourceLocator(resource)) return null
-    if (!options.hostServices.page?.getDraft) {
+    const storage = getStorage()
+    const hasSelfStorage = isSelfStorage(storage)
+    const adapterStorage = isStorageAdapter(storage) ? storage : undefined
+    const hasAdapterLoad = typeof adapterStorage?.getDraft === 'function'
+    if (!hasSelfStorage && !hasPageResourceLocator(resource)) return null
+    if (!hasSelfStorage && !hasAdapterLoad && !options.hostServices.page?.getDraft) {
       options.ui.message.error('缺少 hostServices.page.getDraft')
       return null
     }
 
     try {
-      const draft = await options.hostServices.page.getDraft(resource)
+      if (hasSelfStorage) {
+        const result = await storage.onLoad({ editor, resource })
+        const projectData = isRecord(result?.project) ? result.project : null
+        currentPage.value = null
+        baseUpdateTime.value = undefined
+        if (!projectData) return null
+
+        await runBeforeProjectLoadHooks(
+          getPlugins(),
+          createPluginContext(editor, resource, projectData),
+        )
+
+        if (
+          editor &&
+          typeof editor === 'object' &&
+          'loadProjectData' in editor &&
+          typeof editor.loadProjectData === 'function'
+        ) {
+          editor.loadProjectData(projectData)
+        }
+
+        isDirty.value = false
+        return projectData
+      }
+
+      const draft = hasAdapterLoad
+        ? await adapterStorage.getDraft(resource)
+        : await options.hostServices.page?.getDraft(resource)
       currentPage.value = draft ?? null
       baseUpdateTime.value = getDraftUpdateTime(draft)
 

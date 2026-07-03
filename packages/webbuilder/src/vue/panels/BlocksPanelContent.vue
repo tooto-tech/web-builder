@@ -117,7 +117,6 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 
 .wb-blocks-panel__group :deep(.n-collapse-item__header-main) {
   min-width: 0;
-  user-select: none;
 }
 
 .wb-blocks-panel__group :deep(.n-collapse-item__content-inner) {

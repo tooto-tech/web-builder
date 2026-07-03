@@ -54,6 +54,29 @@ describe('useAutosaveController', () => {
     vi.useRealTimers()
   })
 
+  it('saves after the configured number of editor changes', async () => {
+    vi.useFakeTimers()
+    const saveDraft = vi.fn(async () => true)
+    const controller = useAutosaveController({
+      saveDraft,
+      options: { enabled: true, autosaveChanges: 5 },
+    })
+
+    for (let index = 0; index < 4; index += 1) {
+      controller.recordChange()
+    }
+    await vi.runAllTimersAsync()
+    expect(saveDraft).not.toHaveBeenCalled()
+
+    controller.recordChange()
+    await vi.runAllTimersAsync()
+
+    expect(saveDraft).toHaveBeenCalledWith({ silent: true })
+    expect(saveDraft).toHaveBeenCalledTimes(1)
+    expect(controller.hasPendingChange.value).toBe(false)
+    vi.useRealTimers()
+  })
+
   it('keeps failed changes pending for a later retry', async () => {
     vi.useFakeTimers()
     const saveDraft = vi.fn(async () => false)

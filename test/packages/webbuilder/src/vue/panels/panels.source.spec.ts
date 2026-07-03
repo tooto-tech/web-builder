@@ -46,6 +46,20 @@ describe('built-in Provider panels', () => {
     expect(contentSource).toContain('@drop="onNodeDrop"')
   })
 
+  it('renders layers with leaf-safe tree data and a separated action layout', () => {
+    const contentSource = readPanelFile('LayersPanelContent.vue')
+
+    expect(contentSource).toContain('children?: LayerNode[]')
+    expect(contentSource).toContain('const buildNode = (')
+    expect(contentSource).toContain('treeData.value = [buildNode(props.root, expanded, selected, byId, true)]')
+    expect(contentSource).toContain('...(children.length ? { children } : {})')
+    expect(contentSource).toContain('grid-template-columns: minmax(0, 1fr) auto')
+    expect(contentSource).toContain('width: 48px')
+    expect(contentSource).toContain('visibility: visible')
+    expect(contentSource).not.toContain('children: buildNodes(child, expanded, selected, byId)')
+    expect(contentSource).not.toContain('treeData.value = buildNodes(props.root, expanded, selected, byId)')
+  })
+
   it('assembles the style panel from grapesjs-vue providers and adapters', () => {
     const panelSource = readPanelFile('StylePanel.vue')
     const source = readPanelFile('StylePanelContent.vue')

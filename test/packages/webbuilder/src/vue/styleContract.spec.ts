@@ -11,6 +11,8 @@ describe('@toototech/webbuilder style contract', () => {
     expect(css).toContain('var(--wb-topbar-bg)')
     expect(css).toContain('var(--wb-primary)')
     expect(css).toContain('var(--wb-btn-hover-bg)')
+    expect(css).toContain('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap')
+    expect(css).toMatch(/font-family:\s*["']Open Sans["'],\s*Arial,\s*sans-serif/)
     expect(css).not.toContain('tw-bg-editor-panel')
     expect(css).toContain('.tw-h-screen')
     expect(css).toContain(':where(.wb-shell, .wb-shell-popper) button')
