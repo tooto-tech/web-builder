@@ -62,6 +62,8 @@ const activePanel = ref('blocks')
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
 const isLoadingDraft = ref(false)
 let canvasSetupCleanup: (() => void) | null = null
+const INITIAL_DRAFT_SETTLE_MS = 1500
+let draftLoadSettleTimer: ReturnType<typeof setTimeout> | null = null
 const COMPONENT_OUTLINE_COMMAND = 'core:component-outline'
 
 const resolvedOptions = computed(() => resolveWebBuilderOptions(props.options))
@@ -295,13 +297,27 @@ const grapesPlugins = computed<PluginTypeToLoad[]>(() =>
 const loadInitialDraft = async () => {
   if (!hasDraftLoadSource()) return
 
+  clearDraftLoadSettleTimer()
   isLoadingDraft.value = true
   try {
     await draftController.loadDraft()
-    await Promise.resolve()
   } finally {
-    isLoadingDraft.value = false
+    scheduleDraftLoadSettled()
   }
+}
+
+const clearDraftLoadSettleTimer = () => {
+  if (!draftLoadSettleTimer) return
+  clearTimeout(draftLoadSettleTimer)
+  draftLoadSettleTimer = null
+}
+
+const scheduleDraftLoadSettled = () => {
+  clearDraftLoadSettleTimer()
+  draftLoadSettleTimer = setTimeout(() => {
+    isLoadingDraft.value = false
+    draftLoadSettleTimer = null
+  }, INITIAL_DRAFT_SETTLE_MS)
 }
 
 const onReady = (activeEditor: Editor) => {
@@ -401,6 +417,7 @@ const exitPreview = () => {
 onBeforeUnmount(() => {
   canvasSetupCleanup?.()
   canvasSetupCleanup = null
+  clearDraftLoadSettleTimer()
   autosaveController.stop()
   lockController.stopHeartbeat()
   void lockController.release()

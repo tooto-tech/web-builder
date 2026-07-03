@@ -107,13 +107,18 @@ describe('WebBuilder default panels', () => {
 
   it('does not treat initial draft hydration updates as user changes', () => {
     expect(webBuilderSource).toContain('const isLoadingDraft = ref(false)')
+    expect(webBuilderSource).toContain('const INITIAL_DRAFT_SETTLE_MS = 1500')
+    expect(webBuilderSource).toContain('let draftLoadSettleTimer: ReturnType<typeof setTimeout> | null = null')
+    expect(webBuilderSource).toContain('const scheduleDraftLoadSettled = () =>')
     expect(webBuilderSource).toContain('const loadInitialDraft = async () =>')
     expect(webBuilderSource).toContain('isLoadingDraft.value = true')
     expect(webBuilderSource).toContain('await draftController.loadDraft()')
-    expect(webBuilderSource).toContain('isLoadingDraft.value = false')
+    expect(webBuilderSource).toContain('scheduleDraftLoadSettled()')
+    expect(webBuilderSource).toContain('clearDraftLoadSettleTimer()')
     expect(webBuilderSource).toContain('if (!isLoadingDraft.value) {')
     expect(webBuilderSource).toContain('draftController.markDirty()')
     expect(webBuilderSource).toContain('autosaveController.recordChange()')
+    expect(webBuilderSource).not.toContain('await Promise.resolve()')
   })
 
   it('wires host storage and session options into package controllers', () => {
