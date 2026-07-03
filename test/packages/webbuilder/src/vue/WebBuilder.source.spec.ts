@@ -105,6 +105,17 @@ describe('WebBuilder default panels', () => {
     expect(webBuilderSource).toContain('@publish="handlePublish"')
   })
 
+  it('does not treat initial draft hydration updates as user changes', () => {
+    expect(webBuilderSource).toContain('const isLoadingDraft = ref(false)')
+    expect(webBuilderSource).toContain('const loadInitialDraft = async () =>')
+    expect(webBuilderSource).toContain('isLoadingDraft.value = true')
+    expect(webBuilderSource).toContain('await draftController.loadDraft()')
+    expect(webBuilderSource).toContain('isLoadingDraft.value = false')
+    expect(webBuilderSource).toContain('if (!isLoadingDraft.value) {')
+    expect(webBuilderSource).toContain('draftController.markDirty()')
+    expect(webBuilderSource).toContain('autosaveController.recordChange()')
+  })
+
   it('wires host storage and session options into package controllers', () => {
     expect(webBuilderSource).toContain('const storageOptions = computed(() => resolvedOptions.value.storage)')
     expect(webBuilderSource).toContain('const sessionOptions = computed(() => resolvedOptions.value.session)')

@@ -60,6 +60,7 @@ const showBorders = ref(false)
 const showCode = ref(false)
 const activePanel = ref('blocks')
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
+const isLoadingDraft = ref(false)
 let canvasSetupCleanup: (() => void) | null = null
 const COMPONENT_OUTLINE_COMMAND = 'core:component-outline'
 
@@ -291,6 +292,18 @@ const grapesPlugins = computed<PluginTypeToLoad[]>(() =>
   }),
 )
 
+const loadInitialDraft = async () => {
+  if (!hasDraftLoadSource()) return
+
+  isLoadingDraft.value = true
+  try {
+    await draftController.loadDraft()
+    await Promise.resolve()
+  } finally {
+    isLoadingDraft.value = false
+  }
+}
+
 const onReady = (activeEditor: Editor) => {
   editor.value = activeEditor
   editorReady.value = true
@@ -305,9 +318,7 @@ const onReady = (activeEditor: Editor) => {
     activeEditor.setComponents(initialComponents)
   }
 
-  if (hasDraftLoadSource()) {
-    void draftController.loadDraft()
-  }
+  void loadInitialDraft()
   if (resolvedOptions.value.hostServices.lock?.acquire) {
     void lockController.acquire()
   }
@@ -316,8 +327,10 @@ const onReady = (activeEditor: Editor) => {
 }
 
 const onUpdate = (projectData: unknown, activeEditor: Editor) => {
-  draftController.markDirty()
-  autosaveController.recordChange()
+  if (!isLoadingDraft.value) {
+    draftController.markDirty()
+    autosaveController.recordChange()
+  }
   emit('update', projectData as Record<string, unknown>, activeEditor)
 }
 
