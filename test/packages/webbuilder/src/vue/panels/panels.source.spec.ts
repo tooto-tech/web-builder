@@ -17,8 +17,8 @@ describe('built-in Provider panels', () => {
       ['BlocksPanel.vue', 'BlocksProvider'],
       ['StylePanel.vue', 'StylesProvider'],
       ['LayersPanel.vue', 'LayersProvider'],
-      ['AssetsPanel.vue', 'AssetsProvider'],
       ['ModalHost.vue', 'ModalProvider'],
+      ['AssetsModalHost.vue', 'AssetsProvider'],
     ] as const
 
     expectedPanels.forEach(([file, provider]) => {
@@ -26,6 +26,25 @@ describe('built-in Provider panels', () => {
       expect(source, file).toContain(provider)
       expect(source, file).toContain('@tootix/grapesjs-vue')
     })
+  })
+
+  it('keeps assets package-owned and backed by host media services', () => {
+    const panelSource = readPanelFile('AssetsPanel.vue')
+    const managerSource = readPanelFile('AssetsManager.vue')
+    const modalHostSource = readPanelFile('AssetsModalHost.vue')
+
+    expect(panelSource).toContain('<AssetsManager')
+    expect(panelSource).toContain('context.hostServices.media')
+    expect(panelSource).toContain('syncMediaAssetToEditor')
+    expect(panelSource).toContain('applyMediaAssetToSelectedImage')
+    expect(modalHostSource).toContain('<AssetsManager')
+    expect(modalHostSource).toContain('NModal')
+    expect(modalHostSource).toContain('syncMediaAssetToEditor')
+    expect(managerSource).toContain('mediaService.loadAssets')
+    expect(managerSource).toContain('mediaService.uploadAssets')
+    expect(managerSource).toContain('mediaService.deleteAsset')
+    expect(managerSource).not.toContain('AssetsProvider')
+    expect(managerSource).not.toContain('NDrawer')
   })
 
   it('assembles the layers panel from NTree wired to the GrapesJS LayerManager', () => {

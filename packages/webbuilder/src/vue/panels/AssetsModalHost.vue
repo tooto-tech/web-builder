@@ -1,119 +1,79 @@
 <script setup lang="ts">
 import { AssetsProvider } from '@tootix/grapesjs-vue'
+import { NModal } from 'naive-ui'
+import type { MediaAssetLike, MediaAssetRecord } from '../../core/index.js'
+import { useWebBuilderContext } from '../context.js'
+import {
+  normalizeMediaAssetRecord,
+  syncMediaAssetToEditor,
+} from '../mediaAssets.js'
+import AssetsManager from './AssetsManager.vue'
 
-const getAssetId = (asset: any): string => asset?.get?.('id') ?? asset?.cid ?? getAssetSrc(asset)
-const getAssetSrc = (asset: any): string => asset?.getSrc?.() ?? asset?.get?.('src') ?? asset?.src ?? ''
-const getAssetName = (asset: any): string => asset?.get?.('name') ?? getAssetSrc(asset)
+const context = useWebBuilderContext()
+
+const toRecords = (assets: unknown[]): MediaAssetRecord[] =>
+  assets
+    .map(normalizeMediaAssetRecord)
+    .filter((asset): asset is MediaAssetRecord => Boolean(asset))
+
+const closeOnHide = (visible: boolean, close: () => void) => {
+  if (!visible) close()
+}
+
+const selectAsset = (
+  asset: MediaAssetRecord,
+  select: (asset: MediaAssetLike, complete?: boolean) => void,
+  close: () => void,
+) => {
+  const syncedAsset = syncMediaAssetToEditor(context.editor, asset) as MediaAssetLike
+  select(syncedAsset, true)
+  close()
+}
 </script>
 
 <template>
-  <AssetsProvider v-slot="{ open, assets, select, close }">
-    <Teleport to="body">
-      <div
-        v-if="open"
-        class="wb-assets-modal-host"
-        data-testid="wb-assets-modal-host"
-        @click.self="close()"
+  <AssetsProvider v-slot="{ open, assets, types, select, close }">
+    <NModal
+      :show="open"
+      :block-scroll="false"
+      :mask-closable="true"
+      @update:show="(visible) => closeOnHide(visible, close)"
+    >
+      <section
+        class="wb-modal-host__dialog wb-assets-modal-host"
+        role="dialog"
+        aria-modal="true"
       >
-        <section class="wb-assets-modal-host__dialog" role="dialog" aria-modal="true">
-          <header class="wb-assets-modal-host__header">
-            <span>Assets</span>
-            <button type="button" @click="close()">Close</button>
-          </header>
-          <div v-if="assets.length" class="wb-assets-modal-host__grid">
-            <button
-              v-for="asset in assets"
-              :key="getAssetId(asset)"
-              type="button"
-              class="wb-assets-modal-host__asset"
-              @click="select(asset, true)"
-            >
-              <img v-if="getAssetSrc(asset)" :src="getAssetSrc(asset)" :alt="getAssetName(asset)" />
-              <span v-else>{{ getAssetName(asset) }}</span>
-            </button>
-          </div>
-          <div v-else class="wb-assets-modal-host__empty">No assets are available.</div>
-        </section>
-      </div>
-    </Teleport>
+        <header class="wb-modal-host__header">
+          <span>Select Image</span>
+          <button type="button" class="wb-modal-host__close" @click="close()">Close</button>
+        </header>
+        <div class="wb-modal-host__body wb-assets-modal-host__body">
+          <AssetsManager
+            variant="modal"
+            title="Assets"
+            :initial-records="toRecords(assets)"
+            :types="types"
+            :media-service="context.hostServices.media"
+            :ui="context.ui"
+            @select="(asset) => selectAsset(asset, select, close)"
+          />
+        </div>
+      </section>
+    </NModal>
   </AssetsProvider>
 </template>
 
 <style scoped>
 .wb-assets-modal-host {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(15, 23, 42, 0.45);
-}
-
-.wb-assets-modal-host__dialog {
-  display: flex;
+  width: min(960px, calc(100vw - 48px));
+  max-height: min(760px, calc(100vh - 48px));
   flex-direction: column;
-  width: min(860px, 96vw);
-  max-height: min(720px, 92vh);
-  overflow: hidden;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
 }
 
-.wb-assets-modal-host__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 12px 16px;
-  color: #111827;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.wb-assets-modal-host__header button {
-  border: 0;
-  color: #2563eb;
-  background: transparent;
-  font: inherit;
-  font-size: 12px;
-}
-
-.wb-assets-modal-host__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
-  overflow: auto;
-  padding: 16px;
-}
-
-.wb-assets-modal-host__asset {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 6px;
-  background: #fff;
-}
-
-.wb-assets-modal-host__asset img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.wb-assets-modal-host__empty {
-  margin: 16px;
-  border: 1px dashed #d1d5db;
-  border-radius: 6px;
-  padding: 20px;
-  color: #6b7280;
-  font-size: 12px;
-  text-align: center;
+.wb-assets-modal-host__body {
+  min-height: 420px;
+  padding: 0;
 }
 </style>

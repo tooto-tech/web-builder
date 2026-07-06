@@ -53,10 +53,48 @@ export interface I18nService {
 }
 
 export interface MediaAssetLike {
+  id?: string | number
+  name?: string
+  type?: string
+  size?: number
   src?: string
   url?: string | (() => string)
   getSrc?: () => string
   get?: (key: string) => unknown
+}
+
+export interface MediaAssetRecord {
+  id: string | number
+  name: string
+  src: string
+  url?: string
+  type?: string
+  size?: number
+  width?: number
+  height?: number
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface MediaAssetPage {
+  list: MediaAssetRecord[]
+  total: number
+}
+
+export interface MediaAssetQuery {
+  pageNo?: number
+  pageSize?: number
+  type?: string
+  filterType?: string
+  keyword?: string
+  [key: string]: unknown
+}
+
+export interface MediaAssetUploadOptions {
+  filterType?: string
+  directory?: string
+  onProgress?: (percent: number) => void
+  [key: string]: unknown
 }
 
 export interface MediaSelectionTarget {
@@ -69,8 +107,12 @@ export interface MediaSelectionTarget {
 export interface MediaService {
   openAssetsDialog?: (target?: MediaSelectionTarget) => void
   openAssetsDialogWithTarget?: (target: MediaSelectionTarget) => void
-  loadAssets?: (params?: Record<string, unknown>) => Promise<unknown> | unknown
-  uploadAssets?: (files: File[], params?: Record<string, unknown>) => Promise<unknown> | unknown
+  loadAssets?: (params?: MediaAssetQuery) => Promise<MediaAssetPage | unknown> | MediaAssetPage | unknown
+  uploadAssets?: (files: File[], params?: MediaAssetUploadOptions) => Promise<MediaAssetRecord[] | unknown> | MediaAssetRecord[] | unknown
+  deleteAsset?: (
+    id: string | number,
+    asset?: MediaAssetRecord
+  ) => Promise<unknown> | unknown
 }
 
 export type PageSettingsHostQuery = Record<string, unknown>

@@ -1,44 +1,37 @@
 <script setup lang="ts">
 import { ModalProvider } from '@tootix/grapesjs-vue'
+import { NModal } from 'naive-ui'
+
+const closeOnHide = (visible: boolean, close: () => void) => {
+  if (!visible) close()
+}
 </script>
 
 <template>
   <ModalProvider v-slot="{ open, title, content, attributes, close }">
-    <Teleport to="body">
-      <div v-if="open" class="wb-modal-host" v-bind="attributes">
-        <div class="wb-modal-host__backdrop" @click="close()"></div>
-        <section class="wb-modal-host__dialog" role="dialog" aria-modal="true">
-          <header class="wb-modal-host__header">
-            <component :is="title" />
-            <button type="button" class="wb-modal-host__close" @click="close()">Close</button>
-          </header>
-          <div class="wb-modal-host__body">
-            <component :is="content" />
-          </div>
-        </section>
-      </div>
-    </Teleport>
+    <NModal
+      :show="open"
+      :block-scroll="false"
+      :mask-closable="true"
+      @update:show="(visible) => closeOnHide(visible, close)"
+    >
+      <section class="wb-modal-host__dialog" role="dialog" aria-modal="true" v-bind="attributes">
+        <header class="wb-modal-host__header">
+          <component :is="title" />
+          <button type="button" class="wb-modal-host__close" @click="close()">Close</button>
+        </header>
+        <div class="wb-modal-host__body">
+          <component :is="content" />
+        </div>
+      </section>
+    </NModal>
   </ModalProvider>
 </template>
 
-<style scoped>
-.wb-modal-host {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483640;
-}
-
-.wb-modal-host__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(17, 24, 39, 0.42);
-}
-
+<style>
 .wb-modal-host__dialog {
-  position: relative;
   width: min(720px, calc(100vw - 32px));
   max-height: calc(100vh - 32px);
-  margin: 16px auto;
   overflow: auto;
   border-radius: 6px;
   color: #111827;

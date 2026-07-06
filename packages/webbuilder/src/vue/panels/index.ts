@@ -1,5 +1,6 @@
 import type { Component } from 'vue'
 
+import AssetsManager from './AssetsManager.vue'
 import AssetsModalHost from './AssetsModalHost.vue'
 import AssetsPanel from './AssetsPanel.vue'
 import BlocksPanel from './BlocksPanel.vue'
@@ -17,4 +18,4 @@ const BUILTIN_PANEL_COMPONENTS: Record<string, Component> = {
 export const getBuiltinPanelComponent = (panelId: string): Component | null =>
   BUILTIN_PANEL_COMPONENTS[panelId] ?? null
 
-export { AssetsModalHost, ModalHost }
+export { AssetsManager, AssetsModalHost, ModalHost }

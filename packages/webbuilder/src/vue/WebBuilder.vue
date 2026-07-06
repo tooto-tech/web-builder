@@ -77,7 +77,16 @@ let draftLoadSettleTimer: ReturnType<typeof setTimeout> | null = null
 const COMPONENT_OUTLINE_COMMAND = 'core:component-outline'
 
 const resolvedOptions = computed(() => resolveWebBuilderOptions(props.options))
-const grapesConfig = computed(() => resolvedOptions.value.grapesjs as EditorConfig)
+const grapesConfig = computed(() => {
+  const config = resolvedOptions.value.grapesjs
+  return {
+    ...config,
+    assetManager: {
+      ...(config.assetManager ?? {}),
+      custom: config.assetManager?.custom ?? true,
+    },
+  } as EditorConfig
+})
 const storageOptions = computed(() => resolvedOptions.value.storage)
 const sessionOptions = computed(() => resolvedOptions.value.session)
 
