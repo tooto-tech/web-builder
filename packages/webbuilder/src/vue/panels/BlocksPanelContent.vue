@@ -125,18 +125,19 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 
 .wb-blocks-panel__list {
   display: grid;
-  gap: 2px;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
 }
 
 .wb-blocks-panel__cell {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  gap: 4px;
+  padding-block: 16px;
   align-items: center;
-  gap: 8px;
-  border: 1px solid transparent;
+  border: 1px solid #e7e8e9;
   border-radius: 5px;
-  padding: 4px 6px;
   color: #111827;
   background: #fff;
   font: inherit;
@@ -178,6 +179,7 @@ const updateActiveGroupIds = (value: CollapseValue) => {
 .wb-blocks-panel__cell-body {
   display: grid;
   min-width: 0;
+  font-size: 10px;
 }
 
 .wb-blocks-panel__cell-label {

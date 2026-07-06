@@ -44,7 +44,7 @@
 }
 
 @tailwind utilities;
-.gjs-cv-canvas{
+.tooto-cv-canvas{
     background: var(--wb-topbar-bg);
 }
 .n-collapse-item__header-main{
