@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, provide, ref, watch } from 'vue'
+import { computed, markRaw, onBeforeUnmount, provide, ref, shallowRef, watch } from 'vue'
 import grapesjs from 'grapesjs'
 import type { Editor, EditorConfig } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
@@ -53,7 +53,7 @@ const emit = defineEmits<{
   (event: 'diagnostics', diagnostics: WebBuilderPluginActivationDiagnostic[]): void
 }>()
 
-const editor = ref<Editor | null>(null)
+const editor = shallowRef<Editor | null>(null)
 const editorReady = ref(false)
 const isPreviewMode = ref(false)
 const showBorders = ref(false)
@@ -321,17 +321,18 @@ const scheduleDraftLoadSettled = () => {
 }
 
 const onReady = (activeEditor: Editor) => {
-  editor.value = activeEditor
+  const rawEditor = markRaw(activeEditor)
+  editor.value = rawEditor
   editorReady.value = true
-  showBorders.value = activeEditor.Commands.isActive(COMPONENT_OUTLINE_COMMAND)
+  showBorders.value = rawEditor.Commands.isActive(COMPONENT_OUTLINE_COMMAND)
   canvasSetupCleanup?.()
-  canvasSetupCleanup = useCanvasSetup(activeEditor, {
+  canvasSetupCleanup = useCanvasSetup(rawEditor, {
     frameReset: resolvedOptions.value.canvas.frameReset,
   })
 
   const initialComponents = resolvedOptions.value.canvas.initialComponents
   if (initialComponents) {
-    activeEditor.setComponents(initialComponents)
+    rawEditor.setComponents(initialComponents)
   }
 
   void loadInitialDraft()
@@ -339,7 +340,7 @@ const onReady = (activeEditor: Editor) => {
     void lockController.acquire()
   }
 
-  emit('ready', activeEditor)
+  emit('ready', rawEditor)
 }
 
 const onUpdate = (projectData: unknown, activeEditor: Editor) => {

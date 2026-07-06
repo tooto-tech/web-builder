@@ -121,6 +121,16 @@ describe('WebBuilder default panels', () => {
     expect(webBuilderSource).not.toContain('await Promise.resolve()')
   })
 
+  it('keeps GrapesJS editor instances out of Vue deep reactivity', () => {
+    expect(webBuilderSource).toContain('markRaw')
+    expect(webBuilderSource).toContain('shallowRef')
+    expect(webBuilderSource).toContain('const editor = shallowRef<Editor | null>(null)')
+    expect(webBuilderSource).toContain('const rawEditor = markRaw(activeEditor)')
+    expect(webBuilderSource).toContain('editor.value = rawEditor')
+    expect(webBuilderSource).not.toContain('const editor = ref<Editor | null>(null)')
+    expect(webBuilderSource).not.toContain('editor.value = activeEditor')
+  })
+
   it('wires host storage and session options into package controllers', () => {
     expect(webBuilderSource).toContain('const storageOptions = computed(() => resolvedOptions.value.storage)')
     expect(webBuilderSource).toContain('const sessionOptions = computed(() => resolvedOptions.value.session)')
@@ -136,7 +146,7 @@ describe('WebBuilder default panels', () => {
   it('wires the component border toggle to the GrapesJS outline command', () => {
     expect(webBuilderSource).toContain("const COMPONENT_OUTLINE_COMMAND = 'core:component-outline'")
     expect(webBuilderSource).toContain('const handleToggleBorders = () =>')
-    expect(webBuilderSource).toContain('showBorders.value = activeEditor.Commands.isActive(COMPONENT_OUTLINE_COMMAND)')
+    expect(webBuilderSource).toContain('showBorders.value = rawEditor.Commands.isActive(COMPONENT_OUTLINE_COMMAND)')
     expect(webBuilderSource).toContain('const nextShowBorders = !showBorders.value')
     expect(webBuilderSource).toContain('activeEditor.runCommand(COMPONENT_OUTLINE_COMMAND)')
     expect(webBuilderSource).toContain('activeEditor.stopCommand(COMPONENT_OUTLINE_COMMAND)')
