@@ -3,6 +3,7 @@ import './style.css'
 export { default as DeviceSwitcher } from './DeviceSwitcher.vue'
 export { default as FloatingPanelHost } from './FloatingPanelHost.vue'
 export { default as PanelRail } from './PanelRail.vue'
+export { default as PageSettingsDrawer } from './PageSettingsDrawer.vue'
 export { default as PluginPanelHost } from './PluginPanelHost.vue'
 export { default as TopBar } from './TopBar.vue'
 export { default as WebBuilder } from './WebBuilder.vue'
@@ -24,6 +25,13 @@ export {
   WEB_BUILDER_CONTEXT,
   useWebBuilderContext,
 } from './context.js'
+export {
+  applyPageSettingsToPage,
+  createEmptyPageSettings,
+  getPageSettingsFromPage,
+  getPrimaryContentPageFromEditor,
+} from './pageSettings.js'
+export type { PageSettings } from './pageSettings.js'
 export type { WebBuilderContext } from './context.js'
 export type {
   ResolvedWebBuilderOptions,

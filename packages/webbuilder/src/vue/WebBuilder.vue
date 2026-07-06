@@ -19,6 +19,7 @@ import {
   type EditLockState,
 } from '../core/index.js'
 import PanelRail from './PanelRail.vue'
+import PageSettingsDrawer from './PageSettingsDrawer.vue'
 import PluginPanelHost from './PluginPanelHost.vue'
 import TopBar from './TopBar.vue'
 import WebBuilderShell from './WebBuilderShell.vue'
@@ -34,6 +35,13 @@ import {
   useRevisionController,
 } from './controllers/index.js'
 import { useCanvasSetup } from './useCanvasSetup.js'
+import {
+  applyPageSettingsToPage,
+  createEmptyPageSettings,
+  getPageSettingsFromPage,
+  getPrimaryContentPageFromEditor,
+  type PageSettings,
+} from './pageSettings.js'
 
 const props = withDefaults(defineProps<{
   options?: WebBuilderOptions
@@ -61,6 +69,8 @@ const showCode = ref(false)
 const activePanel = ref('blocks')
 const diagnostics = ref<WebBuilderPluginActivationDiagnostic[]>([])
 const isLoadingDraft = ref(false)
+const pageSettingsVisible = ref(false)
+const pageSettings = ref<PageSettings>(createEmptyPageSettings())
 let canvasSetupCleanup: (() => void) | null = null
 const INITIAL_DRAFT_SETTLE_MS = 1500
 let draftLoadSettleTimer: ReturnType<typeof setTimeout> | null = null
@@ -102,6 +112,27 @@ const themeVars = computed(() =>
 )
 
 const shellMessages = computed(() => resolveShellMessages(resolvedOptions.value.i18n))
+
+const TEMPLATE_RESOURCE_TYPES = new Set([
+  'TEMP_POST_DETAIL',
+  'TEMP_POST_CATEGORY_LIST',
+  'TEMP_MEDIA_DETAIL',
+  'TEMP_MEDIA_CATEGORY_LIST',
+  'TEMP_PRODUCT_DETAIL',
+  'TEMP_PRODUCT_CATEGORY_LIST',
+  'TEMP_LOOP_ITEM',
+  'TEMP_POPUP',
+])
+
+const isTemplateResource = computed(() =>
+  TEMPLATE_RESOURCE_TYPES.has(`${resolvedOptions.value.resource.resourceType ?? ''}`.trim()),
+)
+
+const pageSettingsTitle = computed(() =>
+  isTemplateResource.value
+    ? shellMessages.value['topbar.templateSettings']
+    : shellMessages.value['topbar.pageSettings'],
+)
 
 const sidePanelGridStyle = computed(() => ({
   gridTemplateColumns: 'var(--wb-rail-width) var(--wb-side-panel-width) minmax(0, 1fr)',
@@ -355,6 +386,36 @@ const selectPanel = (panelId: string) => {
   activePanel.value = panelId
 }
 
+const getEditablePage = () => {
+  const activeEditor = editor.value
+  if (!activeEditor) return null
+  return getPrimaryContentPageFromEditor(activeEditor)
+}
+
+const openPageSettings = () => {
+  const page = getEditablePage()
+  if (!page) {
+    resolvedOptions.value.ui.message.warning('未找到可编辑页面')
+    return
+  }
+
+  pageSettings.value = getPageSettingsFromPage(page)
+  pageSettingsVisible.value = true
+}
+
+const handleSavePageSettings = (settings: PageSettings) => {
+  const activeEditor = editor.value
+  const page = getEditablePage()
+  if (!activeEditor || !page) return
+
+  applyPageSettingsToPage(page, settings)
+  pageSettings.value = settings
+  draftController.markDirty()
+  autosaveController.recordChange()
+  emit('update', getProjectData() ?? {}, activeEditor)
+  activeEditor.refresh?.({ tools: true })
+}
+
 const builtinPanelFor = (panelId: string) => {
   return getBuiltinPanelComponent(panelId)
 }
@@ -459,8 +520,9 @@ onBeforeUnmount(() => {
             :show-borders="showBorders"
             :messages="shellMessages"
             :branding="resolvedOptions.branding"
+            :is-template-resource="isTemplateResource"
             @back="emit('back')"
-            @open-page-settings="selectPanel('settings')"
+            @open-page-settings="openPageSettings"
             @toggle-borders="handleToggleBorders"
             @toggle-code="showCode = !showCode"
             @preview="togglePreview"
@@ -534,6 +596,24 @@ onBeforeUnmount(() => {
           :editor="editor"
         >
           <Canvas />
+        </slot>
+      </template>
+
+      <template #modals>
+        <slot
+          name="modals"
+          :editor="editor"
+          :page-settings="pageSettings"
+          :page-settings-visible="pageSettingsVisible"
+        >
+          <PageSettingsDrawer
+            v-model:show="pageSettingsVisible"
+            :settings="pageSettings"
+            :title="pageSettingsTitle"
+            :resource-type="resolvedOptions.resource.resourceType"
+            :page-settings-service="resolvedOptions.hostServices.pageSettings"
+            @save="handleSavePageSettings"
+          />
         </slot>
       </template>
     </WebBuilderShell>

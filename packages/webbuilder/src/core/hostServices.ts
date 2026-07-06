@@ -73,6 +73,22 @@ export interface MediaService {
   uploadAssets?: (files: File[], params?: Record<string, unknown>) => Promise<unknown> | unknown
 }
 
+export type PageSettingsHostQuery = Record<string, unknown>
+export type PageSettingsHostLoader<
+  T = unknown,
+  Args extends unknown[] = [],
+> = (...args: Args) => Promise<T> | T
+
+export interface PageSettingsService {
+  getPostPage?: PageSettingsHostLoader<unknown, [params: PageSettingsHostQuery]>
+  getPost?: PageSettingsHostLoader<unknown, [id: number]>
+  getSpuSimpleList?: PageSettingsHostLoader<unknown>
+  getSpu?: PageSettingsHostLoader<unknown, [id: number]>
+  getProductCategoryList?: PageSettingsHostLoader<unknown, [params?: PageSettingsHostQuery]>
+  getMediaResourcePage?: PageSettingsHostLoader<unknown, [params: PageSettingsHostQuery]>
+  getMediaResourceDetail?: PageSettingsHostLoader<unknown, [id: number]>
+}
+
 export interface EditLockHolder {
   userId: string | number
   displayName?: string
@@ -164,6 +180,7 @@ export interface HostServices {
   globalSettings?: GlobalSettingsService
   i18n?: I18nService
   media?: MediaService
+  pageSettings?: PageSettingsService
   lock?: LockService
   revision?: RevisionService
   product?: Record<string, unknown>
