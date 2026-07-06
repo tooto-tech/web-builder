@@ -2,7 +2,7 @@
 import { computed, markRaw, onBeforeUnmount, provide, ref, shallowRef, watch } from 'vue'
 import grapesjs from 'grapesjs'
 import type { Editor, EditorConfig } from 'grapesjs'
-import 'grapesjs/dist/css/grapes.min.css'
+import './styles/tooto-grapes.css'
 import { Canvas, GjsEditor } from '@tootix/grapesjs-vue'
 import type { PluginTypeToLoad } from '@tootix/grapesjs-vue'
 

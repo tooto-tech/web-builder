@@ -1,0 +1,3707 @@
+
+.CodeMirror {
+    font-family: monospace;
+    height: 300px;
+    color: black;
+    direction: ltr
+}
+.CodeMirror-lines {
+    padding: 4px 0
+}
+
+.CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like {
+    padding: 0 4px
+}
+
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+    background-color: white
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+    background-color: #f7f7f7;
+    white-space: nowrap
+}
+
+.CodeMirror-linenumber {
+    padding: 0 3px 0 5px;
+    min-width: 20px;
+    text-align: right;
+    color: #999;
+    white-space: nowrap
+}
+
+.CodeMirror-guttermarker {
+    color: black
+}
+
+.CodeMirror-guttermarker-subtle {
+    color: #999
+}
+
+.CodeMirror-cursor {
+    border-left: 1px solid black;
+    border-right: none;
+    width: 0
+}
+
+.CodeMirror div.CodeMirror-secondarycursor {
+    border-left: 1px solid silver
+}
+
+.cm-fat-cursor .CodeMirror-cursor {
+    width: auto;
+    border: 0 !important;
+    background: #7e7
+}
+
+.cm-fat-cursor div.CodeMirror-cursors {
+    z-index: 1
+}
+
+.cm-fat-cursor-mark {
+    background-color: rgba(20, 255, 20, 0.5);
+    -webkit-animation: blink 1.06s steps(1) infinite;
+    -moz-animation: blink 1.06s steps(1) infinite;
+    animation: blink 1.06s steps(1) infinite
+}
+
+.cm-animate-fat-cursor {
+    width: auto;
+    -webkit-animation: blink 1.06s steps(1) infinite;
+    -moz-animation: blink 1.06s steps(1) infinite;
+    animation: blink 1.06s steps(1) infinite;
+    background-color: #7e7
+}
+
+@-moz-keyframes blink {
+    50% {
+        background-color: transparent
+    }
+}
+
+@-webkit-keyframes blink {
+    50% {
+        background-color: transparent
+    }
+}
+
+@keyframes blink {
+    50% {
+        background-color: transparent
+    }
+}
+
+.cm-tab {
+    display: inline-block;
+    text-decoration: inherit
+}
+
+.CodeMirror-rulers {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -50px;
+    bottom: 0;
+    overflow: hidden
+}
+
+.CodeMirror-ruler {
+    border-left: 1px solid #ccc;
+    top: 0;
+    bottom: 0;
+    position: absolute
+}
+
+.cm-s-default .cm-header {
+    color: blue
+}
+
+.cm-s-default .cm-quote {
+    color: #090
+}
+
+.cm-negative {
+    color: #d44
+}
+
+.cm-positive {
+    color: #292
+}
+
+.cm-header, .cm-strong {
+    font-weight: bold
+}
+
+.cm-em {
+    font-style: italic
+}
+
+.cm-link {
+    text-decoration: underline
+}
+
+.cm-strikethrough {
+    text-decoration: line-through
+}
+
+.cm-s-default .cm-keyword {
+    color: #708
+}
+
+.cm-s-default .cm-atom {
+    color: #219
+}
+
+.cm-s-default .cm-number {
+    color: #164
+}
+
+.cm-s-default .cm-def {
+    color: blue
+}
+
+.cm-s-default .cm-variable-2 {
+    color: #05a
+}
+
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {
+    color: #085
+}
+
+.cm-s-default .cm-comment {
+    color: #a50
+}
+
+.cm-s-default .cm-string {
+    color: #a11
+}
+
+.cm-s-default .cm-string-2 {
+    color: #f50
+}
+
+.cm-s-default .cm-meta {
+    color: #555
+}
+
+.cm-s-default .cm-qualifier {
+    color: #555
+}
+
+.cm-s-default .cm-builtin {
+    color: #30a
+}
+
+.cm-s-default .cm-bracket {
+    color: #997
+}
+
+.cm-s-default .cm-tag {
+    color: #170
+}
+
+.cm-s-default .cm-attribute {
+    color: #00c
+}
+
+.cm-s-default .cm-hr {
+    color: #999
+}
+
+.cm-s-default .cm-link {
+    color: #00c
+}
+
+.cm-s-default .cm-error {
+    color: red
+}
+
+.cm-invalidchar {
+    color: red
+}
+
+.CodeMirror-composing {
+    border-bottom: 2px solid
+}
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+    color: #0b0
+}
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+    color: #a22
+}
+
+.CodeMirror-matchingtag {
+    background: rgba(255, 150, 0, 0.3)
+}
+
+.CodeMirror-activeline-background {
+    background: #e8f2ff
+}
+
+.CodeMirror {
+    position: relative;
+    overflow: hidden;
+    background: white
+}
+
+.CodeMirror-scroll {
+    overflow: scroll !important;
+    margin-bottom: -50px;
+    margin-right: -50px;
+    padding-bottom: 50px;
+    height: 100%;
+    outline: none;
+    position: relative
+}
+
+.CodeMirror-sizer {
+    position: relative;
+    border-right: 50px solid transparent
+}
+
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+    position: absolute;
+    z-index: 6;
+    display: none;
+    outline: none
+}
+
+.CodeMirror-vscrollbar {
+    right: 0;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: scroll
+}
+
+.CodeMirror-hscrollbar {
+    bottom: 0;
+    left: 0;
+    overflow-y: hidden;
+    overflow-x: scroll
+}
+
+.CodeMirror-scrollbar-filler {
+    right: 0;
+    bottom: 0
+}
+
+.CodeMirror-gutter-filler {
+    left: 0;
+    bottom: 0
+}
+
+.CodeMirror-gutters {
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-height: 100%;
+    z-index: 3
+}
+
+.CodeMirror-gutter {
+    white-space: normal;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: -50px
+}
+
+.CodeMirror-gutter-wrapper {
+    position: absolute;
+    z-index: 4;
+    background: none !important;
+    border: none !important
+}
+
+.CodeMirror-gutter-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 4
+}
+
+.CodeMirror-gutter-elt {
+    position: absolute;
+    cursor: default;
+    z-index: 4
+}
+
+.CodeMirror-gutter-wrapper ::selection {
+    background-color: transparent
+}
+
+.CodeMirror-gutter-wrapper ::-moz-selection {
+    background-color: transparent
+}
+
+.CodeMirror-lines {
+    cursor: text;
+    min-height: 1px
+}
+
+.CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like {
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    border-width: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    margin: 0;
+    white-space: pre;
+    word-wrap: normal;
+    line-height: inherit;
+    color: inherit;
+    z-index: 2;
+    position: relative;
+    overflow: visible;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-variant-ligatures: contextual;
+    font-variant-ligatures: contextual
+}
+
+.CodeMirror-wrap pre.CodeMirror-line, .CodeMirror-wrap pre.CodeMirror-line-like {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: normal
+}
+
+.CodeMirror-linebackground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0
+}
+
+.CodeMirror-linewidget {
+    position: relative;
+    z-index: 2;
+    padding: .1px
+}
+
+.CodeMirror-rtl pre {
+    direction: rtl
+}
+
+.CodeMirror-code {
+    outline: none
+}
+
+.CodeMirror-scroll, .CodeMirror-sizer, .CodeMirror-gutter, .CodeMirror-gutters, .CodeMirror-linenumber {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box
+}
+
+.CodeMirror-measure {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden
+}
+
+.CodeMirror-cursor {
+    position: absolute;
+    pointer-events: none
+}
+
+.CodeMirror-measure pre {
+    position: static
+}
+
+div.CodeMirror-cursors {
+    visibility: hidden;
+    position: relative;
+    z-index: 3
+}
+
+div.CodeMirror-dragcursors {
+    visibility: visible
+}
+
+.CodeMirror-focused div.CodeMirror-cursors {
+    visibility: visible
+}
+
+.CodeMirror-selected {
+    background: #d9d9d9
+}
+
+.CodeMirror-focused .CodeMirror-selected {
+    background: #d7d4f0
+}
+
+.CodeMirror-crosshair {
+    cursor: crosshair
+}
+
+.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection {
+    background: #d7d4f0
+}
+
+.CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection {
+    background: #d7d4f0
+}
+
+.cm-searching {
+    background-color: #ffa;
+    background-color: rgba(255, 255, 0, 0.4)
+}
+
+.cm-force-border {
+    padding-right: .1px
+}
+
+@media print {
+    .CodeMirror div.CodeMirror-cursors {
+        visibility: hidden
+    }
+}
+
+.cm-tab-wrap-hack:after {
+    content: ""
+}
+
+span.CodeMirror-selectedtext {
+    background: none
+}
+
+.cm-s-hopscotch.CodeMirror {
+    background: #322931;
+    color: #d5d3d5
+}
+
+.cm-s-hopscotch div.CodeMirror-selected {
+    background: #433b42 !important
+}
+
+.cm-s-hopscotch .CodeMirror-gutters {
+    background: #322931;
+    border-right: 0px
+}
+
+.cm-s-hopscotch .CodeMirror-linenumber {
+    color: #797379
+}
+
+.cm-s-hopscotch .CodeMirror-cursor {
+    border-left: 1px solid #989498 !important
+}
+
+.cm-s-hopscotch span.cm-comment {
+    color: #b33508
+}
+
+.cm-s-hopscotch span.cm-atom {
+    color: #c85e7c
+}
+
+.cm-s-hopscotch span.cm-number {
+    color: #c85e7c
+}
+
+.cm-s-hopscotch span.cm-property, .cm-s-hopscotch span.cm-attribute {
+    color: #8fc13e
+}
+
+.cm-s-hopscotch span.cm-keyword {
+    color: #dd464c
+}
+
+.cm-s-hopscotch span.cm-string {
+    color: #fdcc59
+}
+
+.cm-s-hopscotch span.cm-variable {
+    color: #8fc13e
+}
+
+.cm-s-hopscotch span.cm-variable-2 {
+    color: #1290bf
+}
+
+.cm-s-hopscotch span.cm-def {
+    color: #fd8b19
+}
+
+.cm-s-hopscotch span.cm-error {
+    background: #dd464c;
+    color: #989498
+}
+
+.cm-s-hopscotch span.cm-bracket {
+    color: #d5d3d5
+}
+
+.cm-s-hopscotch span.cm-tag {
+    color: #dd464c
+}
+
+.cm-s-hopscotch span.cm-link {
+    color: #c85e7c
+}
+
+.cm-s-hopscotch .CodeMirror-matchingbracket {
+    text-decoration: underline;
+    color: white !important
+}
+
+.cm-s-hopscotch .CodeMirror-activeline-background {
+    background: #302020
+}
+
+.tooto-is__grab, .tooto-is__grab * {
+    cursor: grab !important
+}
+
+.tooto-is__grabbing, .tooto-is__grabbing * {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: grabbing !important
+}
+
+:root {
+    --tooto-main-color: #444;
+    --tooto-primary-color: #444;
+    --tooto-secondary-color: #ddd;
+    --tooto-tertiary-color: #804f7b;
+    --tooto-quaternary-color: #2251FF;
+    --tooto-font-color: #ddd;
+    --tooto-font-color-active: #f8f8f8;
+    --tooto-main-dark-color: #fff;
+    --tooto-secondary-dark-color: rgba(0, 0, 0, 0.1);
+    --tooto-main-light-color: rgba(255, 255, 255, 0.1);
+    --tooto-secondary-light-color: rgba(255, 255, 255, 0.7);
+    --tooto-soft-light-color: rgba(255, 255, 255, 0.015);
+    --tooto-color-blue: #2251FF;
+    --tooto-color-red: #dd3636;
+    --tooto-color-yellow: #ffca6f;
+    --tooto-color-green: #62c462;
+    --tooto-left-width: 15%;
+    --tooto-color-highlight: #71b7f1;
+    --tooto-color-warn: #ffca6f;
+    --tooto-handle-margin: -5px;
+    --tooto-light-border: rgba(255, 255, 255, 0.05);
+    --tooto-arrow-color: rgba(255, 255, 255, 0.7);
+    --tooto-dark-text-shadow: rgba(0, 0, 0, 0.2);
+    --tooto-color-input-padding: 22px;
+    --tooto-input-padding: 5px;
+    --tooto-padding-elem-classmanager: 5px 6px;
+    --tooto-upload-padding: 150px 10px;
+    --tooto-animation-duration: 0.2s;
+    --tooto-main-font: Helvetica, sans-serif;
+    --tooto-font-size: 0.75rem;
+    --tooto-placeholder-background-color: var(--tooto-color-green);
+    --tooto-canvas-top: 40px;
+    --tooto-flex-item-gap: 5px;
+    --editor-bg: #0d0d0d;
+    --editor-panel: #001533;
+    --editor-panel-dark: #001533;
+    --editor-border: #2c2c2c;
+    --editor-border-light: #3a3a3a;
+    --editor-text: #d1d5db;
+    --editor-text-muted: #9ca3af;
+    --editor-text-dim: #6b7280;
+    --editor-text-darker: #4b5563;
+    --editor-primary: #2251FF;
+    --editor-primary-light: #5c7cff;
+    --editor-danger: #ef4444;
+    --editor-btn-hover: #ffffff29;
+    --editor-btn-active: #ffffff29;
+}
+
+.tooto-bg-main, .tooto-off-prv, .tooto-sm-colorp-c {
+    background-color: var(--tooto-main-color)
+}
+
+.tooto-color-main, .tooto-off-prv, .tooto-sm-stack #tooto-sm-add {
+    color: var(--tooto-font-color);
+    fill: var(--tooto-font-color)
+}
+
+.tooto-color-active {
+    color: var(--tooto-font-color-active);
+    fill: var(--tooto-font-color-active)
+}
+
+.tooto-color-warn {
+    color: var(--tooto-color-warn);
+    fill: var(--tooto-color-warn)
+}
+
+.tooto-color-hl {
+    color: var(--tooto-color-highlight);
+    fill: var(--tooto-color-highlight)
+}
+
+.tooto-invis-invis, .tooto-clm-tags #tooto-clm-new, .tooto-no-app {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    color: inherit
+}
+
+.tooto-no-app {
+    height: 10px
+}
+
+.opac50 {
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.tooto-checker-bg, .tooto-field-colorp-c, .checker-bg, .tooto-sm-layer-preview {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==")
+}
+
+.tooto-no-user-select, .tooto-grabbing, .tooto-grabbing *, .tooto-rte-toolbar, .tooto-layer-name {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none
+}
+
+.tooto-no-pointer-events, .tooto-resizer-c, .tooto-margin-v-el, .tooto-padding-v-el, .tooto-fixedmargin-v-el, .tooto-fixedpadding-v-el {
+    pointer-events: none
+}
+
+.no-select, .tooto-clm-tags #tooto-clm-close, .tooto-com-no-select, .tooto-com-no-select img, .tooto-category-title, .tooto-layer-title, .tooto-block-category .tooto-title, .tooto-sm-sector-title, .tooto-trait-category .tooto-title {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none
+}
+
+.clear {
+    clear: both
+}
+
+.tooto-category-open, .tooto-block-category.tooto-open, .tooto-sm-sector.tooto-sm-open, .tooto-trait-category.tooto-open {
+    border-bottom: 1px solid rgba(0, 0, 0, .05)
+}
+
+.tooto-category-title, .tooto-layer-title, .tooto-block-category .tooto-title, .tooto-sm-sector-title, .tooto-trait-category .tooto-title {
+    background-color: #fff;
+    color: #000;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .05);
+    text-align: left;
+    position: relative;
+    cursor: pointer
+}
+
+.btn-cl, .tooto-am-close, .tooto-mdl-btn-close {
+    opacity: .3;
+    filter: alpha(opacity=30);
+    font-size: 25px;
+    cursor: pointer
+}
+
+.btn-cl:hover, .tooto-am-close:hover, .tooto-mdl-btn-close:hover {
+    opacity: .7;
+    filter: alpha(opacity=70)
+}
+
+.tooto-traits-label {
+    border-bottom: 1px solid var(--tooto-main-dark-color);
+    font-weight: lighter;
+    margin-bottom: 5px;
+    padding: 10px;
+    text-align: left
+}
+
+.tooto-label-wrp {
+    width: 30%;
+    min-width: 30%
+}
+
+.tooto-field-wrp {
+    flex-grow: 1
+}
+
+.tooto-traits-c, .tooto-traits-cs {
+    display: flex;
+    flex-direction: column
+}
+
+.tooto-trait-categories {
+    display: flex;
+    flex-direction: column
+}
+
+.tooto-trait-category {
+    width: 100%
+}
+
+.tooto-trait-category .tooto-caret-icon {
+    margin-right: 5px
+}
+
+.tooto-trt-header {
+    font-weight: lighter;
+    padding: 10px
+}
+
+.tooto-trt-trait {
+    display: flex;
+    justify-content: flex-start;
+    padding: 5px 10px;
+    font-weight: lighter;
+    align-items: center;
+    text-align: left;
+    gap: 5px
+}
+
+.tooto-trt-traits {
+    font-size: var(--tooto-font-size)
+}
+
+.tooto-trt-trait .tooto-label {
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden
+}
+
+.tooto-guide-info {
+    position: absolute
+}
+
+.tooto-guide-info__content {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    width: 100%;
+    padding: 5px
+}
+
+.tooto-guide-info__line {
+    position: relative;
+    margin: auto
+}
+
+.tooto-guide-info__line::before, .tooto-guide-info__line::after {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: inherit
+}
+
+.tooto-guide-info__y {
+    padding: 0 5px
+}
+
+.tooto-guide-info__y .tooto-guide-info__content {
+    justify-content: center
+}
+
+.tooto-guide-info__y .tooto-guide-info__line {
+    width: 100%;
+    height: 1px
+}
+
+.tooto-guide-info__y .tooto-guide-info__line::before, .tooto-guide-info__y .tooto-guide-info__line::after {
+    width: 1px;
+    height: 10px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto
+}
+
+.tooto-guide-info__y .tooto-guide-info__line::after {
+    left: auto;
+    right: 0
+}
+
+.tooto-guide-info__x {
+    padding: 5px 0
+}
+
+.tooto-guide-info__x .tooto-guide-info__content {
+    align-items: center
+}
+
+.tooto-guide-info__x .tooto-guide-info__line {
+    height: 100%;
+    width: 1px
+}
+
+.tooto-guide-info__x .tooto-guide-info__line::before, .tooto-guide-info__x .tooto-guide-info__line::after {
+    width: 10px;
+    height: 1px;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    transform: translateX(-50%)
+}
+
+.tooto-guide-info__x .tooto-guide-info__line::after {
+    top: auto;
+    bottom: 0
+}
+
+.tooto-badge {
+    white-space: nowrap
+}
+
+.tooto-badge__icon {
+    vertical-align: middle;
+    display: inline-block;
+    width: 15px;
+    height: 15px
+}
+
+.tooto-badge__icon svg {
+    fill: currentColor
+}
+
+.tooto-badge__name {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.tooto-frame-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    margin: auto
+}
+
+.tooto-frame-wrapper--anim {
+    transition: width .35s ease, height .35s ease
+}
+
+.tooto-frame-wrapper__top {
+    transform: translateY(-100%) translateX(-50%);
+    display: flex;
+    padding: 5px 0;
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    top: 0
+}
+
+.tooto-frame-wrapper__top-r {
+    margin-left: auto
+}
+
+.tooto-frame-wrapper__left {
+    position: absolute;
+    left: 0;
+    transform: translateX(-100%) translateY(-50%);
+    height: 100%;
+    top: 50%
+}
+
+.tooto-frame-wrapper__bottom {
+    position: absolute;
+    bottom: 0;
+    transform: translateY(100%) translateX(-50%);
+    width: 100%;
+    left: 50%
+}
+
+.tooto-frame-wrapper__right {
+    position: absolute;
+    right: 0;
+    transform: translateX(100%) translateY(-50%);
+    height: 100%;
+    top: 50%
+}
+
+.tooto-frame-wrapper__icon {
+    width: 24px;
+    cursor: pointer
+}
+
+.tooto-frame-wrapper__icon > svg {
+    fill: currentColor
+}
+
+.tooto-padding-v-top, .tooto-fixedpadding-v-top {
+    width: 100%;
+    top: 0;
+    left: 0
+}
+
+.tooto-padding-v-right, .tooto-fixedpadding-v-right {
+    right: 0
+}
+
+.tooto-padding-v-bottom, .tooto-fixedpadding-v-bottom {
+    width: 100%;
+    left: 0;
+    bottom: 0
+}
+
+.tooto-padding-v-left, .tooto-fixedpadding-v-left {
+    left: 0
+}
+
+.tooto-cv-canvas {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.tooto-cv-canvas-bg {
+    background-color: #001533;
+}
+
+.tooto-cv-canvas.tooto-cui {
+    width: 100%;
+    height: 100%;
+    top: 0
+}
+
+.tooto-cv-canvas.tooto-is__grab .tooto-cv-canvas__frames, .tooto-cv-canvas.tooto-is__grabbing .tooto-cv-canvas__frames {
+    pointer-events: none
+}
+
+.tooto-cv-canvas__frames {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%
+}
+
+.tooto-cv-canvas__spots {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1
+}
+
+.tooto-cv-canvas .tooto-ghost {
+    display: none;
+    pointer-events: none;
+    background-color: #5b5b5b;
+    border: 2px dashed #ccc;
+    position: absolute;
+    z-index: 10;
+    opacity: .55;
+    filter: alpha(opacity=55)
+}
+
+.tooto-cv-canvas .tooto-highlighter, .tooto-cv-canvas .tooto-highlighter-sel {
+    position: absolute;
+    outline: 1px solid var(--tooto-color-blue);
+    outline-offset: -1px;
+    pointer-events: none;
+    width: 100%;
+    height: 100%
+}
+
+.gjs-margin-v-el, .gjs-padding-v-el, .gjs-fixedmargin-v-el, .gjs-fixedpadding-v-el {
+    opacity: 0.2;
+    filter: alpha(opacity=10);
+    position: absolute;
+    background-color: #fd8b19;
+}
+
+.gjs-fixedmargin-v-el, .gjs-fixedpadding-v-el {
+    opacity: .2;
+    filter: alpha(opacity=20)
+}
+
+.gjs-padding-v-el, .gjs-fixedpadding-v-el {
+    background-color: #8fc13e;
+}
+.tooto-cv-canvas .tooto-highlighter-warning {
+    outline: 3px solid var(--tooto-color-yellow)
+}
+
+.tooto-cv-canvas .tooto-highlighter-sel {
+    outline: 2px solid var(--tooto-color-blue);
+    outline-offset: -2px
+}
+
+.tooto-cv-canvas #tooto-tools, .tooto-cv-canvas .tooto-tools {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 1
+}
+
+.tooto-cv-canvas #tooto-tools {
+    z-index: 2
+}
+
+.tooto-cv-canvas * {
+    box-sizing: border-box
+}
+
+.tooto-frame {
+    outline: medium none;
+    height: 100%;
+    width: 100%;
+    border: none;
+    margin: auto;
+    display: block;
+    transition: width .35s ease, height .35s ease;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0
+}
+
+.tooto-toolbar {
+    position: absolute;
+    background-color: var(--tooto-color-blue);
+    white-space: nowrap;
+    color: #fff;
+    z-index: 10;
+    top: 0;
+    left: 0
+}
+
+.tooto-toolbar-item {
+    width: 26px;
+    padding: 5px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.tooto-toolbar-item svg {
+    fill: currentColor;
+    vertical-align: middle
+}
+
+.tooto-resizer-c {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9
+}
+
+.tooto-margin-v-el, .tooto-padding-v-el, .tooto-fixedmargin-v-el, .tooto-fixedpadding-v-el {
+    opacity: .1;
+    filter: alpha(opacity=10);
+    position: absolute;
+    background-color: #ff0
+}
+
+.tooto-fixedmargin-v-el, .tooto-fixedpadding-v-el {
+    opacity: .2;
+    filter: alpha(opacity=20)
+}
+
+.tooto-padding-v-el, .tooto-fixedpadding-v-el {
+    background-color: navy
+}
+
+.tooto-resizer-h {
+    pointer-events: all;
+    position: absolute;
+    border: 3px solid var(--tooto-color-blue);
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    margin: var(--tooto-handle-margin)
+}
+
+.tooto-resizer-h-tl {
+    top: 0;
+    left: 0;
+    cursor: nwse-resize
+}
+
+.tooto-resizer-h-tr {
+    top: 0;
+    right: 0;
+    cursor: nesw-resize
+}
+
+.tooto-resizer-h-tc {
+    top: 0;
+    margin: var(--tooto-handle-margin) auto;
+    left: 0;
+    right: 0;
+    cursor: ns-resize
+}
+
+.tooto-resizer-h-cl {
+    left: 0;
+    margin: auto var(--tooto-handle-margin);
+    top: 0;
+    bottom: 0;
+    cursor: ew-resize
+}
+
+.tooto-resizer-h-cr {
+    margin: auto var(--tooto-handle-margin);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    cursor: ew-resize
+}
+
+.tooto-resizer-h-bl {
+    bottom: 0;
+    left: 0;
+    cursor: nesw-resize
+}
+
+.tooto-resizer-h-bc {
+    bottom: 0;
+    margin: var(--tooto-handle-margin) auto;
+    left: 0;
+    right: 0;
+    cursor: ns-resize
+}
+
+.tooto-resizer-h-br {
+    bottom: 0;
+    right: 0;
+    cursor: nwse-resize
+}
+
+.tooto-pn-panel .tooto-resizer-h {
+    background-color: rgba(0, 0, 0, .2);
+    border: none;
+    opacity: 0;
+    transition: opacity .25s
+}
+
+.tooto-pn-panel .tooto-resizer-h:hover {
+    opacity: 1
+}
+
+.tooto-pn-panel .tooto-resizer-h-tc, .tooto-pn-panel .tooto-resizer-h-bc {
+    margin: 0 auto;
+    width: 100%
+}
+
+.tooto-pn-panel .tooto-resizer-h-cr, .tooto-pn-panel .tooto-resizer-h-cl {
+    margin: auto 0;
+    height: 100%
+}
+
+.tooto-resizing .tooto-highlighter, .tooto-resizing .tooto-badge {
+    display: none !important
+}
+
+.tooto-resizing-tl * {
+    cursor: nwse-resize !important
+}
+
+.tooto-resizing-tr * {
+    cursor: nesw-resize !important
+}
+
+.tooto-resizing-tc * {
+    cursor: ns-resize !important
+}
+
+.tooto-resizing-cl * {
+    cursor: ew-resize !important
+}
+
+.tooto-resizing-cr * {
+    cursor: ew-resize !important
+}
+
+.tooto-resizing-bl * {
+    cursor: nesw-resize !important
+}
+
+.tooto-resizing-bc * {
+    cursor: ns-resize !important
+}
+
+.tooto-resizing-br * {
+    cursor: nwse-resize !important
+}
+
+.no-dots, .ui-resizable-handle {
+    border: none !important;
+    margin: 0 !important;
+    outline: none !important
+}
+
+.tooto-com-dashed * {
+    outline: 1px dashed #888;
+    outline-offset: -2px;
+    box-sizing: border-box
+}
+
+.tooto-com-badge, .tooto-badge {
+    pointer-events: none;
+    background-color: var(--tooto-color-blue);
+    color: #fff;
+    padding: 2px 5px;
+    position: absolute;
+    z-index: 1;
+    font-size: 12px;
+    outline: none;
+    display: none
+}
+
+.tooto-badge-warning {
+    background-color: var(--tooto-color-yellow)
+}
+
+.tooto-placeholder, .tooto-com-placeholder, .tooto-placeholder {
+    position: absolute;
+    z-index: 10;
+    pointer-events: none;
+    display: none
+}
+
+.tooto-placeholder, .tooto-placeholder {
+    border-style: solid !important;
+    outline: none;
+    box-sizing: border-box;
+    transition: top var(--tooto-animation-duration), left var(--tooto-animation-duration), width var(--tooto-animation-duration), height var(--tooto-animation-duration)
+}
+
+.tooto-placeholder.horizontal, .tooto-com-placeholder.horizontal, .tooto-placeholder.horizontal {
+    border-color: rgba(0, 0, 0, 0) var(--tooto-placeholder-background-color);
+    border-width: 3px 5px;
+    margin: -3px 0 0
+}
+
+.tooto-placeholder.vertical, .tooto-com-placeholder.vertical, .tooto-placeholder.vertical {
+    border-color: var(--tooto-placeholder-background-color) rgba(0, 0, 0, 0);
+    border-width: 5px 3px;
+    margin: 0 0 0 -3px
+}
+
+.tooto-placeholder-int, .tooto-com-placeholder-int, .tooto-placeholder-int {
+    background-color: var(--tooto-placeholder-background-color);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    padding: 1.5px;
+    outline: none
+}
+
+.tooto-pn-panel {
+    display: inline-block;
+    position: absolute;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 5px;
+    z-index: 3
+}
+
+.tooto-pn-panel .icon-undo, .tooto-pn-panel .icon-redo {
+    font-size: 20px;
+    height: 30px;
+    width: 25px
+}
+
+.tooto-pn-commands {
+    width: calc(100% - var(--tooto-left-width));
+    left: 0;
+    top: 0;
+    box-shadow: 0 0 5px var(--tooto-main-dark-color)
+}
+
+.tooto-pn-options {
+    right: var(--tooto-left-width);
+    top: 0
+}
+
+.tooto-pn-views {
+    border-bottom: 2px solid var(--tooto-main-dark-color);
+    right: 0;
+    width: var(--tooto-left-width);
+    z-index: 4
+}
+
+.tooto-pn-views-container {
+    height: 100%;
+    padding: 42px 0 0;
+    right: 0;
+    width: var(--tooto-left-width);
+    overflow: auto;
+    box-shadow: 0 0 5px var(--tooto-main-dark-color)
+}
+
+.tooto-pn-buttons {
+    align-items: center;
+    display: flex;
+    justify-content: space-between
+}
+
+.tooto-pn-btn {
+    box-sizing: border-box;
+    min-height: 30px;
+    min-width: 30px;
+    line-height: 21px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    font-size: 18px;
+    margin-right: 5px;
+    border-radius: 2px;
+    padding: 4px;
+    position: relative;
+    cursor: pointer
+}
+
+.tooto-pn-btn.tooto-pn-active {
+    background-color: rgba(0, 0, 0, .15);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .25) inset
+}
+
+.tooto-pn-btn svg {
+    fill: currentColor
+}
+
+.tooto-label {
+    line-height: 18px
+}
+
+.tooto-fields {
+    display: flex
+}
+
+.tooto-select {
+    padding: 0;
+    width: 100%
+}
+
+.tooto-select select {
+    padding-right: 10px
+}
+
+.tooto-select:-moz-focusring, .tooto-select select:-moz-focusring {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 0 var(--tooto-secondary-light-color)
+}
+
+.tooto-input:focus, .tooto-button:focus, .tooto-btn-prim:focus, .tooto-select:focus, .tooto-select select:focus {
+    outline: none
+}
+
+.tooto-field input, .tooto-field select, .tooto-field textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: inherit;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    padding: var(--tooto-input-padding);
+    z-index: 1
+}
+
+.tooto-field input:focus, .tooto-field select:focus, .tooto-field textarea:focus {
+    outline: none
+}
+
+.tooto-field input[type=number] {
+    -moz-appearance: textfield
+}
+
+.tooto-field input[type=number]::-webkit-outer-spin-button, .tooto-field input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+.tooto-field-range {
+    flex: 9 1 auto
+}
+
+.tooto-field-integer input {
+    padding-right: 30px
+}
+
+.tooto-select option, .tooto-field-select option, .tooto-clm-select option, .tooto-sm-select option, .tooto-fields option, .tooto-sm-unit option {
+    background-color: var(--tooto-main-color);
+    color: var(--tooto-font-color)
+}
+
+.tooto-field {
+    background-color: var(--tooto-main-dark-color);
+    box-shadow: none;
+    border-radius: 2px;
+    box-sizing: border-box;
+    padding: 0;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.tooto-field textarea {
+    resize: vertical
+}
+
+.tooto-field .tooto-sel-arrow {
+    height: 100%;
+    width: 9px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 0
+}
+
+.tooto-field .tooto-d-s-arrow {
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    right: var(--tooto-input-padding);
+    border-top: 4px solid var(--tooto-arrow-color);
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-left: 3px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    cursor: pointer
+}
+
+.tooto-field-arrows {
+    position: absolute;
+    cursor: ns-resize;
+    margin: auto;
+    height: 20px;
+    width: 9px;
+    z-index: 10;
+    bottom: 0;
+    right: calc(var(--tooto-input-padding) - 2px);
+    top: 0
+}
+
+.tooto-field-color, .tooto-field-radio {
+    width: 100%
+}
+
+.tooto-field-color input {
+    padding-right: var(--tooto-color-input-padding);
+    box-sizing: border-box
+}
+
+.tooto-field-colorp {
+    border-left: 1px solid var(--tooto-main-dark-color);
+    box-sizing: border-box;
+    height: 100%;
+    padding: 2px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: var(--tooto-color-input-padding);
+    z-index: 10
+}
+
+.tooto-field-colorp .tooto-checker-bg, .tooto-field-colorp .tooto-field-colorp-c {
+    height: 100%;
+    width: 100%;
+    border-radius: 1px
+}
+
+.tooto-field-colorp-c {
+    height: 100%;
+    position: relative;
+    width: 100%
+}
+
+.tooto-field-color-picker {
+    background-color: var(--tooto-font-color);
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0 0 1px var(--tooto-main-dark-color);
+    border-radius: 1px;
+    position: absolute;
+    top: 0
+}
+
+.tooto-field-checkbox {
+    padding: 0;
+    width: 17px;
+    height: 17px;
+    display: block;
+    cursor: pointer
+}
+
+.tooto-field-checkbox input {
+    display: none
+}
+
+.tooto-field-checkbox input:checked + .tooto-chk-icon {
+    border-color: hsla(0, 0%, 100%, .5);
+    border-width: 0 2px 2px 0;
+    border-style: solid
+}
+
+.tooto-radio-item {
+    flex: 1 1 auto;
+    text-align: center;
+    border-left: 1px solid var(--tooto-dark-text-shadow)
+}
+
+.tooto-radio-item:first-child {
+    border: none
+}
+
+.tooto-radio-item:hover {
+    background: var(--tooto-main-dark-color)
+}
+
+.tooto-radio-item input {
+    display: none
+}
+
+.tooto-radio-item input:checked + .tooto-radio-item-label {
+    background-color: hsla(0, 0%, 100%, .2)
+}
+
+.tooto-radio-items {
+    display: flex
+}
+
+.tooto-radio-item-label {
+    cursor: pointer;
+    display: block;
+    padding: var(--tooto-input-padding)
+}
+
+.tooto-field-units {
+    position: absolute;
+    margin: auto;
+    right: 10px;
+    bottom: 0;
+    top: 0
+}
+
+.tooto-field-unit {
+    position: absolute;
+    right: 10px;
+    top: 3px;
+    font-size: 10px;
+    color: var(--tooto-arrow-color);
+    cursor: pointer
+}
+
+.tooto-input-unit {
+    text-align: center
+}
+
+.tooto-field-arrow-u, .tooto-field-arrow-d {
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-left: 3px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    border-top: 4px solid var(--tooto-arrow-color);
+    bottom: 4px;
+    cursor: pointer
+}
+
+.tooto-field-arrow-u {
+    border-bottom: 4px solid var(--tooto-arrow-color);
+    border-top: none;
+    top: 4px
+}
+
+.tooto-field-select {
+    padding: 0
+}
+
+.tooto-field-range {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    box-shadow: none;
+    padding: 0
+}
+
+.tooto-field-range input {
+    margin: 0;
+    height: 100%
+}
+
+.tooto-field-range input:focus {
+    outline: none
+}
+
+.tooto-field-range input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: -4px;
+    height: 10px;
+    width: 10px;
+    border: 1px solid var(--tooto-main-dark-color);
+    border-radius: 100%;
+    background-color: var(--tooto-font-color);
+    cursor: pointer
+}
+
+.tooto-field-range input::-moz-range-thumb {
+    height: 10px;
+    width: 10px;
+    border: 1px solid var(--tooto-main-dark-color);
+    border-radius: 100%;
+    background-color: var(--tooto-font-color);
+    cursor: pointer
+}
+
+.tooto-field-range input::-ms-thumb {
+    height: 10px;
+    width: 10px;
+    border: 1px solid var(--tooto-main-dark-color);
+    border-radius: 100%;
+    background-color: var(--tooto-font-color);
+    cursor: pointer
+}
+
+.tooto-field-range input::-moz-range-track {
+    background-color: var(--tooto-main-dark-color);
+    border-radius: 1px;
+    margin-top: 3px;
+    height: 3px
+}
+
+.tooto-field-range input::-webkit-slider-runnable-track {
+    background-color: var(--tooto-main-dark-color);
+    border-radius: 1px;
+    margin-top: 3px;
+    height: 3px
+}
+
+.tooto-field-range input::-ms-track {
+    background-color: var(--tooto-main-dark-color);
+    border-radius: 1px;
+    margin-top: 3px;
+    height: 3px
+}
+
+.tooto-btn-prim {
+    color: inherit;
+    background-color: var(--tooto-main-light-color);
+    border-radius: 2px;
+    padding: 3px 6px;
+    padding: var(--tooto-input-padding);
+    cursor: pointer;
+    border: none
+}
+
+.tooto-btn-prim:active {
+    background-color: var(--tooto-main-light-color)
+}
+
+.tooto-btn--full {
+    width: 100%
+}
+
+.tooto-chk-icon {
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+    box-sizing: border-box;
+    display: block;
+    height: 14px;
+    margin: 0 5px;
+    width: 6px
+}
+
+.tooto-add-trasp {
+    background: none;
+    border: none;
+    color: var(--tooto-font-color);
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 2px;
+    opacity: .75;
+    filter: alpha(opacity=75)
+}
+
+.tooto-add-trasp:hover {
+    opacity: 1;
+    filter: alpha(opacity=100)
+}
+
+.tooto-add-trasp:active {
+    background-color: rgba(0, 0, 0, .2)
+}
+
+.tooto-devices-c {
+    display: flex;
+    align-items: center;
+    padding: 2px 3px 3px 3px
+}
+
+.tooto-devices-c .tooto-device-label {
+    flex-grow: 2;
+    text-align: left;
+    margin-right: 10px
+}
+
+.tooto-devices-c .tooto-select {
+    flex-grow: 20
+}
+
+.tooto-devices-c .tooto-add-trasp {
+    flex-grow: 1;
+    margin-left: 5px
+}
+
+.tooto-sm-clear {
+    cursor: pointer;
+    width: 14px;
+    min-width: 14px;
+    height: 14px;
+    margin-left: 3px
+}
+
+.tooto-sm-header {
+    font-weight: lighter;
+    padding: 10px
+}
+
+.tooto-sm-sector {
+    clear: both;
+    font-weight: lighter;
+    text-align: left
+}
+
+.tooto-sm-sector-title {
+    display: flex;
+    align-items: center
+}
+
+.tooto-sm-sector-caret {
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    transform: rotate(-90deg)
+}
+
+.tooto-sm-sector-label {
+    margin-left: 5px
+}
+
+.tooto-sm-sector.tooto-sm-open .tooto-sm-sector-caret {
+    transform: none
+}
+
+.tooto-sm-properties {
+    font-size: var(--tooto-font-size);
+    padding: 10px 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    box-sizing: border-box;
+    width: 100%
+}
+
+.tooto-sm-label {
+    margin: 5px 5px 3px 0;
+    display: flex;
+    align-items: center
+}
+
+.tooto-sm-close-btn, .tooto-sm-preview-file-close {
+    display: block;
+    font-size: 23px;
+    position: absolute;
+    cursor: pointer;
+    right: 5px;
+    top: 0;
+    opacity: .7;
+    filter: alpha(opacity=70)
+}
+
+.tooto-sm-close-btn:hover, .tooto-sm-preview-file-close:hover {
+    opacity: .9;
+    filter: alpha(opacity=90)
+}
+
+.tooto-sm-field, .tooto-clm-field, .tooto-clm-select {
+    width: 100%;
+    position: relative
+}
+
+.tooto-sm-field input, .tooto-clm-field input, .tooto-clm-select input, .tooto-sm-field select, .tooto-clm-field select, .tooto-clm-select select {
+    background-color: rgba(0, 0, 0, 0);
+    color: hsla(0, 0%, 100%, .7);
+    border: none;
+    width: 100%
+}
+
+.tooto-sm-field input, .tooto-clm-field input, .tooto-clm-select input {
+    box-sizing: border-box
+}
+
+.tooto-sm-field select, .tooto-clm-field select, .tooto-clm-select select {
+    position: relative;
+    z-index: 1;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none
+}
+
+.tooto-sm-field select::-ms-expand, .tooto-clm-field select::-ms-expand, .tooto-clm-select select::-ms-expand {
+    display: none
+}
+
+.tooto-sm-field select:-moz-focusring, .tooto-clm-field select:-moz-focusring, .tooto-clm-select select:-moz-focusring {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 0 var(--tooto-secondary-light-color)
+}
+
+.tooto-sm-field input:focus, .tooto-clm-field input:focus, .tooto-clm-select input:focus, .tooto-sm-field select:focus, .tooto-clm-field select:focus, .tooto-clm-select select:focus {
+    outline: none
+}
+
+.tooto-sm-field .tooto-sm-unit, .tooto-clm-field .tooto-sm-unit, .tooto-clm-select .tooto-sm-unit {
+    position: absolute;
+    right: 10px;
+    top: 3px;
+    font-size: 10px;
+    color: var(--tooto-secondary-light-color);
+    cursor: pointer
+}
+
+.tooto-sm-field .tooto-clm-sel-arrow, .tooto-clm-field .tooto-clm-sel-arrow, .tooto-clm-select .tooto-clm-sel-arrow, .tooto-sm-field .tooto-sm-int-arrows, .tooto-clm-field .tooto-sm-int-arrows, .tooto-clm-select .tooto-sm-int-arrows, .tooto-sm-field .tooto-sm-sel-arrow, .tooto-clm-field .tooto-sm-sel-arrow, .tooto-clm-select .tooto-sm-sel-arrow {
+    height: 100%;
+    width: 9px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: ns-resize
+}
+
+.tooto-sm-field .tooto-sm-sel-arrow, .tooto-clm-field .tooto-sm-sel-arrow, .tooto-clm-select .tooto-sm-sel-arrow {
+    cursor: pointer
+}
+
+.tooto-sm-field .tooto-clm-d-s-arrow, .tooto-clm-field .tooto-clm-d-s-arrow, .tooto-clm-select .tooto-clm-d-s-arrow, .tooto-sm-field .tooto-sm-d-arrow, .tooto-clm-field .tooto-sm-d-arrow, .tooto-clm-select .tooto-sm-d-arrow, .tooto-sm-field .tooto-sm-d-s-arrow, .tooto-clm-field .tooto-sm-d-s-arrow, .tooto-clm-select .tooto-sm-d-s-arrow, .tooto-sm-field .tooto-sm-u-arrow, .tooto-clm-field .tooto-sm-u-arrow, .tooto-clm-select .tooto-sm-u-arrow {
+    position: absolute;
+    height: 0;
+    width: 0;
+    border-left: 3px solid rgba(0, 0, 0, 0);
+    border-right: 4px solid rgba(0, 0, 0, 0);
+    cursor: pointer
+}
+
+.tooto-sm-field .tooto-sm-u-arrow, .tooto-clm-field .tooto-sm-u-arrow, .tooto-clm-select .tooto-sm-u-arrow {
+    border-bottom: 4px solid var(--tooto-secondary-light-color);
+    top: 4px
+}
+
+.tooto-sm-field .tooto-clm-d-s-arrow, .tooto-clm-field .tooto-clm-d-s-arrow, .tooto-clm-select .tooto-clm-d-s-arrow, .tooto-sm-field .tooto-sm-d-arrow, .tooto-clm-field .tooto-sm-d-arrow, .tooto-clm-select .tooto-sm-d-arrow, .tooto-sm-field .tooto-sm-d-s-arrow, .tooto-clm-field .tooto-sm-d-s-arrow, .tooto-clm-select .tooto-sm-d-s-arrow {
+    border-top: 4px solid var(--tooto-secondary-light-color);
+    bottom: 4px
+}
+
+.tooto-sm-field .tooto-clm-d-s-arrow, .tooto-clm-field .tooto-clm-d-s-arrow, .tooto-clm-select .tooto-clm-d-s-arrow, .tooto-sm-field .tooto-sm-d-s-arrow, .tooto-clm-field .tooto-sm-d-s-arrow, .tooto-clm-select .tooto-sm-d-s-arrow {
+    bottom: 7px
+}
+
+.tooto-sm-field.tooto-sm-color, .tooto-sm-color.tooto-clm-field, .tooto-sm-field.tooto-sm-input, .tooto-sm-input.tooto-clm-field, .tooto-sm-field.tooto-sm-integer, .tooto-sm-integer.tooto-clm-field, .tooto-sm-field.tooto-sm-list, .tooto-sm-list.tooto-clm-field, .tooto-sm-field.tooto-sm-select, .tooto-sm-select.tooto-clm-field, .tooto-clm-select {
+    background-color: var(--tooto-main-dark-color);
+    border: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 1px 1px 0 var(--tooto-main-light-color);
+    color: var(--tooto-secondary-light-color);
+    border-radius: 2px;
+    box-sizing: border-box;
+    padding: 0 5px
+}
+
+.tooto-sm-field.tooto-sm-composite, .tooto-sm-composite.tooto-clm-field, .tooto-sm-composite.tooto-clm-select {
+    border-radius: 2px
+}
+
+.tooto-sm-field.tooto-sm-select, .tooto-sm-select.tooto-clm-field, .tooto-clm-select {
+    padding: 0
+}
+
+.tooto-sm-field.tooto-sm-select select, .tooto-sm-select.tooto-clm-field select, .tooto-clm-select select {
+    height: 20px
+}
+
+.tooto-sm-field.tooto-sm-select option, .tooto-sm-select.tooto-clm-field option, .tooto-clm-select option {
+    padding: 3px 0
+}
+
+.tooto-sm-field.tooto-sm-composite, .tooto-sm-composite.tooto-clm-field, .tooto-sm-composite.tooto-clm-select {
+    background-color: var(--tooto-secondary-dark-color);
+    border: 1px solid rgba(0, 0, 0, .25)
+}
+
+.tooto-sm-field.tooto-sm-list, .tooto-sm-list.tooto-clm-field, .tooto-sm-list.tooto-clm-select {
+    width: auto;
+    padding: 0;
+    overflow: hidden;
+    float: left
+}
+
+.tooto-sm-field.tooto-sm-list input, .tooto-sm-list.tooto-clm-field input, .tooto-sm-list.tooto-clm-select input {
+    display: none
+}
+
+.tooto-sm-field.tooto-sm-list label, .tooto-sm-list.tooto-clm-field label, .tooto-sm-list.tooto-clm-select label {
+    cursor: pointer;
+    padding: 5px;
+    display: block
+}
+
+.tooto-sm-field.tooto-sm-list .tooto-sm-radio:checked + label, .tooto-sm-list.tooto-clm-field .tooto-sm-radio:checked + label, .tooto-sm-list.tooto-clm-select .tooto-sm-radio:checked + label {
+    background-color: hsla(0, 0%, 100%, .2)
+}
+
+.tooto-sm-field.tooto-sm-list .tooto-sm-icon, .tooto-sm-list.tooto-clm-field .tooto-sm-icon, .tooto-sm-list.tooto-clm-select .tooto-sm-icon {
+    background-repeat: no-repeat;
+    background-position: center;
+    text-shadow: none;
+    line-height: normal
+}
+
+.tooto-sm-field.tooto-sm-integer select, .tooto-sm-integer.tooto-clm-field select, .tooto-sm-integer.tooto-clm-select select {
+    width: auto;
+    padding: 0
+}
+
+.tooto-sm-list .tooto-sm-el {
+    float: left;
+    border-left: 1px solid var(--tooto-main-dark-color)
+}
+
+.tooto-sm-list .tooto-sm-el:first-child {
+    border: none
+}
+
+.tooto-sm-list .tooto-sm-el:hover {
+    background: var(--tooto-main-dark-color)
+}
+
+.tooto-sm-slider .tooto-field-integer {
+    flex: 1 1 65px
+}
+
+.tooto-sm-property {
+    box-sizing: border-box;
+    float: left;
+    width: 50%;
+    margin-bottom: 5px;
+    padding: 0 5px
+}
+
+.tooto-sm-property--full, .tooto-sm-property.tooto-sm-composite, .tooto-sm-property.tooto-sm-file, .tooto-sm-property.tooto-sm-list, .tooto-sm-property.tooto-sm-stack, .tooto-sm-property.tooto-sm-slider, .tooto-sm-property.tooto-sm-color {
+    width: 100%
+}
+
+.tooto-sm-property .tooto-sm-btn {
+    background-color: color-mix(in srgb, var(--tooto-main-dark-color), white 13%);
+    border-radius: 2px;
+    box-shadow: 1px 1px 0 color-mix(in srgb, var(--tooto-main-dark-color), white 2%), 1px 1px 0 color-mix(in srgb, var(--tooto-main-dark-color), white 17%) inset;
+    padding: 5px;
+    position: relative;
+    text-align: center;
+    height: auto;
+    width: 100%;
+    cursor: pointer;
+    color: var(--tooto-font-color);
+    box-sizing: border-box;
+    text-shadow: -1px -1px 0 var(--tooto-main-dark-color);
+    border: none;
+    opacity: .85;
+    filter: alpha(opacity=85)
+}
+
+.tooto-sm-property .tooto-sm-btn-c {
+    box-sizing: border-box;
+    float: left;
+    width: 100%
+}
+
+.tooto-sm-property__text-shadow .tooto-sm-layer-preview-cnt::after {
+    color: #000;
+    content: "T";
+    font-weight: 900;
+    line-height: 17px;
+    padding: 0 4px
+}
+
+.tooto-sm-preview-file {
+    background-color: var(--tooto-light-border);
+    border-radius: 2px;
+    margin-top: 5px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--tooto-light-border), black 1%);
+    padding: 3px 20px
+}
+
+.tooto-sm-preview-file-cnt {
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 50px
+}
+
+.tooto-sm-preview-file-close {
+    top: -5px;
+    width: 14px;
+    height: 14px
+}
+
+.tooto-sm-layers {
+    margin-top: 5px;
+    padding: 1px 3px;
+    min-height: 30px
+}
+
+.tooto-sm-layer {
+    background-color: hsla(0, 0%, 100%, .055);
+    border-radius: 2px;
+    margin: 2px 0;
+    padding: 7px;
+    position: relative
+}
+
+.tooto-sm-layer.tooto-sm-active {
+    background-color: hsla(0, 0%, 100%, .12)
+}
+
+.tooto-sm-layer .tooto-sm-label-wrp {
+    display: flex;
+    align-items: center
+}
+
+.tooto-sm-layer #tooto-sm-move {
+    height: 14px;
+    width: 14px;
+    min-width: 14px;
+    cursor: grab
+}
+
+.tooto-sm-layer #tooto-sm-label {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0 5px
+}
+
+.tooto-sm-layer-preview {
+    height: 15px;
+    width: 15px;
+    min-width: 15px;
+    margin-right: 5px;
+    border-radius: 2px
+}
+
+.tooto-sm-layer-preview-cnt {
+    border-radius: 2px;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    background-size: cover !important
+}
+
+.tooto-sm-layer #tooto-sm-close-layer {
+    display: block;
+    cursor: pointer;
+    height: 14px;
+    width: 14px;
+    min-width: 14px;
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.tooto-sm-layer #tooto-sm-close-layer:hover {
+    opacity: .8;
+    filter: alpha(opacity=80)
+}
+
+.tooto-sm-stack .tooto-sm-properties {
+    padding: 5px 0 0
+}
+
+.tooto-sm-stack #tooto-sm-add {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    right: 0;
+    top: -17px;
+    opacity: .75;
+    padding: 0;
+    width: 18px;
+    height: 18px
+}
+
+.tooto-sm-stack #tooto-sm-add:hover {
+    opacity: 1;
+    filter: alpha(opacity=100)
+}
+
+.tooto-sm-colorp-c {
+    height: 100%;
+    width: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    box-sizing: border-box;
+    border-radius: 2px;
+    padding: 2px
+}
+
+.tooto-sm-colorp-c .tooto-field-colorp-c, .tooto-sm-colorp-c .tooto-checker-bg {
+    height: 100%;
+    width: 100%;
+    border-radius: 1px
+}
+
+.tooto-sm-color-picker {
+    background-color: var(--tooto-font-color);
+    cursor: pointer;
+    height: 16px;
+    width: 100%;
+    margin-top: -16px;
+    box-shadow: 0 0 1px var(--tooto-main-dark-color);
+    border-radius: 1px
+}
+
+.tooto-sm-btn-upload #tooto-sm-upload {
+    left: 0;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer
+}
+
+.tooto-sm-btn-upload #tooto-sm-label {
+    padding: 2px 0
+}
+
+.tooto-sm-layer > #tooto-sm-move {
+    opacity: .7;
+    filter: alpha(opacity=70);
+    cursor: move;
+    font-size: 12px;
+    float: left;
+    margin: 0 5px 0 0
+}
+
+.tooto-sm-layer > #tooto-sm-move:hover {
+    opacity: .9;
+    filter: alpha(opacity=90)
+}
+
+.tooto-blocks-c {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    padding-block: 10px;
+}
+
+.tooto-block-categories {
+    display: flex;
+    flex-direction: column
+}
+
+.tooto-block-category {
+    width: 100%
+}
+
+.tooto-block-category .tooto-caret-icon {
+    width: 15px;
+}
+
+.tooto-block {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    padding: 1em;
+    box-sizing: border-box;
+    min-height: 90px;
+    cursor: all-scroll;
+    font-size: 11px;
+    font-weight: lighter;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(0, 0, 0, .05);
+    border-radius: 3px;
+    transition: all .2s ease 0s;
+    transition-property: box-shadow, color;
+    box-shadow: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooto-block:hover {
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .15)
+}
+
+.tooto-block svg {
+    fill: currentColor
+}
+
+.tooto-block__media {
+    margin-bottom: 10px;
+    pointer-events: none
+}
+
+.tooto-block-svg {
+    width: 54px;
+    fill: currentColor
+}
+
+.tooto-block-svg-path {
+    fill: currentColor
+}
+
+.tooto-block.fa {
+    font-size: 2em;
+    line-height: 2em;
+    padding: 11px
+}
+
+.tooto-block-label {
+    line-height: normal;
+    font-size: .65rem;
+    font-weight: normal;
+    font-family: Helvetica, sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none
+}
+
+.tooto-block.tooto-bdrag {
+    width: auto;
+    padding: 0
+}
+
+.tooto-selected-parent {
+    border: 1px solid var(--tooto-color-yellow)
+}
+
+.tooto-opac50 {
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.tooto-layer {
+    font-weight: lighter;
+    text-align: left;
+    position: relative;
+    font-size: var(--tooto-font-size);
+    display: grid
+}
+
+.tooto-layer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid var(--tooto-main-dark-color);
+    background-color: var(--tooto-secondary-dark-color);
+    gap: var(--tooto-flex-item-gap);
+    cursor: pointer
+}
+
+.tooto-layer-item-left, .tooto-layer-item-right {
+    display: flex;
+    align-items: center;
+    gap: var(--tooto-flex-item-gap)
+}
+
+.tooto-layer-item-left {
+    width: 100%
+}
+
+.tooto-layer-hidden {
+    opacity: .55;
+    filter: alpha(opacity=55)
+}
+
+.tooto-layer-vis {
+    box-sizing: content-box;
+    cursor: pointer;
+    z-index: 1
+}
+
+.tooto-layer-vis-on, .tooto-layer-vis-off {
+    display: flex;
+    width: 13px;
+    height: 13px
+}
+
+.tooto-layer-vis-off {
+    display: none
+}
+
+.tooto-layer-vis.tooto-layer-off .tooto-layer-vis-on {
+    display: none
+}
+
+.tooto-layer-vis.tooto-layer-off .tooto-layer-vis-off {
+    display: flex
+}
+
+.tooto-layer-caret {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    box-sizing: content-box;
+    transform: rotate(90deg);
+    display: flex;
+    opacity: .7;
+    filter: alpha(opacity=70)
+}
+
+.tooto-layer-caret:hover {
+    opacity: 1;
+    filter: alpha(opacity=100)
+}
+
+.tooto-layer.open > .tooto-layer-item .tooto-layer-caret {
+    transform: rotate(180deg)
+}
+
+.tooto-layer-title {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0) !important;
+    border-bottom: none
+}
+
+.tooto-layer-title-inn {
+    align-items: center;
+    position: relative;
+    display: flex;
+    gap: var(--tooto-flex-item-gap)
+}
+
+.tooto-layer-title-c {
+    width: 100%
+}
+
+.tooto-layer__icon {
+    display: block;
+    width: 100%;
+    max-width: 15px;
+    max-height: 15px;
+    padding-left: 5px
+}
+
+.tooto-layer__icon svg {
+    fill: currentColor
+}
+
+.tooto-layer-name {
+    display: inline-block;
+    box-sizing: content-box;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 170px;
+    height: auto
+}
+
+.tooto-layer-name--no-edit {
+    text-overflow: ellipsis
+}
+
+.tooto-layer > .tooto-layer-children {
+    display: none
+}
+
+.tooto-layer.open > .tooto-layer-children {
+    display: block
+}
+
+.tooto-layer-no-chld > .tooto-layer-title-inn > .tooto-layer-caret {
+    visibility: hidden
+}
+
+.tooto-layer-move {
+    display: flex;
+    width: 13px;
+    height: 13px;
+    box-sizing: content-box;
+    cursor: move
+}
+
+.tooto-layer.tooto-hovered .tooto-layer-item {
+    background-color: var(--tooto-soft-light-color)
+}
+
+.tooto-layer.tooto-selected .tooto-layer-item {
+    background-color: var(--tooto-main-light-color)
+}
+
+.tooto-layers {
+    position: relative;
+    height: 100%
+}
+
+.tooto-layers #tooto-placeholder {
+    width: 100%;
+    position: absolute
+}
+
+.tooto-layers #tooto-placeholder #tooto-plh-int {
+    height: 100%;
+    padding: 1px
+}
+
+.tooto-layers #tooto-placeholder #tooto-plh-int.tooto-insert {
+    background-color: var(--tooto-color-green)
+}
+
+#tooto-clm-add-tag, .tooto-clm-tags-btn {
+    background-color: hsla(0, 0%, 100%, .15);
+    border-radius: 2px;
+    padding: 3px;
+    margin-right: 3px;
+    border: 1px solid rgba(0, 0, 0, .15);
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    cursor: pointer
+}
+
+.tooto-clm-tags-btn svg {
+    fill: currentColor;
+    display: block
+}
+
+.tooto-clm-header {
+    display: flex;
+    align-items: center;
+    margin: 7px 0
+}
+
+.tooto-clm-header-status {
+    flex-shrink: 1;
+    margin-left: auto
+}
+
+.tooto-clm-tag {
+    display: flex;
+    overflow: hidden;
+    align-items: center;
+    border-radius: 3px;
+    margin: 0 3px 3px 0;
+    padding: 5px;
+    cursor: default
+}
+
+.tooto-clm-tag-status, .tooto-clm-tag-close {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 1
+}
+
+.tooto-clm-tag-status svg, .tooto-clm-tag-close svg {
+    vertical-align: middle;
+    fill: currentColor
+}
+
+.tooto-clm-sels-info {
+    margin: 7px 0;
+    text-align: left
+}
+
+.tooto-clm-sel-id {
+    font-size: .9em;
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.tooto-clm-label-sel {
+    float: left;
+    padding-right: 5px
+}
+
+.tooto-clm-tags {
+    font-size: var(--tooto-font-size);
+    padding: 10px 5px
+}
+
+.tooto-clm-tags #tooto-clm-sel {
+    padding: 7px 0;
+    float: left
+}
+
+.tooto-clm-tags #tooto-clm-sel {
+    font-style: italic;
+    margin-left: 5px
+}
+
+.tooto-clm-tags #tooto-clm-tags-field {
+    clear: both;
+    padding: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap
+}
+
+.tooto-clm-tags #tooto-clm-tags-c {
+    display: flex;
+    flex-wrap: wrap;
+    vertical-align: top;
+    overflow: hidden
+}
+
+.tooto-clm-tags #tooto-clm-new {
+    color: var(--tooto-font-color);
+    padding: var(--tooto-padding-elem-classmanager);
+    display: none
+}
+
+.tooto-clm-tags #tooto-clm-close {
+    opacity: .85;
+    filter: alpha(opacity=85);
+    font-size: 20px;
+    line-height: 0;
+    cursor: pointer;
+    color: hsla(0, 0%, 100%, .9)
+}
+
+.tooto-clm-tags #tooto-clm-close:hover {
+    opacity: 1;
+    filter: alpha(opacity=100)
+}
+
+.tooto-clm-tags #tooto-clm-checkbox {
+    color: hsla(0, 0%, 100%, .9);
+    vertical-align: middle;
+    cursor: pointer;
+    font-size: 9px
+}
+
+.tooto-clm-tags #tooto-clm-tag-label {
+    flex-grow: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 3px;
+    cursor: text
+}
+
+.tooto-mdl-container {
+    font-family: var(--tooto-main-font);
+    overflow-y: auto;
+    position: fixed;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100
+}
+
+.tooto-mdl-dialog {
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, .05);
+    animation: tooto-slide-down .215s;
+    margin: auto;
+    max-width: 850px;
+    width: 90%;
+    border-radius: 3px;
+    font-weight: lighter;
+    position: relative;
+    z-index: 2
+}
+
+.tooto-mdl-title {
+    font-size: 1rem
+}
+
+.tooto-mdl-btn-close {
+    position: absolute;
+    right: 15px;
+    top: 5px
+}
+
+.tooto-mdl-active .tooto-mdl-dialog {
+    animation: tooto-mdl-slide-down .216s
+}
+
+.tooto-mdl-header, .tooto-mdl-content {
+    padding: 10px 15px;
+    clear: both
+}
+
+.tooto-mdl-header {
+    position: relative;
+    border-bottom: 1px solid var(--tooto-main-dark-color);
+    padding: 15px 15px 7px
+}
+
+.tooto-export-dl::after {
+    content: "";
+    clear: both;
+    display: block;
+    margin-bottom: 10px
+}
+
+.tooto-dropzone {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 11;
+    width: 100%;
+    height: 100%;
+    transition: opacity .25s;
+    pointer-events: none
+}
+
+.tooto-dropzone-active .tooto-dropzone {
+    display: block;
+    opacity: 1
+}
+
+.tooto-am-assets {
+    height: 290px;
+    overflow: auto;
+    clear: both;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start
+}
+
+.tooto-am-assets-header {
+    padding: 5px
+}
+
+.tooto-am-add-asset .tooto-am-add-field {
+    width: 70%;
+    float: left
+}
+
+.tooto-am-add-asset button {
+    width: 25%;
+    float: right
+}
+
+.tooto-am-preview-cont {
+    position: relative;
+    height: 70px;
+    width: 30%;
+    background-color: var(--tooto-main-color);
+    border-radius: 2px;
+    float: left;
+    overflow: hidden
+}
+
+.tooto-am-preview {
+    position: absolute;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    z-index: 1
+}
+
+.tooto-am-preview-bg {
+    opacity: .5;
+    filter: alpha(opacity=50);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 0
+}
+
+.tooto-am-dimensions {
+    opacity: .5;
+    filter: alpha(opacity=50);
+    font-size: 10px
+}
+
+.tooto-am-meta {
+    width: 70%;
+    float: left;
+    font-size: 12px;
+    padding: 5px 0 0 5px;
+    box-sizing: border-box
+}
+
+.tooto-am-meta > div {
+    margin-bottom: 5px
+}
+
+.tooto-am-close {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    display: none
+}
+
+.tooto-am-asset {
+    border-bottom: 1px solid color-mix(in srgb, var(--tooto-main-dark-color), black 3%);
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%
+}
+
+.tooto-am-asset:hover .tooto-am-close {
+    display: block
+}
+
+.tooto-am-highlight {
+    background-color: var(--tooto-main-light-color)
+}
+
+.tooto-am-assets-cont {
+    background-color: var(--tooto-secondary-dark-color);
+    border-radius: 3px;
+    box-sizing: border-box;
+    padding: 10px;
+    width: 45%;
+    float: right;
+    height: 325px;
+    overflow: hidden
+}
+
+.tooto-am-file-uploader {
+    width: 55%;
+    float: left
+}
+
+.tooto-am-file-uploader > form {
+    background-color: var(--tooto-secondary-dark-color);
+    border: 2px dashed;
+    border-radius: 3px;
+    position: relative;
+    text-align: center;
+    margin-bottom: 15px
+}
+
+.tooto-am-file-uploader > form.tooto-am-hover {
+    border: 2px solid var(--tooto-color-green);
+    color: color-mix(in srgb, var(--tooto-color-green), white 5%)
+}
+
+.tooto-am-file-uploader > form.tooto-am-disabled {
+    border-color: red
+}
+
+.tooto-am-file-uploader > form #tooto-am-uploadFile {
+    opacity: 0;
+    filter: alpha(opacity=0);
+    padding: var(--tooto-upload-padding);
+    width: 100%;
+    box-sizing: border-box
+}
+
+.tooto-am-file-uploader #tooto-am-title {
+    position: absolute;
+    padding: var(--tooto-upload-padding);
+    width: 100%
+}
+
+.tooto-cm-editor-c {
+    float: left;
+    box-sizing: border-box;
+    width: 50%
+}
+
+.tooto-cm-editor-c .CodeMirror {
+    height: 450px
+}
+
+.tooto-cm-editor {
+    font-size: 12px
+}
+
+.tooto-cm-editor#tooto-cm-htmlmixed {
+    padding-right: 10px;
+    border-right: 1px solid var(--tooto-main-dark-color)
+}
+
+.tooto-cm-editor#tooto-cm-htmlmixed #tooto-cm-title {
+    color: #a97d44
+}
+
+.tooto-cm-editor#tooto-cm-css {
+    padding-left: 10px
+}
+
+.tooto-cm-editor#tooto-cm-css #tooto-cm-title {
+    color: #ddca7e
+}
+
+.tooto-cm-editor #tooto-cm-title {
+    background-color: var(--tooto-main-dark-color);
+    font-size: 12px;
+    padding: 5px 10px 3px;
+    text-align: right
+}
+
+.tooto-rte-toolbar {
+    position: absolute;
+    z-index: 10
+}
+
+.tooto-rte-toolbar-ui {
+    border: 1px solid var(--tooto-main-dark-color);
+    border-radius: 3px
+}
+
+.tooto-rte-actionbar {
+    display: flex
+}
+
+.tooto-rte-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 25px;
+    border-right: 1px solid var(--tooto-main-dark-color);
+    text-align: center;
+    cursor: pointer;
+    outline: none
+}
+
+.tooto-rte-action:last-child {
+    border-right: none
+}
+
+.tooto-rte-action:hover {
+    background-color: var(--tooto-main-light-color)
+}
+
+.tooto-rte-active {
+    background-color: var(--tooto-main-light-color)
+}
+
+.tooto-rte-disabled {
+    color: var(--tooto-main-light-color);
+    cursor: not-allowed
+}
+
+.tooto-rte-disabled:hover {
+    background-color: unset
+}
+
+.sp-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    z-index: 9999994;
+    overflow: hidden
+}
+
+.sp-container.sp-flat {
+    position: relative
+}
+
+.sp-container, .sp-container * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box
+}
+
+.sp-top {
+    position: relative;
+    width: 100%;
+    display: inline-block
+}
+
+.sp-top-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0
+}
+
+.sp-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 20%
+}
+
+.sp-hue {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 84%;
+    height: 100%
+}
+
+.sp-clear-enabled .sp-hue {
+    top: 33px;
+    height: 77.5%
+}
+
+.sp-fill {
+    padding-top: 80%
+}
+
+.sp-sat, .sp-val {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0
+}
+
+.sp-alpha-enabled .sp-top {
+    margin-bottom: 18px
+}
+
+.sp-alpha-enabled .sp-alpha {
+    display: block
+}
+
+.sp-alpha-handle {
+    position: absolute;
+    top: -4px;
+    bottom: -4px;
+    width: 6px;
+    left: 50%;
+    cursor: pointer;
+    border: 1px solid #000;
+    background: #fff;
+    opacity: .8
+}
+
+.sp-alpha {
+    display: none;
+    position: absolute;
+    bottom: -14px;
+    right: 0;
+    left: 0;
+    height: 8px
+}
+
+.sp-alpha-inner {
+    border: solid 1px #333
+}
+
+.sp-clear {
+    display: none
+}
+
+.sp-clear.sp-clear-display {
+    background-position: center
+}
+
+.sp-clear-enabled .sp-clear {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0;
+    bottom: 0;
+    left: 84%;
+    height: 28px
+}
+
+.sp-container, .sp-replacer, .sp-preview, .sp-dragger, .sp-slider, .sp-alpha, .sp-clear, .sp-alpha-handle, .sp-container.sp-dragging .sp-input, .sp-container button {
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -o-user-select: none;
+    user-select: none
+}
+
+.sp-container.sp-input-disabled .sp-input-container {
+    display: none
+}
+
+.sp-container.sp-buttons-disabled .sp-button-container {
+    display: none
+}
+
+.sp-container.sp-palette-buttons-disabled .sp-palette-button-container {
+    display: none
+}
+
+.sp-palette-only .sp-picker-container {
+    display: none
+}
+
+.sp-palette-disabled .sp-palette-container {
+    display: none
+}
+
+.sp-initial-disabled .sp-initial {
+    display: none
+}
+
+.sp-sat {
+    background-image: -webkit-gradient(linear, 0 0, 100% 0, from(#fff), to(rgba(204, 154, 129, 0)));
+    background-image: -webkit-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+    background-image: -moz-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+    background-image: -o-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+    background-image: -ms-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+    background-image: linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType = 1, startColorstr=#FFFFFFFF, endColorstr=#00CC9A81)";
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr="#FFFFFFFF", endColorstr="#00CC9A81")
+}
+
+.sp-val {
+    background-image: -webkit-gradient(linear, 0 100%, 0 0, from(#000000), to(rgba(204, 154, 129, 0)));
+    background-image: -webkit-linear-gradient(bottom, #000000, rgba(204, 154, 129, 0));
+    background-image: -moz-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+    background-image: -o-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+    background-image: -ms-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+    background-image: linear-gradient(to top, #000, rgba(204, 154, 129, 0));
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00CC9A81, endColorstr=#FF000000)";
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00CC9A81", endColorstr="#FF000000")
+}
+
+.sp-hue {
+    background: -moz-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    background: -ms-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    background: -o-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    background: -webkit-gradient(linear, left top, left bottom, from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
+    background: -webkit-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    background: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%)
+}
+
+.sp-1 {
+    height: 17%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff0000", endColorstr="#ffff00")
+}
+
+.sp-2 {
+    height: 16%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffff00", endColorstr="#00ff00")
+}
+
+.sp-3 {
+    height: 17%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00ff00", endColorstr="#00ffff")
+}
+
+.sp-4 {
+    height: 17%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00ffff", endColorstr="#0000ff")
+}
+
+.sp-5 {
+    height: 16%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#0000ff", endColorstr="#ff00ff")
+}
+
+.sp-6 {
+    height: 17%;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff00ff", endColorstr="#ff0000")
+}
+
+.sp-hidden {
+    display: none !important
+}
+
+.sp-cf:before, .sp-cf:after {
+    content: "";
+    display: table
+}
+
+.sp-cf:after {
+    clear: both
+}
+
+@media (max-device-width: 480px) {
+    .sp-color {
+        right: 40%
+    }
+
+    .sp-hue {
+        left: 63%
+    }
+
+    .sp-fill {
+        padding-top: 60%
+    }
+}
+
+.sp-dragger {
+    border-radius: 5px;
+    height: 5px;
+    width: 5px;
+    border: 1px solid #fff;
+    background: #000;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.sp-slider {
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+    height: 3px;
+    left: -1px;
+    right: -1px;
+    border: 1px solid #000;
+    background: #fff;
+    opacity: .8
+}
+
+.sp-container {
+    border-radius: 0;
+    background-color: #ececec;
+    border: solid 1px #f0c49b;
+    padding: 0
+}
+
+.sp-container, .sp-container button, .sp-container input, .sp-color, .sp-hue, .sp-clear {
+    font: normal 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.sp-top {
+    margin-bottom: 3px
+}
+
+.sp-color, .sp-hue, .sp-clear {
+    border: solid 1px #666
+}
+
+.sp-input-container {
+    float: right;
+    width: 100px;
+    margin-bottom: 4px
+}
+
+.sp-initial-disabled .sp-input-container {
+    width: 100%
+}
+
+.sp-input {
+    font-size: 12px !important;
+    border: 1px inset;
+    padding: 4px 5px;
+    margin: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    color: #222
+}
+
+.sp-input:focus {
+    border: 1px solid orange
+}
+
+.sp-input.sp-validation-error {
+    border: 1px solid red;
+    background: #fdd
+}
+
+.sp-picker-container, .sp-palette-container {
+    float: left;
+    position: relative;
+    padding: 10px;
+    padding-bottom: 300px;
+    margin-bottom: -290px
+}
+
+.sp-picker-container {
+    width: 172px;
+    border-left: solid 1px #fff
+}
+
+.sp-palette-container {
+    border-right: solid 1px #ccc
+}
+
+.sp-palette-only .sp-palette-container {
+    border: 0
+}
+
+.sp-palette .sp-thumb-el {
+    display: block;
+    position: relative;
+    float: left;
+    width: 24px;
+    height: 15px;
+    margin: 3px;
+    cursor: pointer;
+    border: solid 2px rgba(0, 0, 0, 0)
+}
+
+.sp-palette .sp-thumb-el:hover, .sp-palette .sp-thumb-el.sp-thumb-active {
+    border-color: orange
+}
+
+.sp-thumb-el {
+    position: relative
+}
+
+.sp-initial {
+    float: left;
+    border: solid 1px #333
+}
+
+.sp-initial span {
+    width: 30px;
+    height: 25px;
+    border: none;
+    display: block;
+    float: left;
+    margin: 0
+}
+
+.sp-initial .sp-clear-display {
+    background-position: center
+}
+
+.sp-palette-button-container, .sp-button-container {
+    float: right
+}
+
+.sp-replacer {
+    margin: 0;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 4px;
+    display: inline-block;
+    border: solid 1px #91765d;
+    background: #eee;
+    color: #333;
+    vertical-align: middle
+}
+
+.sp-replacer:hover, .sp-replacer.sp-active {
+    border-color: #f0c49b;
+    color: #111
+}
+
+.sp-replacer.sp-disabled {
+    cursor: default;
+    border-color: silver;
+    color: silver
+}
+
+.sp-dd {
+    padding: 2px 0;
+    height: 16px;
+    line-height: 16px;
+    float: left;
+    font-size: 10px
+}
+
+.sp-preview {
+    position: relative;
+    width: 25px;
+    height: 20px;
+    border: solid 1px #222;
+    margin-right: 5px;
+    float: left;
+    z-index: 0
+}
+
+.sp-palette {
+    max-width: 220px
+}
+
+.sp-palette .sp-thumb-el {
+    width: 16px;
+    height: 16px;
+    margin: 2px 1px;
+    border: solid 1px #d0d0d0
+}
+
+.sp-container {
+    padding-bottom: 0
+}
+
+.sp-container button {
+    background-color: #eee;
+    background-image: -webkit-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -moz-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -ms-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: -o-linear-gradient(top, #eeeeee, #cccccc);
+    background-image: linear-gradient(to bottom, #eeeeee, #cccccc);
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #bbb;
+    border-radius: 3px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1;
+    padding: 5px 4px;
+    text-align: center;
+    text-shadow: 0 1px 0 #eee;
+    vertical-align: middle
+}
+
+.sp-container button:hover {
+    background-color: #ddd;
+    background-image: -webkit-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -moz-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -ms-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: -o-linear-gradient(top, #dddddd, #bbbbbb);
+    background-image: linear-gradient(to bottom, #dddddd, #bbbbbb);
+    border: 1px solid #bbb;
+    border-bottom: 1px solid #999;
+    cursor: pointer;
+    text-shadow: 0 1px 0 #ddd
+}
+
+.sp-container button:active {
+    border: 1px solid #aaa;
+    border-bottom: 1px solid #888;
+    -webkit-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+    -moz-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+    -ms-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+    -o-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
+    box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee
+}
+
+.sp-cancel {
+    font-size: 11px;
+    color: #d93f3f !important;
+    margin: 0;
+    padding: 2px;
+    margin-right: 5px;
+    vertical-align: middle;
+    text-decoration: none
+}
+
+.sp-cancel:hover {
+    color: #d93f3f !important;
+    text-decoration: underline
+}
+
+.sp-palette span:hover, .sp-palette span.sp-thumb-active {
+    border-color: #000
+}
+
+.sp-preview, .sp-alpha, .sp-thumb-el {
+    position: relative;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)
+}
+
+.sp-preview-inner, .sp-alpha-inner, .sp-thumb-inner {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0
+}
+
+.sp-palette .sp-thumb-inner {
+    background-position: 50% 50%;
+    background-repeat: no-repeat
+}
+
+.sp-palette .sp-thumb-light.sp-thumb-active .sp-thumb-inner {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIVJREFUeNpiYBhsgJFMffxAXABlN5JruT4Q3wfi/0DsT64h8UD8HmpIPCWG/KemIfOJCUB+Aoacx6EGBZyHBqI+WsDCwuQ9mhxeg2A210Ntfo8klk9sOMijaURm7yc1UP2RNCMbKE9ODK1HM6iegYLkfx8pligC9lCD7KmRof0ZhjQACDAAceovrtpVBRkAAAAASUVORK5CYII=)
+}
+
+.sp-palette .sp-thumb-dark.sp-thumb-active .sp-thumb-inner {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAMdJREFUOE+tkgsNwzAMRMugEAahEAahEAZhEAqlEAZhEAohEAYh81X2dIm8fKpEspLGvudPOsUYpxE2BIJCroJmEW9qJ+MKaBFhEMNabSy9oIcIPwrB+afvAUFoK4H0tMaQ3XtlrggDhOVVMuT4E5MMG0FBbCEYzjYT7OxLEvIHQLY2zWwQ3D+9luyOQTfKDiFD3iUIfPk8VqrKjgAiSfGFPecrg6HN6m/iBcwiDAo7WiBeawa+Kwh7tZoSCGLMqwlSAzVDhoK+6vH4G0P5wdkAAAAASUVORK5CYII=)
+}
+
+.sp-clear-display {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(data:image/gif;base64,R0lGODlhFAAUAPcAAAAAAJmZmZ2dnZ6enqKioqOjo6SkpKWlpaampqenp6ioqKmpqaqqqqurq/Hx8fLy8vT09PX19ff39/j4+Pn5+fr6+vv7+wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAAUABQAAAihAP9FoPCvoMGDBy08+EdhQAIJCCMybCDAAYUEARBAlFiQQoMABQhKUJBxY0SPICEYHBnggEmDKAuoPMjS5cGYMxHW3IiT478JJA8M/CjTZ0GgLRekNGpwAsYABHIypcAgQMsITDtWJYBR6NSqMico9cqR6tKfY7GeBCuVwlipDNmefAtTrkSzB1RaIAoXodsABiZAEFB06gIBWC1mLVgBa0AAOw==)
+}
+
+.tooto-editor-sp {
+    border: 1px solid var(--tooto-main-dark-color);
+    box-shadow: 0 0 7px var(--tooto-main-dark-color);
+    border-radius: 3px
+}
+
+.tooto-editor-sp .sp-hue, .tooto-editor-sp .sp-slider {
+    cursor: row-resize
+}
+
+.tooto-editor-sp .sp-color, .tooto-editor-sp .sp-dragger {
+    cursor: crosshair
+}
+
+.tooto-editor-sp .sp-alpha-inner, .tooto-editor-sp .sp-alpha-handle {
+    cursor: col-resize
+}
+
+.tooto-editor-sp .sp-hue {
+    left: 90%
+}
+
+.tooto-editor-sp .sp-color {
+    right: 15%
+}
+
+.tooto-editor-sp .sp-picker-container {
+    border: none
+}
+
+.tooto-editor-sp .colpick_dark .colpick_color {
+    outline: 1px solid var(--tooto-main-dark-color)
+}
+
+.tooto-editor-sp .sp-cancel, .tooto-editor-sp .sp-cancel:hover {
+    bottom: -8px;
+    color: #777 !important;
+    font-size: 25px;
+    left: 0;
+    position: absolute;
+    text-decoration: none
+}
+
+.tooto-editor-sp .sp-alpha-handle {
+    background-color: #ccc;
+    border: 1px solid #555;
+    width: 4px
+}
+
+.tooto-editor-sp .sp-color, .tooto-editor-sp .sp-hue {
+    border: 1px solid #333
+}
+
+.tooto-editor-sp .sp-slider {
+    background-color: #ccc;
+    border: 1px solid #555;
+    height: 3px;
+    left: -4px;
+    width: 22px
+}
+
+.tooto-editor-sp .sp-dragger {
+    background: rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 1px #111
+}
+
+.tooto-editor-sp .sp-button-container {
+    float: none;
+    width: 100%;
+    position: relative;
+    text-align: right
+}
+
+.tooto-editor-sp .sp-button-container .sp-choose, .tooto-editor-sp .sp-button-container .sp-choose:hover, .tooto-editor-sp .sp-button-container .sp-choose:active {
+    background: var(--tooto-main-dark-color);
+    border-color: var(--tooto-main-dark-color);
+    color: var(--tooto-font-color);
+    text-shadow: none;
+    box-shadow: none;
+    padding: 3px 5px
+}
+
+.tooto-editor-sp .sp-palette-container {
+    border: none;
+    float: none;
+    margin: 0;
+    padding: 5px 10px 0
+}
+
+.tooto-editor-sp .sp-palette .sp-thumb-el, .tooto-editor-sp .sp-palette .sp-thumb-el:hover {
+    border: 1px solid rgba(0, 0, 0, .9)
+}
+
+.tooto-editor-sp .sp-palette .sp-thumb-el:hover, .tooto-editor-sp .sp-palette .sp-thumb-el.sp-thumb-active {
+    border-color: rgba(0, 0, 0, .9)
+}
+
+.tooto-one-bg {
+    background-color: #fff;
+    color: #000;
+}
+
+.tooto-one-color {
+    color: var(--tooto-primary-color)
+}
+
+.tooto-one-color-h:hover {
+    color: var(--tooto-primary-color)
+}
+
+.tooto-two-bg {
+    background-color: var(--tooto-secondary-color)
+}
+
+.tooto-two-color {
+    color: var(--tooto-primary-color)
+}
+
+.tooto-two-color-h:hover {
+    color: var(--tooto-secondary-color)
+}
+
+.tooto-three-bg {
+    background-color: var(--tooto-tertiary-color)
+}
+
+.tooto-three-color {
+    color: var(--tooto-tertiary-color)
+}
+
+.tooto-three-color-h:hover {
+    color: var(--tooto-tertiary-color)
+}
+
+.tooto-four-bg {
+    background-color: var(--tooto-quaternary-color)
+}
+
+.tooto-four-color {
+    color: var(--tooto-quaternary-color)
+}
+
+.tooto-four-color-h:hover {
+    color: var(--tooto-quaternary-color)
+}
+
+.tooto-danger-bg {
+    background-color: var(--tooto-color-red)
+}
+
+.tooto-danger-color {
+    color: var(--tooto-color-red)
+}
+
+.tooto-danger-color-h:hover {
+    color: var(--tooto-color-red)
+}
+
+.tooto-bdrag {
+    pointer-events: none !important;
+    position: absolute !important;
+    z-index: 10 !important;
+    width: auto
+}
+
+.tooto-drag-helper {
+    background-color: var(--tooto-color-blue) !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    z-index: 10 !important;
+    transform: scale(0.3) !important;
+    transform-origin: top left !important;
+    -webkit-transform-origin: top left !important;
+    margin: 15px !important;
+    transition: none !important;
+    outline: none !important
+}
+
+.tooto-grabbing, .tooto-grabbing * {
+    cursor: grabbing !important;
+    cursor: -webkit-grabbing !important
+}
+
+.tooto-grabbing {
+    overflow: hidden
+}
+
+.tooto-off-prv {
+    position: relative;
+    z-index: 10;
+    padding: 5px;
+    cursor: pointer
+}
+
+.tooto-editor-cont ::-webkit-scrollbar-track {
+    background: var(--tooto-secondary-dark-color)
+}
+
+.tooto-editor-cont ::-webkit-scrollbar-thumb {
+    background-color: hsla(0, 0%, 100%, .2)
+}
+
+.tooto-editor-cont ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tooto-no-touch-actions {
+    touch-action: none
+}
+
+.tooto-disabled {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    opacity: .5;
+    filter: alpha(opacity=50)
+}
+
+.tooto-editor {
+    font-family: var(--tooto-main-font);
+    font-size: var(--tooto-font-size);
+    position: relative;
+    box-sizing: border-box;
+    height: 100%
+}
+
+.tooto-freezed, .tooto-freezed {
+    opacity: .5;
+    filter: alpha(opacity=50);
+    pointer-events: none
+}
+
+.tooto-hidden {
+    display: none
+}
+
+@keyframes tooto-slide-down {
+    0% {
+        transform: translate(0, -3rem);
+        opacity: 0
+    }
+    100% {
+        transform: translate(0, 0);
+        opacity: 1
+    }
+}
+
+@keyframes tooto-slide-up {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1
+    }
+    100% {
+        transform: translate(0, -3rem);
+        opacity: 0
+    }
+}
+
+.cm-s-hopscotch span.cm-error {
+    color: #fff
+}

@@ -72,6 +72,7 @@ export interface WebBuilderCanvasOptions {
   initialComponents?: string
   styles?: string[]
   scripts?: string[]
+  frameStyle?: string
   frameReset?: boolean
 }
 
@@ -154,9 +155,16 @@ export interface ResolvedWebBuilderOptions extends WebBuilderOptions {
 
 export const DEFAULT_WEB_BUILDER_DEVICES: WebBuilderDeviceOption[] = [
   { id: 'desktop', name: 'Desktop', width: '' },
-  { id: 'tablet', name: 'Tablet', width: '768px', widthMedia: '992px' },
+  // { id: 'tablet', name: 'Tablet', width: '768px', widthMedia: '992px' },
   { id: 'mobile', name: 'Mobile', width: '375px', widthMedia: '480px' },
 ]
+
+export const DEFAULT_WEB_BUILDER_CANVAS_FRAME_STYLE = `
+     body{background:#ffffff;}
+     body .tooto-selected{
+        outline: 2px solid #2251ff !important;
+    }
+  `
 
 const createDefaultTenant = (): TenantContext => ({
   roles: [],
@@ -210,12 +218,14 @@ export const resolveWebBuilderOptions = (
     ...options,
     grapesjs: {
       height: '100%',
+      stylePrefix: 'tooto-',
       storageManager: false,
       panels: { defaults: [] },
       deviceManager: { devices },
       canvas: {
         styles: options.canvas?.styles,
         scripts: options.canvas?.scripts,
+        frameStyle: options.canvas?.frameStyle ?? DEFAULT_WEB_BUILDER_CANVAS_FRAME_STYLE,
       },
       ...options.grapesjs,
     },

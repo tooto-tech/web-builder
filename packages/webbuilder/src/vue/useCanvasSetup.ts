@@ -2,32 +2,19 @@ import type { Editor } from 'grapesjs'
 
 const FRAME_RESET_STYLE_ID = 'wb-canvas-frame-reset'
 
-const FRAME_RESET_CSS = `
+export const FRAME_RESET_CSS = `
   html {
     margin: 0 !important;
     padding: 0 !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     scrollbar-gutter: auto;
-    scrollbar-width: auto;
-    -ms-overflow-style: auto;
   }
   body {
     margin: 0 !important;
     padding: 0 !important;
     min-height: 100% !important;
     overflow: visible !important;
-  }
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar {
-    width: auto;
-    height: auto;
-  }
-  html::-webkit-scrollbar-track,
-  body::-webkit-scrollbar-track,
-  html::-webkit-scrollbar-thumb,
-  body::-webkit-scrollbar-thumb {
-    background: initial;
   }
 `
 

@@ -21,7 +21,7 @@ const options: WebBuilderOptions = {
         <h1 style="margin: 0; max-width: 720px; color: #111827; font-size: 42px; line-height: 1.1;">
           One options object mounts the editor shell.
         </h1>
-        <p style="margin: 18px 0 0; max-width: 620px; color: #4b5563; font-size: 16px; line-height: 1.7;">
+        <p style="margin: 18px 0 0; max-width: 620px; color: #4b5563; font-size: 16px; line-height: 170;">
           This Vue 3 + TypeScript + Vite 8 demo imports WebBuilder directly from the package.
         </p>
       </section>
