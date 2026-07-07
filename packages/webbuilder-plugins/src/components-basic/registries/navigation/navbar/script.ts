@@ -32,9 +32,9 @@ export const navbarScript = function (this: HTMLElement) {
     overlay.classList.toggle('is-open', hasOpenMega)
   }
 
-  const normalizePath = function (value?: string | null) {
+  const normalizeLocation = function (value?: string | null) {
     const raw = `${value ?? ''}`.trim()
-    if (!raw || raw === '#') return ''
+    if (!raw || raw === '#') return null
 
     const stripLocalePrefix = function (path: string) {
       if (path === '/en') return '/'
@@ -44,14 +44,23 @@ export const navbarScript = function (this: HTMLElement) {
     try {
       const url = new URL(raw, window.location.origin)
       const pathname = `${url.pathname || '/'}`
-      return stripLocalePrefix(pathname.replace(/\/+$/, '') || '/')
+      return {
+        path: stripLocalePrefix(pathname.replace(/\/+$/, '') || '/'),
+        hash: url.hash || '',
+      }
     } catch {
-      return stripLocalePrefix(raw.replace(/\/+$/, '') || '/')
+      const hashIndex = raw.indexOf('#')
+      const pathname = hashIndex >= 0 ? raw.slice(0, hashIndex) : raw
+      const hash = hashIndex >= 0 ? raw.slice(hashIndex) : ''
+      return {
+        path: stripLocalePrefix(pathname.replace(/\/+$/, '') || '/'),
+        hash,
+      }
     }
   }
 
   const syncActiveNav = function () {
-    const currentPath = normalizePath(window.location.pathname || '/')
+    const currentLocation = normalizeLocation(`${window.location.pathname || '/'}${window.location.hash || ''}`)
 
     el.querySelectorAll('.gjs-navbar__link.is-active, .gjs-nav-group__dropdown-item.is-active, .gjs-nav-group__mega-item.is-active').forEach(function (node) {
       node.classList.remove('is-active')
@@ -70,8 +79,13 @@ export const navbarScript = function (this: HTMLElement) {
     ) as HTMLAnchorElement[]
 
     interactiveLinks.forEach(function (link) {
-      const targetPath = normalizePath(link.getAttribute('href'))
-      if (!targetPath || targetPath !== currentPath) return
+      const targetLocation = normalizeLocation(link.getAttribute('href'))
+      if (
+        !targetLocation
+        || !currentLocation
+        || targetLocation.path !== currentLocation.path
+        || targetLocation.hash !== currentLocation.hash
+      ) return
 
       link.classList.add('is-active')
       link.setAttribute('aria-current', 'page')
