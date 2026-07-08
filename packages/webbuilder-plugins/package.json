@@ -71,6 +71,10 @@
   },
   "license": "MIT",
   "homepage": "https://www.npmjs.com/package/@toototech/webbuilder-plugins",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tooto-tech/web-builder"
+  },
   "publishConfig": {
     "access": "public"
   }
