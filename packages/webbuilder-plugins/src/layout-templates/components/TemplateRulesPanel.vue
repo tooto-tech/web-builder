@@ -50,6 +50,8 @@ const conditionFieldMap: Record<RuleTemplateResourceType, Array<{
     { key: 'excludePostIds', label: '排除文章 ID', kind: 'numbers', placeholder: '输入不包含的文章 ID' },
     { key: 'typeIds', label: '文章类型 ID', kind: 'numbers', placeholder: '输入文章类型 ID' },
     { key: 'excludeTypeIds', label: '排除类型 ID', kind: 'numbers', placeholder: '输入不包含的文章类型 ID' },
+    { key: 'categoryIds', label: '文章分类 ID', kind: 'numbers', placeholder: '输入分类 ID' },
+    { key: 'excludeCategoryIds', label: '排除分类 ID', kind: 'numbers', placeholder: '输入不包含的分类 ID' },
     { key: 'tagIds', label: '标签 ID', kind: 'numbers', placeholder: '输入标签 ID' },
     { key: 'templateNames', label: '模板名', kind: 'strings', placeholder: '输入模板名' },
     { key: 'publishTimeRange', label: '发布时间范围', kind: 'daterange', placeholder: '' },

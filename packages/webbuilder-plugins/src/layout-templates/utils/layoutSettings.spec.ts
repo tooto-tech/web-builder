@@ -31,7 +31,7 @@ describe('layoutSettings', () => {
     expect(resolveLayoutIdForPage(settings.footer, 'home', ['global-footer'])).toBeNull()
   })
 
-  it('resolves include and exclude rules by priority', () => {
+  it('resolves include and exclude rules by descending priority', () => {
     const settings = normalizeLayoutSettings({
       header: {
         defaultLayoutId: 10,
@@ -42,7 +42,7 @@ describe('layoutSettings', () => {
             matchMode: 'exclude',
             pageIds: ['products'],
             enabled: true,
-            priority: 2,
+            priority: 1,
           },
           {
             id: 'home-only',
@@ -50,7 +50,7 @@ describe('layoutSettings', () => {
             matchMode: 'include',
             pageIds: ['home'],
             enabled: true,
-            priority: 1,
+            priority: 2,
           },
         ],
       },
@@ -59,6 +59,125 @@ describe('layoutSettings', () => {
     expect(resolveLayoutIdForPage(settings.header, 'home')).toBe(30)
     expect(resolveLayoutIdForPage(settings.header, 'about')).toBe(20)
     expect(resolveLayoutIdForPage(settings.header, 'products')).toBeNull()
+  })
+
+  it('preserves dynamic target resource types and rule conditions', () => {
+    const settings = normalizeLayoutSettings({
+      header: {
+        rules: [
+          {
+            id: 'post-category-header',
+            layoutId: 'wb-header-post',
+            matchMode: 'exclude',
+            pageIds: [],
+            enabled: true,
+            priority: 4,
+            targetResourceTypes: ['TEMP_POST_DETAIL'],
+            conditions: {
+              categoryIds: [18, '21'],
+              excludePostIds: [99],
+              publishTimeRange: {
+                start: '2026-01-01',
+                end: '2026-12-31',
+              },
+            },
+          },
+        ],
+      },
+    })
+
+    expect(settings.header.rules[0]).toMatchObject({
+      targetResourceTypes: ['TEMP_POST_DETAIL'],
+      conditions: {
+        categoryIds: [18, 21],
+        excludePostIds: [99],
+        publishTimeRange: {
+          start: '2026-01-01',
+          end: '2026-12-31',
+        },
+      },
+    })
+  })
+
+  it('matches article detail layout rules by target resource type and article category', () => {
+    const settings = normalizeLayoutSettings({
+      header: {
+        rules: [
+          {
+            id: 'post-template-fallback',
+            layoutId: 'wb-header-fallback',
+            matchMode: 'exclude',
+            pageIds: [],
+            enabled: true,
+            priority: 1,
+            targetResourceTypes: ['TEMP_POST_DETAIL'],
+            conditions: {},
+          },
+          {
+            id: 'post-category-specific',
+            layoutId: 'wb-header-category',
+            matchMode: 'exclude',
+            pageIds: [],
+            enabled: true,
+            priority: 1,
+            targetResourceTypes: ['TEMP_POST_DETAIL'],
+            conditions: {
+              categoryIds: [18],
+            },
+          },
+        ],
+      },
+    })
+
+    expect(resolveLayoutIdForPage(settings.header, 'post.detail', [], {
+      resourceType: 'TEMP_POST_DETAIL',
+      attributes: {
+        postId: 42,
+        categoryIds: [18, 33],
+      },
+    })).toBe('wb-header-category')
+  })
+
+  it('excludes dynamic detail rules when exclude conditions match', () => {
+    const settings = normalizeLayoutSettings({
+      header: {
+        rules: [
+          {
+            id: 'excluded-post',
+            layoutId: 'wb-header-a',
+            matchMode: 'exclude',
+            pageIds: [],
+            enabled: true,
+            priority: 9,
+            targetResourceTypes: ['TEMP_POST_DETAIL'],
+            conditions: {
+              categoryIds: [18],
+              excludePostIds: [42],
+            },
+          },
+          {
+            id: 'category-fallback',
+            layoutId: 'wb-header-b',
+            matchMode: 'exclude',
+            pageIds: [],
+            enabled: true,
+            priority: 1,
+            targetResourceTypes: ['TEMP_POST_DETAIL'],
+            conditions: {
+              categoryIds: [18],
+            },
+          },
+        ],
+      },
+    })
+
+    expect(resolveLayoutIdForPage(settings.header, 'post.detail', [], {
+      resourceType: 'TEMP_POST_DETAIL',
+      attributes: {
+        postId: 42,
+        categoryIds: [18],
+      },
+    })).toBe('wb-header-b')
   })
 
   it('applies an exclude rule globally except selected pages', () => {

@@ -7,7 +7,7 @@ import {
   type RulePageListResult,
 } from './layoutRulePages'
 
-type TestPageRow = { resourceKey?: string; resourceName?: string }
+type TestPageRow = { resourceKey?: string; resourceName?: string; resourceType?: string }
 
 describe('layoutRulePages', () => {
   it('normalizes page rows into unique selectable options', () => {
@@ -16,11 +16,13 @@ describe('layoutRulePages', () => {
         { resourceKey: 'page.about', resourceName: 'About' },
         { resourceKey: 'page.home', resourceName: 'Home' },
         { resourceKey: 'page.home', resourceName: 'Homepage' },
+        { resourceKey: 'post.detail', resourceName: 'Post Detail', resourceType: 'TEMP_POST_DETAIL' },
         { resourceKey: '   ', resourceName: 'Invalid' },
       ])
     ).toEqual([
-      { id: 'page.about', label: 'About' },
-      { id: 'page.home', label: 'Home' },
+      { id: 'page.about', label: 'About', resourceType: undefined },
+      { id: 'page.home', label: 'Home', resourceType: undefined },
+      { id: 'post.detail', label: 'Post Detail', resourceType: 'TEMP_POST_DETAIL' },
     ])
   })
 
@@ -35,7 +37,7 @@ describe('layoutRulePages', () => {
     )
 
     await expect(loadRulePageOptions(fetchPageList)).resolves.toEqual([
-      { id: 'post.detail', label: 'Post Detail' },
+      { id: 'post.detail', label: 'Post Detail', resourceType: 'TEMP_POST_DETAIL' },
     ])
 
     expect(fetchPageList).toHaveBeenCalledTimes(7)

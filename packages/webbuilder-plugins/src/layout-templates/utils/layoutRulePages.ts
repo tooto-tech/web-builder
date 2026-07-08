@@ -1,11 +1,13 @@
 export type RulePageOption = {
   id: string
   label: string
+  resourceType?: string
 }
 
 export interface SelectablePageRow {
   resourceKey?: string | null
   resourceName?: string | null
+  resourceType?: string | null
 }
 
 export interface RulePageListParams {
@@ -48,6 +50,7 @@ export const toRulePageOptions = (rows: SelectablePageRow[] | null | undefined):
     deduped.set(id, {
       id,
       label: `${row.resourceName ?? row.resourceKey ?? id}`.trim() || id,
+      resourceType: `${row.resourceType ?? ''}`.trim() || undefined,
     })
   })
 
@@ -67,7 +70,10 @@ export const loadRulePageOptions = async (
         pageSize: LIST_PAGE_SIZE,
         ...query,
       })
-      rows.push(...(result?.list || []))
+      rows.push(...(result?.list || []).map((row) => ({
+        ...row,
+        resourceType: row.resourceType ?? query.resourceType,
+      })))
     } catch (error) {
       lastError = error
     }

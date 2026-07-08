@@ -18,6 +18,11 @@ on:
         options:
           - dry-run
           - publish
+      dist_tag:
+        description: npm dist-tag used for publish mode. Keep latest reserved for the 0.2 line.
+        required: true
+        default: legacy-0.1
+        type: string
 
 permissions:
   contents: read
@@ -58,4 +63,4 @@ jobs:
 
       - name: Publish selected package
         if: inputs.mode == 'publish'
-        run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --access public
+        run: pnpm --filter "${{ inputs.package_name }}" exec npm publish --access public --tag "${{ inputs.dist_tag }}"

@@ -60,6 +60,8 @@ const SUPPORTED_CONDITION_KEYS: Record<
     'excludePostIds',
     'typeIds',
     'excludeTypeIds',
+    'categoryIds',
+    'excludeCategoryIds',
     'tagIds',
     'templateNames',
     'publishTimeRange'
