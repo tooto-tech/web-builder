@@ -1,4 +1,6 @@
 import {
+  DEFAULT_NAVBAR_MENU_CODE,
+  DEFAULT_NAVBAR_MENU_DATA_KEY,
   NAV_GROUP_CHEVRON,
   TYPE_DROPDOWN,
   TYPE_DROPDOWN_ITEM,
@@ -327,6 +329,234 @@ export function makeNavGroup(
   }
 }
 
+function makeBackendMenuText(binding: string, text: string, classes: string[]) {
+  return {
+    tagName: 'span',
+    classes: [...classes, 'wb-menu-tree-text'],
+    attributes: { 'data-cms-bind': binding },
+    draggable: false,
+    droppable: false,
+    copyable: false,
+    removable: false,
+    selectable: false,
+    hoverable: false,
+    layerable: false,
+    components: [{ type: 'textnode', content: text }],
+  }
+}
+
+function makeBackendLeafLink() {
+  return {
+    type: TYPE_NAVBAR_LINK,
+    tagName: 'a',
+    classes: ['gjs-navbar__link'],
+    attributes: {
+      href: '#',
+      'data-cms-repeat': 'menuItem@menuItems',
+      'data-cms-if': '!menuItem.hasChildren',
+      'data-cms-bind-href': 'menuItem.url',
+      'data-cms-bind-target': 'menuItem.target',
+      'data-cms-bind-rel': 'menuItem.rel',
+    },
+    components: [
+      makeBackendMenuText('menuItem.title', 'Menu', ['gjs-navbar__link-label']),
+    ],
+  }
+}
+
+function makeBackendDropdown() {
+  return {
+    type: TYPE_DROPDOWN,
+    tagName: 'div',
+    classes: ['gjs-nav-group__dropdown'],
+    attributes: {
+      'data-cms-if': "menuItem.submenuType == 'dropdown'",
+    },
+    components: [
+      {
+        tagName: 'div',
+        classes: ['gjs-nav-group__dropdown-inner'],
+        draggable: false,
+        droppable: false,
+        copyable: false,
+        removable: false,
+        selectable: true,
+        hoverable: true,
+        layerable: true,
+        highlightable: true,
+        components: [
+          {
+            type: TYPE_DROPDOWN_ITEM,
+            tagName: 'a',
+            classes: ['gjs-nav-group__dropdown-item'],
+            attributes: {
+              href: '#',
+              'data-cms-repeat': 'child@menuItem.children',
+              'data-cms-bind-href': 'child.url',
+              'data-cms-bind-target': 'child.target',
+              'data-cms-bind-rel': 'child.rel',
+            },
+            components: [
+              makeBackendMenuText('child.title', 'Child', ['gjs-nav-group__dropdown-item-label']),
+            ],
+          },
+        ],
+      },
+    ],
+  }
+}
+
+function makeBackendMega() {
+  return {
+    type: TYPE_MEGA,
+    tagName: 'div',
+    classes: ['gjs-nav-group__mega'],
+    attributes: {
+      'data-cms-if': "menuItem.submenuType == 'mega'",
+    },
+    components: [
+      {
+        type: TYPE_MEGA_INNER,
+        tagName: 'div',
+        classes: ['gjs-nav-group__mega-inner'],
+        components: [
+          {
+            type: TYPE_MEGA_LEFT,
+            tagName: 'div',
+            classes: ['gjs-nav-group__mega-left'],
+            components: [
+              {
+                tagName: 'div',
+                classes: ['gjs-nav-group__mega-left-stack'],
+                draggable: false,
+                droppable: false,
+                copyable: false,
+                removable: false,
+                selectable: true,
+                hoverable: true,
+                layerable: true,
+                components: [
+                  {
+                    type: TYPE_MEGA_COL,
+                    tagName: 'div',
+                    classes: ['gjs-nav-group__mega-col'],
+                    components: [
+                      {
+                        type: TYPE_MEGA_ITEM,
+                        tagName: 'a',
+                        classes: ['gjs-nav-group__mega-item'],
+                        attributes: {
+                          href: '#',
+                          'data-cms-repeat': 'child@menuItem.children',
+                          'data-cms-bind-href': 'child.url',
+                          'data-cms-bind-target': 'child.target',
+                          'data-cms-bind-rel': 'child.rel',
+                          'data-cms-bind-data-mega-image-src': 'child.menuImage',
+                          'data-cms-bind-data-mega-image-alt': 'child.menuImageAlt',
+                        },
+                        components: [
+                          makeBackendMenuText('child.title', 'Child', ['gjs-nav-group__mega-item-label']),
+                          {
+                            tagName: 'span',
+                            classes: ['gjs-nav-group__mega-item-icon'],
+                            draggable: false,
+                            droppable: false,
+                            copyable: false,
+                            removable: false,
+                            selectable: false,
+                            hoverable: false,
+                            layerable: false,
+                            components: [{ type: 'textnode', content: '+' }],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: TYPE_MEGA_RIGHT,
+            tagName: 'div',
+            classes: ['gjs-nav-group__mega-right'],
+            components: [
+              {
+                tagName: 'img',
+                classes: ['gjs-nav-group__mega-img'],
+                attributes: {
+                  src: 'https://placehold.co/630x420/e2e8f0/94a3b8?text=Feature+Image',
+                  alt: 'Feature Image',
+                  width: '630',
+                  height: '420',
+                  'data-cms-bind-src': 'menuItem.children[0].menuImage',
+                  'data-cms-bind-alt': 'menuItem.children[0].menuImageAlt',
+                },
+                draggable: false,
+                copyable: false,
+                removable: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  }
+}
+
+export function makeBackendNavbarMenu() {
+  return {
+    type: TYPE_NAVBAR_MENU,
+    tagName: 'nav',
+    classes: ['gjs-navbar__menu'],
+    menuCode: DEFAULT_NAVBAR_MENU_CODE,
+    menuDataKey: DEFAULT_NAVBAR_MENU_DATA_KEY,
+    attributes: {
+      'data-cms-component': 'menu-tree',
+      'data-menu-code': DEFAULT_NAVBAR_MENU_CODE,
+      'data-menu-data-key': DEFAULT_NAVBAR_MENU_DATA_KEY,
+      'data-wb-i18n-skip': 'true',
+      translate: 'no',
+    },
+    components: [
+      uiEl('button', ['gjs-navbar__close'], {
+        attributes: { 'aria-label': 'Close menu', type: 'button' },
+        content: '✕',
+      }),
+      makeBackendLeafLink(),
+      {
+        type: TYPE_NAV_GROUP,
+        tagName: 'div',
+        classes: ['gjs-nav-group'],
+        attributes: {
+          'data-cms-repeat': 'menuItem@menuItems',
+          'data-cms-if': 'menuItem.hasChildren',
+          'data-cms-bind-classappend': 'menuItem.submenuTypeClass',
+        },
+        components: [
+          {
+            tagName: 'button',
+            classes: ['gjs-nav-group__btn'],
+            attributes: { type: 'button' },
+            selectable: false,
+            hoverable: false,
+            draggable: false,
+            droppable: false,
+            layerable: false,
+            highlightable: false,
+            components: [
+              makeBackendMenuText('menuItem.title', 'Menu', ['gjs-nav-group__btn-label']),
+              uiEl('span', ['gjs-nav-group__btn-chevron'], { content: NAV_GROUP_CHEVRON }),
+            ],
+          },
+          makeBackendDropdown(),
+          makeBackendMega(),
+        ],
+      },
+    ],
+  }
+}
+
 export function createNavbarStructure() {
   return [
     {
@@ -373,68 +603,7 @@ export function createNavbarStructure() {
           tagName: 'div',
           classes: ['gjs-navbar__center'],
           components: [
-            {
-              type: TYPE_NAVBAR_MENU,
-              tagName: 'nav',
-              classes: ['gjs-navbar__menu'],
-              components: [
-                uiEl('button', ['gjs-navbar__close'], {
-                  attributes: { 'aria-label': 'Close menu', type: 'button' },
-                  content: '✕',
-                }),
-                makeNavGroup('Products', 'mega', {
-                  megaTitle: '',
-                  megaItems: [
-                    { text: 'Bathroom Mirrors', imageSrc: 'https://placehold.co/800x560/ded8d0/6b7280?text=Bathroom+Mirrors' },
-                    { text: 'Shower Doors', imageSrc: 'https://placehold.co/800x560/d9d6d1/6b7280?text=Shower+Doors' },
-                    { text: 'Bathtub Doors', imageSrc: 'https://placehold.co/800x560/d4d1cb/6b7280?text=Bathtub+Doors' },
-                    { text: 'Medicine Cabinets', imageSrc: 'https://placehold.co/800x560/e2ddd6/6b7280?text=Medicine+Cabinets' },
-                    { text: 'Ceiling Fan', imageSrc: 'https://placehold.co/800x560/d7d3ce/6b7280?text=Ceiling+Fan' },
-                    { text: 'Chandelier', imageSrc: 'https://placehold.co/800x560/ddd8d2/6b7280?text=Chandelier' },
-                  ],
-                  megaFooterLinkText: 'View All',
-                  megaImageSrc: 'https://placehold.co/800x560/ded8d0/6b7280?text=Bathroom+Mirrors',
-                  megaImageAlt: 'Bathroom mirrors',
-                }),
-                makeNavGroup('Solutions', 'mega', {
-                  megaTitle: '',
-                  megaItems: [
-                    { text: 'Public & Commercial Buildings', imageSrc: 'https://placehold.co/800x560/d5d2cd/6b7280?text=Public+%26+Commercial+Buildings' },
-                    { text: 'High-end Residences & Real Estate', imageSrc: 'https://placehold.co/800x560/d7d4cf/6b7280?text=High-end+Residences' },
-                    { text: 'Healthcare & Wellness Spaces', imageSrc: 'https://placehold.co/800x560/dcd8d2/6b7280?text=Healthcare+%26+Wellness' },
-                    { text: 'Hotels & Resorts', imageSrc: 'https://placehold.co/800x560/d4d1cb/6b7280?text=Hotels+%26+Resorts' },
-                    { text: 'Small Houses & Apartments', imageSrc: 'https://placehold.co/800x560/ddd7d0/6b7280?text=Small+Houses+%26+Apartments' },
-                    { text: 'Customization', imageSrc: 'https://placehold.co/800x560/d9d4ce/6b7280?text=Customization' },
-                  ],
-                  megaFooterLinkText: 'View All',
-                  megaImageSrc: 'https://placehold.co/800x560/d5d2cd/6b7280?text=Public+%26+Commercial+Buildings',
-                  megaImageAlt: 'Hotels and resorts',
-                }),
-                makeLink('Cases'),
-                makeNavGroup('Why Foca', 'mega', {
-                  megaTitle: '',
-                  megaItems: [
-                    { text: 'About FOCA', imageSrc: 'https://placehold.co/800x560/d8d4cf/6b7280?text=About+FOCA' },
-                    { text: 'Company Structure', imageSrc: 'https://placehold.co/800x560/ded9d2/6b7280?text=Company+Structure' },
-                    { text: 'Foca Team', imageSrc: 'https://placehold.co/800x560/d4d0ca/6b7280?text=Foca+Team' },
-                    { text: 'Location', imageSrc: 'https://placehold.co/800x560/d9d5ce/6b7280?text=Location' },
-                    { text: 'Partnership', imageSrc: 'https://placehold.co/800x560/dcd6cf/6b7280?text=Partnership' },
-                  ],
-                  megaImageSrc: 'https://placehold.co/800x560/d8d4cf/6b7280?text=About+FOCA',
-                  megaImageAlt: 'About FOCA',
-                }),
-                makeNavGroup('Resources', 'mega', {
-                  megaTitle: '',
-                  megaItems: [
-                    { text: 'Technical Support', imageSrc: 'https://placehold.co/800x560/d7d3cc/6b7280?text=Technical+Support' },
-                    { text: 'FAQs', imageSrc: 'https://placehold.co/800x560/ddd8d1/6b7280?text=FAQs' },
-                  ],
-                  megaImageSrc: 'https://placehold.co/800x560/d7d3cc/6b7280?text=Technical+Support',
-                  megaImageAlt: 'Technical Support',
-                }),
-                makeLink('Contact'),
-              ],
-            },
+            makeBackendNavbarMenu(),
           ],
         },
         {

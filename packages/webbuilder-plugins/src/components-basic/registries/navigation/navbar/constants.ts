@@ -16,6 +16,9 @@ export const TYPE_NAVBAR_RIGHT = 'navbar-right-slot'
 
 export type NavGroupMenuType = 'dropdown' | 'mega'
 
+export const DEFAULT_NAVBAR_MENU_CODE = 'main-menu'
+export const DEFAULT_NAVBAR_MENU_DATA_KEY = 'menuItems'
+
 export const ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
   stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
   style="width:24px;height:24px;">

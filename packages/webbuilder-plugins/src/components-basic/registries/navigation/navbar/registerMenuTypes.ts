@@ -1,5 +1,7 @@
 import type { Editor } from 'grapesjs'
 import {
+  DEFAULT_NAVBAR_MENU_CODE,
+  DEFAULT_NAVBAR_MENU_DATA_KEY,
   LINK_TARGET_OPTIONS,
   TYPE_DROPDOWN,
   TYPE_DROPDOWN_ITEM,
@@ -75,6 +77,34 @@ function applyMenuTraits(model: any) {
   })
 }
 
+function isBackendMenuTree(model: any) {
+  const attrs = model?.getAttributes?.() || {}
+  return attrs['data-cms-component'] === 'menu-tree'
+}
+
+function applyBackendMenuAttrs(model: any) {
+  if (!isBackendMenuTree(model)) return
+
+  const attrs = { ...(model.getAttributes?.() || {}) }
+  const menuCode = String(model.get('menuCode') ?? attrs['data-menu-code'] ?? DEFAULT_NAVBAR_MENU_CODE).trim()
+    || DEFAULT_NAVBAR_MENU_CODE
+  const menuDataKey = String(model.get('menuDataKey') ?? attrs['data-menu-data-key'] ?? DEFAULT_NAVBAR_MENU_DATA_KEY).trim()
+    || DEFAULT_NAVBAR_MENU_DATA_KEY
+
+  model.set?.({
+    menuCode,
+    menuDataKey,
+  })
+  model.setAttributes?.({
+    ...attrs,
+    'data-cms-component': 'menu-tree',
+    'data-menu-code': menuCode,
+    'data-menu-data-key': menuDataKey,
+    'data-wb-i18n-skip': 'true',
+    translate: 'no',
+  })
+}
+
 function addDropdownItem(editor: Editor, traitCtx: any) {
   const target = resolveTraitTarget(editor, TYPE_DROPDOWN, traitCtx)
   if (!target) return
@@ -134,7 +164,7 @@ export function registerNavbarMenuTypes(editor: Editor): void {
         nmDrawerPaddingX: 12,
         nmDrawerPaddingBottom: 24,
         traits: [
-          { type: 'navbar-menu-select', label: '后台菜单', name: 'nmMenuSourceId', changeProp: true },
+          { type: 'menu-tree-select', label: '后台菜单', name: 'menuCode', changeProp: true },
           { type: 'number', label: '桌面菜单间距 (px)', name: 'nmGap', changeProp: true, min: 0, max: 80 },
           { type: 'text', label: '移动抽屉宽度', name: 'nmDrawerWidth', changeProp: true, placeholder: '360px / 100vw' },
           { type: 'color-picker', label: '移动抽屉背景', name: 'nmDrawerBg', changeProp: true },
@@ -152,6 +182,8 @@ export function registerNavbarMenuTypes(editor: Editor): void {
           'change:nmGap change:nmDrawerWidth change:nmDrawerBg change:nmDrawerPaddingTop change:nmDrawerPaddingX change:nmDrawerPaddingBottom',
           () => applyMenuTraits(this),
         )
+        this.listenTo(this, 'change:menuCode change:menuDataKey', () => applyBackendMenuAttrs(this))
+        applyBackendMenuAttrs(this)
         applyMenuTraits(this)
       },
     },
