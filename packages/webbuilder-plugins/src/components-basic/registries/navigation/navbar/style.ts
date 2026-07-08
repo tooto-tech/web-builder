@@ -91,6 +91,9 @@ export const NAVBAR_STYLES = `
     gap: var(--wb-navbar-menu-gap, 28px);
     height: 100%;
   }
+  .gjs-navbar__menu-item {
+    display: contents;
+  }
   .gjs-navbar__link {
     display: flex;
     align-items: center;

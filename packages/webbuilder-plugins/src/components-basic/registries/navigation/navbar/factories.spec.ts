@@ -22,11 +22,17 @@ describe('navbar factories', () => {
     })
 
     const menuComponents = flattenComponents(menu)
+    const rootMenuRepeats = menuComponents.filter(
+      component => component?.attributes?.['data-cms-repeat'] === 'menuItem@menuItems',
+    )
+    expect(rootMenuRepeats).toHaveLength(1)
+    expect(rootMenuRepeats[0]).toMatchObject({
+      classes: ['gjs-navbar__menu-item'],
+    })
     expect(menuComponents).toEqual(expect.arrayContaining([
       expect.objectContaining({
         classes: ['gjs-navbar__link'],
         attributes: expect.objectContaining({
-          'data-cms-repeat': 'menuItem@menuItems',
           'data-cms-if': '!menuItem.hasChildren',
           'data-cms-bind-href': 'menuItem.url',
           'data-cms-bind-target': 'menuItem.target',
@@ -36,7 +42,6 @@ describe('navbar factories', () => {
       expect.objectContaining({
         classes: ['gjs-nav-group'],
         attributes: expect.objectContaining({
-          'data-cms-repeat': 'menuItem@menuItems',
           'data-cms-if': 'menuItem.hasChildren',
           'data-cms-bind-classappend': 'menuItem.submenuTypeClass',
         }),

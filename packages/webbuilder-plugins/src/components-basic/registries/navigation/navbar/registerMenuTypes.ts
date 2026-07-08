@@ -9,7 +9,7 @@ import {
   TYPE_NAVBAR_MENU,
   TYPE_NAV_GROUP,
 } from './constants.js'
-import { makeDropdownItem, makeLink, makeNavGroup } from './factories.js'
+import { makeBackendNavbarMenuComponents, makeDropdownItem, makeLink, makeNavGroup } from './factories.js'
 import {
   applyStyleVars,
   findImmediateChildByClass,
@@ -82,6 +82,46 @@ function isBackendMenuTree(model: any) {
   return attrs['data-cms-component'] === 'menu-tree'
 }
 
+function collectionItems(collection: any): any[] {
+  if (!collection) return []
+  if (Array.isArray(collection)) return collection
+  const length = Number(collection.length ?? 0)
+  if (!Number.isFinite(length) || length <= 0 || typeof collection.at !== 'function') return []
+  const items: any[] = []
+  for (let index = 0; index < length; index += 1) {
+    const child = collection.at(index)
+    if (child) items.push(child)
+  }
+  return items
+}
+
+function hasOrderedBackendMenuRepeat(component: any): boolean {
+  const attrs = component?.getAttributes?.() || component?.get?.('attributes') || {}
+  const classes = component?.get?.('classes') || component?.get?.('classesName') || []
+  const classList = Array.isArray(classes)
+    ? classes.map((item: any) => String(item?.name ?? item)).filter(Boolean)
+    : String(classes).split(/\s+/).filter(Boolean)
+  if (
+    attrs['data-cms-repeat'] === 'menuItem@menuItems'
+    && (component?.hasClass?.('gjs-navbar__menu-item') || classList.includes('gjs-navbar__menu-item'))
+  ) {
+    return true
+  }
+  return collectionItems(component?.components?.()).some(child => hasOrderedBackendMenuRepeat(child))
+}
+
+function ensureBackendMenuTemplate(model: any) {
+  if (hasOrderedBackendMenuRepeat(model)) return
+
+  const components = model?.components?.()
+  if (typeof components?.reset === 'function') {
+    components.reset(makeBackendNavbarMenuComponents())
+    return
+  }
+
+  model?.set?.('components', makeBackendNavbarMenuComponents())
+}
+
 function applyBackendMenuAttrs(model: any) {
   if (!isBackendMenuTree(model)) return
 
@@ -103,6 +143,7 @@ function applyBackendMenuAttrs(model: any) {
     'data-wb-i18n-skip': 'true',
     translate: 'no',
   })
+  ensureBackendMenuTemplate(model)
 }
 
 function addDropdownItem(editor: Editor, traitCtx: any) {

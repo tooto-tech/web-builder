@@ -352,7 +352,6 @@ function makeBackendLeafLink() {
     classes: ['gjs-navbar__link'],
     attributes: {
       href: '#',
-      'data-cms-repeat': 'menuItem@menuItems',
       'data-cms-if': '!menuItem.hasChildren',
       'data-cms-bind-href': 'menuItem.url',
       'data-cms-bind-target': 'menuItem.target',
@@ -504,32 +503,27 @@ function makeBackendMega() {
   }
 }
 
-export function makeBackendNavbarMenu() {
+function makeBackendMenuItem() {
   return {
-    type: TYPE_NAVBAR_MENU,
-    tagName: 'nav',
-    classes: ['gjs-navbar__menu'],
-    menuCode: DEFAULT_NAVBAR_MENU_CODE,
-    menuDataKey: DEFAULT_NAVBAR_MENU_DATA_KEY,
+    tagName: 'div',
+    classes: ['gjs-navbar__menu-item'],
     attributes: {
-      'data-cms-component': 'menu-tree',
-      'data-menu-code': DEFAULT_NAVBAR_MENU_CODE,
-      'data-menu-data-key': DEFAULT_NAVBAR_MENU_DATA_KEY,
-      'data-wb-i18n-skip': 'true',
-      translate: 'no',
+      'data-cms-repeat': 'menuItem@menuItems',
     },
+    draggable: false,
+    droppable: false,
+    copyable: false,
+    removable: false,
+    selectable: false,
+    hoverable: false,
+    layerable: false,
     components: [
-      uiEl('button', ['gjs-navbar__close'], {
-        attributes: { 'aria-label': 'Close menu', type: 'button' },
-        content: '✕',
-      }),
       makeBackendLeafLink(),
       {
         type: TYPE_NAV_GROUP,
         tagName: 'div',
         classes: ['gjs-nav-group'],
         attributes: {
-          'data-cms-repeat': 'menuItem@menuItems',
           'data-cms-if': 'menuItem.hasChildren',
           'data-cms-bind-classappend': 'menuItem.submenuTypeClass',
         },
@@ -554,6 +548,34 @@ export function makeBackendNavbarMenu() {
         ],
       },
     ],
+  }
+}
+
+export function makeBackendNavbarMenuComponents() {
+  return [
+    uiEl('button', ['gjs-navbar__close'], {
+      attributes: { 'aria-label': 'Close menu', type: 'button' },
+      content: '✕',
+    }),
+    makeBackendMenuItem(),
+  ]
+}
+
+export function makeBackendNavbarMenu() {
+  return {
+    type: TYPE_NAVBAR_MENU,
+    tagName: 'nav',
+    classes: ['gjs-navbar__menu'],
+    menuCode: DEFAULT_NAVBAR_MENU_CODE,
+    menuDataKey: DEFAULT_NAVBAR_MENU_DATA_KEY,
+    attributes: {
+      'data-cms-component': 'menu-tree',
+      'data-menu-code': DEFAULT_NAVBAR_MENU_CODE,
+      'data-menu-data-key': DEFAULT_NAVBAR_MENU_DATA_KEY,
+      'data-wb-i18n-skip': 'true',
+      translate: 'no',
+    },
+    components: makeBackendNavbarMenuComponents(),
   }
 }
 
