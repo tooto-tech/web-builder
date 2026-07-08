@@ -12,6 +12,7 @@ class FakeNavbarElement {
 
   readonly children: FakeNavbarElement[] = []
   parentElement: FakeNavbarElement | null = null
+  innerHTML = ''
 
   private readonly classes: Set<string>
   private readonly attributes = new Map<string, string>()
@@ -42,6 +43,14 @@ class FakeNavbarElement {
       child.parentElement = this
       this.children.push(child)
     })
+  }
+
+  get textContent() {
+    return this.innerHTML
+  }
+
+  set textContent(value: string) {
+    this.innerHTML = value
   }
 
   querySelector(selector: string) {
@@ -143,5 +152,85 @@ describe('navbarScript', () => {
     expect(highwayLink.getAttribute('aria-current')).toBe('page')
     expect(tunnelLink.classList.contains('is-active')).toBe(false)
     expect(tunnelLink.getAttribute('aria-current')).toBeNull()
+  })
+
+  it('fetches the backend menu code and renders the published navbar in backend order', async () => {
+    const root = new FakeNavbarElement(['gjs-navbar'])
+    const burger = new FakeNavbarElement(['gjs-navbar__burger'])
+    const menu = new FakeNavbarElement(['gjs-navbar__menu'], {
+      'data-menu-code': 'main-menu',
+    })
+    const staleLink = new FakeNavbarElement(['gjs-navbar__link'], {
+      href: '/stale.html',
+    })
+
+    staleLink.textContent = 'Stale'
+    menu.append(staleLink)
+    root.append(burger, menu)
+
+    const fetch = vi.fn(async () => ({
+      ok: true,
+      json: async () => ({
+        data: {
+          items: [
+            { title: 'Products', resolvedUrl: '/products.html' },
+            {
+              title: 'Solutions',
+              submenuType: 'mega',
+              children: [
+                {
+                  title: 'Manufacturing',
+                  resolvedUrl: '/solutions/manufacturing.html',
+                  menuImage: 'https://example.test/manufacturing.jpg',
+                  menuImageAlt: 'Manufacturing',
+                },
+              ],
+            },
+            {
+              title: 'About',
+              submenuType: 'dropdown',
+              children: [{ title: 'Company', resolvedUrl: '/about/company.html' }],
+            },
+          ],
+        },
+      }),
+    }))
+
+    vi.stubGlobal('fetch', fetch)
+    vi.stubGlobal('window', {
+      location: {
+        href: 'https://example.test/en/products.html',
+        origin: 'https://example.test',
+        pathname: '/en/products.html',
+        hash: '',
+      },
+      matchMedia: vi.fn(() => ({ matches: true })),
+      addEventListener: vi.fn(),
+      scrollY: 0,
+      pageYOffset: 0,
+    })
+    vi.stubGlobal('document', {
+      addEventListener: vi.fn(),
+      documentElement: {
+        scrollTop: 0,
+        getAttribute: vi.fn(() => 'en'),
+      },
+      body: { scrollTop: 0 },
+    })
+
+    navbarScript.call(root as unknown as HTMLElement)
+    await Promise.resolve()
+    await Promise.resolve()
+
+    expect(fetch).toHaveBeenCalledWith(
+      '/app-api/content/menu/code/main-menu?language=en',
+      expect.objectContaining({ credentials: 'same-origin', cache: 'no-store' }),
+    )
+    expect(menu.innerHTML.indexOf('Products')).toBeLessThan(menu.innerHTML.indexOf('Solutions'))
+    expect(menu.innerHTML.indexOf('Solutions')).toBeLessThan(menu.innerHTML.indexOf('About'))
+    expect(menu.innerHTML).toContain('gjs-nav-group--mega')
+    expect(menu.innerHTML).toContain('data-mega-image-src="https://example.test/manufacturing.jpg"')
+    expect(menu.innerHTML).toContain('gjs-nav-group__dropdown-item')
+    expect(menu.innerHTML).not.toContain('Stale')
   })
 })
